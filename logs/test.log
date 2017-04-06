@@ -1,0 +1,406 @@
+2017/04/03 15:44:19 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/03 15:44:28 [W] [asm_amd64.s:514] im here
+2017/04/03 15:44:28 [W] [error_controller.go:16] this is warning 
+2017/04/03 15:44:28 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m|    716.832µs|   match|[44m GET     [0m /static/js/reload.min.js
+2017/04/03 15:44:30 [W] [asm_amd64.s:514] im here
+2017/04/03 15:44:30 [W] [error_controller.go:16] this is warning 
+2017/04/03 15:44:30 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m|     96.743µs|   match|[44m GET     [0m /static/js/reload.min.js
+2017/04/04 16:32:55 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 16:33:13 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 16:34:43 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 16:34:44 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:18:29 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:20:42 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:23:44 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:30:30 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:30:42 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:30:47 [W] [router.go:792] &{0xc4200ccc80}
+2017/04/04 21:30:47 [W] [asm_amd64.s:514] im here
+2017/04/04 21:30:47 [W] [error_controller.go:16] this is warning 
+2017/04/04 21:30:47 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m|     425.18µs|   match|[44m GET     [0m /static/js/reload.min.js
+2017/04/04 21:31:17 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:34:04 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:34:08 [C] [asm_amd64.s:514] the request url is  /
+2017/04/04 21:34:08 [C] [asm_amd64.s:514] Handler crashed with error <Ormer> table: `.` not found, maybe not RegisterModel
+2017/04/04 21:34:08 [C] [asm_amd64.s:514] /usr/local/go/src/runtime/asm_amd64.s:514
+2017/04/04 21:34:08 [C] [asm_amd64.s:514] /usr/local/go/src/runtime/panic.go:489
+2017/04/04 21:34:08 [C] [asm_amd64.s:514] /Users/Mark/go/src/github.com/astaxie/beego/orm/orm.go:110
+2017/04/04 21:34:08 [C] [asm_amd64.s:514] /Users/Mark/go/src/github.com/astaxie/beego/orm/orm.go:124
+2017/04/04 21:34:08 [C] [asm_amd64.s:514] /Users/Mark/go/src/onestory/models/models.go:31
+2017/04/04 21:34:08 [C] [asm_amd64.s:514] /Users/Mark/go/src/onestory/controllers/default.go:20
+2017/04/04 21:34:08 [C] [asm_amd64.s:514] /Users/Mark/go/src/github.com/astaxie/beego/router.go:792
+2017/04/04 21:34:08 [C] [asm_amd64.s:514] /usr/local/go/src/net/http/server.go:2568
+2017/04/04 21:34:08 [C] [asm_amd64.s:514] /usr/local/go/src/net/http/server.go:1825
+2017/04/04 21:34:08 [C] [asm_amd64.s:514] /usr/local/go/src/runtime/asm_amd64.s:2197
+2017/04/04 21:35:34 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:35:58 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:36:58 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:40:13 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:40:19 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:40:23 [W] [default.go:20] &{select * from onestory_userprofile where passid = ? [43] 0xc4200be880}
+2017/04/04 21:40:23 [W] [router.go:792] <nil>
+2017/04/04 21:40:23 [W] [asm_amd64.s:514] im here
+2017/04/04 21:40:23 [W] [error_controller.go:16] this is warning 
+2017/04/04 21:40:23 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m|    441.735µs|   match|[44m GET     [0m /static/js/reload.min.js
+2017/04/04 21:40:49 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:40:50 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:42:19 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:42:20 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:42:27 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:43:57 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:44:02 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:44:05 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:44:06 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:45:01 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:45:03 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:45:04 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:45:11 [W] [default.go:20] {0xc42035eaf0 0xc4204976c0}
+2017/04/04 21:45:11 [W] [default.go:20] {0xc42035eaf0 0xc4204976c0}
+2017/04/04 21:45:11 [W] [router.go:792] <nil>
+2017/04/04 21:45:11 [W] [asm_amd64.s:514] im here
+2017/04/04 21:45:11 [W] [error_controller.go:16] this is warning 
+2017/04/04 21:45:11 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m|   1.435388ms|   match|[44m GET     [0m /static/js/reload.min.js
+2017/04/04 21:45:32 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:54:29 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:54:34 [W] [default.go:20] dog@gamil.com
+2017/04/04 21:54:34 [W] [router.go:792] <nil>
+2017/04/04 21:54:34 [W] [asm_amd64.s:514] im here
+2017/04/04 21:54:34 [W] [error_controller.go:16] this is warning 
+2017/04/04 21:54:34 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m|   1.683337ms|   match|[44m GET     [0m /static/js/reload.min.js
+2017/04/04 21:55:42 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:55:43 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:55:48 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:56:30 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:56:36 [W] [default.go:20] 0
+2017/04/04 21:56:36 [W] [default.go:20] map[phone:2323121 update_time:2016-05-04 09:19:17.481305 nick_name:oooook ext: passid:43 email:dog@gamil.com]
+2017/04/04 21:56:36 [W] [router.go:792] <nil>
+2017/04/04 21:56:36 [W] [asm_amd64.s:514] im here
+2017/04/04 21:56:36 [W] [error_controller.go:16] this is warning 
+2017/04/04 21:56:36 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m|   1.764447ms|   match|[44m GET     [0m /static/js/reload.min.js
+2017/04/04 21:57:08 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:57:15 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:57:18 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:57:49 [W] [default.go:20] 0
+2017/04/04 21:57:49 [W] [default.go:20] map[passid:38 email:han@gamil.com phone:232312 update_time:2016-04-28 11:22:32.979927 nick_name:oooook ext:]
+2017/04/04 21:57:49 [W] [default.go:20] 1
+2017/04/04 21:57:49 [W] [default.go:20] map[nick_name:oooook ext: passid:43 email:dog@gamil.com phone:2323121 update_time:2016-05-04 09:19:17.481305]
+2017/04/04 21:57:49 [W] [default.go:20] 2
+2017/04/04 21:57:49 [W] [default.go:20] map[email:dog1@gamil.com phone:232312111 update_time:2016-05-04 09:19:55.047579 nick_name:oooook ext: passid:45]
+2017/04/04 21:57:49 [W] [router.go:792] <nil>
+2017/04/04 21:57:49 [W] [asm_amd64.s:514] im here
+2017/04/04 21:57:49 [W] [error_controller.go:16] this is warning 
+2017/04/04 21:57:49 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m|  21.166491ms|   match|[44m GET     [0m /static/js/reload.min.js
+2017/04/04 21:58:37 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 21:59:39 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:00:41 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:01:18 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:02:22 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:03:10 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:03:21 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:03:22 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:03:23 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:04:16 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:08:57 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:09:14 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:12:01 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:14:01 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:14:15 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:14:19 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:15:39 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:15:48 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:16:21 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:17:28 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:17:32 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:18:21 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:18:38 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:18:44 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:18:46 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:19:19 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:19:44 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:20:13 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:20:15 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:20:30 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:20:53 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:21:07 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:22:29 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:22:33 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:22:42 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:23:14 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:23:45 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:23:46 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:24:26 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:30:17 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:30:23 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:30:51 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:30:55 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:31:09 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:31:35 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:33:10 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:33:16 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:33:17 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:33:33 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:34:11 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:34:12 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:34:14 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:34:32 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:34:40 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:34:48 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:34:51 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:34:53 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:35:58 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:36:38 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:36:42 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:36:43 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:36:51 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:38:07 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:38:26 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:38:41 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:38:49 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:39:04 [W] [default.go:19] &{0xc4200cd8c0 onestory_main}
+2017/04/04 22:39:04 [W] [default.go:20] onestory_main
+2017/04/04 22:39:04 [W] [default.go:20] 0
+2017/04/04 22:39:04 [W] [default.go:20] map[nick_name:oooook ext: passid:38 email:han@gamil.com phone:232312 update_time:2016-04-28 11:22:32.979927]
+2017/04/04 22:39:04 [W] [default.go:20] 1
+2017/04/04 22:39:04 [W] [default.go:20] map[passid:43 email:dog@gamil.com phone:2323121 update_time:2016-05-04 09:19:17.481305 nick_name:oooook ext:]
+2017/04/04 22:39:04 [W] [default.go:20] 2
+2017/04/04 22:39:04 [W] [default.go:20] map[phone:232312111 update_time:2016-05-04 09:19:55.047579 nick_name:oooook ext: passid:45 email:dog1@gamil.com]
+2017/04/04 22:39:04 [W] [router.go:792] <nil>
+2017/04/04 22:39:04 [W] [error_controller.go:14] this is 404 here 
+2017/04/04 22:39:04 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m|   1.116923ms|   match|[44m GET     [0m /static/js/reload.min.js
+2017/04/04 22:39:28 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:39:44 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:39:48 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:39:56 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:39:58 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:40:15 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:40:19 [W] [default.go:19] &{0xc42000da20 onestory_main}
+2017/04/04 22:40:19 [W] [default.go:20] onestory_main
+2017/04/04 22:40:19 [W] [default.go:20] 0
+2017/04/04 22:40:19 [W] [default.go:20] map[phone:232312 update_time:2016-04-28 11:22:32.979927 nick_name:oooook ext: passid:38 email:han@gamil.com]
+2017/04/04 22:40:19 [W] [default.go:20] 1
+2017/04/04 22:40:19 [W] [default.go:20] map[nick_name:oooook ext: passid:43 email:dog@gamil.com phone:2323121 update_time:2016-05-04 09:19:17.481305]
+2017/04/04 22:40:19 [W] [default.go:20] 2
+2017/04/04 22:40:19 [W] [default.go:20] map[passid:45 email:dog1@gamil.com phone:232312111 update_time:2016-05-04 09:19:55.047579 nick_name:oooook ext:]
+2017/04/04 22:40:19 [W] [router.go:792] <nil>
+2017/04/04 22:40:19 [W] [error_controller.go:14] this is 404 here 
+2017/04/04 22:40:19 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m|    425.619µs|   match|[44m GET     [0m /static/js/reload.min.js
+2017/04/04 22:41:02 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:41:03 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:41:22 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/04 22:41:25 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 15:44:46 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 15:44:47 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 15:44:59 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:01:01 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:03:25 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:03:35 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:12:25 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:12:33 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:12:39 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:12:40 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:12:44 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:14:04 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:14:47 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:15:09 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:17:08 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:17:09 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:17:20 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:17:36 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:19:23 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:19:33 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:19:47 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:20:30 [W] [default.go:19] &{0xc4200da980 onestory_main}
+2017/04/05 16:20:30 [W] [default.go:20] onestory_main
+2017/04/05 16:20:31 [W] [default.go:20] 0
+2017/04/05 16:20:31 [W] [default.go:20] map[phone:232312 update_time:2016-04-28 11:22:32.979927 nick_name:oooook ext: passid:38 email:han@gamil.com]
+2017/04/05 16:20:31 [W] [default.go:20] 1
+2017/04/05 16:20:31 [W] [default.go:20] map[update_time:2016-05-04 09:19:17.481305 nick_name:oooook ext: passid:43 email:dog@gamil.com phone:2323121]
+2017/04/05 16:20:31 [W] [default.go:20] 2
+2017/04/05 16:20:31 [W] [default.go:20] map[phone:232312111 update_time:2016-05-04 09:19:55.047579 nick_name:oooook ext: passid:45 email:dog1@gamil.com]
+2017/04/05 16:20:31 [W] [router.go:792] <nil>
+2017/04/05 16:20:31 [W] [error_controller.go:14] this is 404 here 
+2017/04/05 16:20:31 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m|  27.811735ms|   match|[44m GET     [0m /static/js/reload.min.js
+2017/04/05 16:29:54 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:32:32 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:32:35 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:32:42 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:32:49 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:32:52 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:32:54 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:33:00 [W] [default.go:19] &{0xc4200ca540 onestory_main}
+2017/04/05 16:33:00 [W] [default.go:20] onestory_main
+2017/04/05 16:33:00 [W] [default.go:20] 0
+2017/04/05 16:33:00 [W] [default.go:20] map[update_time:2016-04-28 11:22:32.979927 nick_name:oooook ext: passid:38 email:han@gamil.com phone:232312]
+2017/04/05 16:33:00 [W] [default.go:20] 1
+2017/04/05 16:33:00 [W] [default.go:20] map[passid:43 email:dog@gamil.com phone:2323121 update_time:2016-05-04 09:19:17.481305 nick_name:oooook ext:]
+2017/04/05 16:33:00 [W] [default.go:20] 2
+2017/04/05 16:33:00 [W] [default.go:20] map[phone:232312111 update_time:2016-05-04 09:19:55.047579 nick_name:oooook ext: passid:45 email:dog1@gamil.com]
+2017/04/05 16:33:00 [W] [router.go:792] <nil>
+2017/04/05 16:33:00 [W] [user_profile.go:16] get service from map
+2017/04/05 16:33:00 [W] [default.go:23] &{0xc4200ca540 onestory_main}
+2017/04/05 16:33:00 [W] [default.go:24] onestory_main
+2017/04/05 16:33:00 [W] [default.go:24] 0
+2017/04/05 16:33:00 [W] [default.go:24] map[passid:38 email:han@gamil.com phone:232312 update_time:2016-04-28 11:22:32.979927 nick_name:oooook ext:]
+2017/04/05 16:33:00 [W] [default.go:24] 1
+2017/04/05 16:33:00 [W] [default.go:24] map[passid:43 email:dog@gamil.com phone:2323121 update_time:2016-05-04 09:19:17.481305 nick_name:oooook ext:]
+2017/04/05 16:33:00 [W] [default.go:24] 2
+2017/04/05 16:33:00 [W] [default.go:24] map[email:dog1@gamil.com phone:232312111 update_time:2016-05-04 09:19:55.047579 nick_name:oooook ext: passid:45]
+2017/04/05 16:33:00 [W] [router.go:792] this is 2
+2017/04/05 16:33:00 [W] [router.go:792] <nil>
+2017/04/05 16:33:00 [W] [error_controller.go:14] this is 404 here 
+2017/04/05 16:33:00 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m|   9.435161ms|   match|[44m GET     [0m /static/js/reload.min.js
+2017/04/05 16:33:22 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:33:24 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:33:33 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:33:35 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:33:59 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:34:00 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:41:30 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 16:41:41 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 17:11:16 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 17:26:36 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:01:57 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:05:09 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:07:47 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:08:04 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:08:36 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:08:58 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:09:06 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:09:13 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:09:31 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:13:49 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:14:00 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:15:34 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:16:17 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:16:29 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:17:37 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:18:43 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:18:48 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:19:11 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:19:25 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:19:26 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:20:34 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:21:37 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:21:38 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:23:37 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:35:18 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:35:23 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:35:29 [W] [default.go:19] &{0xc42049dde0 onestory_main}
+2017/04/05 21:35:29 [W] [default.go:20] onestory_main
+2017/04/05 21:35:29 [W] [default.go:20] 0
+2017/04/05 21:35:29 [W] [default.go:20] map[passid:38 email:han@gamil.com phone:232312 update_time:2016-04-28 11:22:32.979927 nick_name:oooook ext:]
+2017/04/05 21:35:29 [W] [default.go:20] 1
+2017/04/05 21:35:29 [W] [default.go:20] map[update_time:2016-05-04 09:19:17.481305 nick_name:oooook ext: passid:43 email:dog@gamil.com phone:2323121]
+2017/04/05 21:35:29 [W] [default.go:20] 2
+2017/04/05 21:35:29 [W] [default.go:20] map[email:dog1@gamil.com phone:232312111 update_time:2016-05-04 09:19:55.047579 nick_name:oooook ext: passid:45]
+2017/04/05 21:35:29 [W] [router.go:792] <nil>
+2017/04/05 21:35:29 [W] [error_controller.go:14] this is 404 here 
+2017/04/05 21:35:29 [D] [server.go:2568] |      127.0.0.1|[47m 304 [0m|    1.33406ms|   match|[44m GET     [0m /static/js/reload.min.js
+2017/04/05 21:35:57 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:36:00 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:36:46 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:36:52 [W] [default.go:19] &{0xc4200ca800 onestory_main}
+2017/04/05 21:36:52 [W] [default.go:20] onestory_main
+2017/04/05 21:36:52 [W] [default.go:20] 0
+2017/04/05 21:36:52 [W] [default.go:20] map[ext: passid:38 email:han@gamil.com phone:232312 update_time:2016-04-28 11:22:32.979927 nick_name:oooook]
+2017/04/05 21:36:52 [W] [default.go:20] 1
+2017/04/05 21:36:52 [W] [default.go:20] map[ext: passid:43 email:dog@gamil.com phone:2323121 update_time:2016-05-04 09:19:17.481305 nick_name:oooook]
+2017/04/05 21:36:52 [W] [default.go:20] 2
+2017/04/05 21:36:52 [W] [default.go:20] map[phone:232312111 update_time:2016-05-04 09:19:55.047579 nick_name:oooook ext: passid:45 email:dog1@gamil.com]
+2017/04/05 21:36:52 [W] [router.go:792] <nil>
+2017/04/05 21:36:52 [W] [error_controller.go:14] this is 404 here 
+2017/04/05 21:37:16 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:37:24 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:38:00 [W] [userprofile.go:29] &{0xc42036f680 onestory_main}
+2017/04/05 21:38:00 [C] [asm_amd64.s:514] the request url is  /adduserprofile
+2017/04/05 21:38:00 [C] [asm_amd64.s:514] Handler crashed with error <Ormer> table: `onestory/models.UserProfileData` not found, maybe not RegisterModel
+2017/04/05 21:38:00 [C] [asm_amd64.s:514] /usr/local/go/src/runtime/asm_amd64.s:514
+2017/04/05 21:38:00 [C] [asm_amd64.s:514] /usr/local/go/src/runtime/panic.go:489
+2017/04/05 21:38:00 [C] [asm_amd64.s:514] /Users/Mark/go/src/github.com/astaxie/beego/orm/orm.go:110
+2017/04/05 21:38:00 [C] [asm_amd64.s:514] /Users/Mark/go/src/github.com/astaxie/beego/orm/orm.go:167
+2017/04/05 21:38:00 [C] [asm_amd64.s:514] /Users/Mark/go/src/onestory/models/user_profile.go:36
+2017/04/05 21:38:00 [C] [asm_amd64.s:514] /Users/Mark/go/src/onestory/controllers/userprofile.go:32
+2017/04/05 21:38:00 [C] [asm_amd64.s:514] /Users/Mark/go/src/github.com/astaxie/beego/router.go:792
+2017/04/05 21:38:00 [C] [asm_amd64.s:514] /usr/local/go/src/net/http/server.go:2568
+2017/04/05 21:38:00 [C] [asm_amd64.s:514] /usr/local/go/src/net/http/server.go:1825
+2017/04/05 21:38:00 [C] [asm_amd64.s:514] /usr/local/go/src/runtime/asm_amd64.s:2197
+2017/04/05 21:39:11 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:39:17 [C] [asm_amd64.s:514] the request url is  /adduserprofile
+2017/04/05 21:39:17 [C] [asm_amd64.s:514] Handler crashed with error RegisterModel must be run before BootStrap
+2017/04/05 21:39:17 [C] [asm_amd64.s:514] /usr/local/go/src/runtime/asm_amd64.s:514
+2017/04/05 21:39:17 [C] [asm_amd64.s:514] /usr/local/go/src/runtime/panic.go:489
+2017/04/05 21:39:17 [C] [asm_amd64.s:514] /Users/Mark/go/src/github.com/astaxie/beego/orm/models_boot.go:308
+2017/04/05 21:39:17 [C] [asm_amd64.s:514] /Users/Mark/go/src/onestory/models/user_profile.go:49
+2017/04/05 21:39:17 [C] [asm_amd64.s:514] /Users/Mark/go/src/onestory/controllers/userprofile.go:29
+2017/04/05 21:39:17 [C] [asm_amd64.s:514] /Users/Mark/go/src/github.com/astaxie/beego/router.go:792
+2017/04/05 21:39:17 [C] [asm_amd64.s:514] /usr/local/go/src/net/http/server.go:2568
+2017/04/05 21:39:17 [C] [asm_amd64.s:514] /usr/local/go/src/net/http/server.go:1825
+2017/04/05 21:39:17 [C] [asm_amd64.s:514] /usr/local/go/src/runtime/asm_amd64.s:2197
+2017/04/05 21:58:03 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:58:07 [W] [userprofile.go:29] &{0xc4201681a0 onestory_main}
+2017/04/05 21:58:07 [W] [userprofile.go:32] 0
+2017/04/05 21:58:07 [W] [userprofile.go:32] 0
+2017/04/05 21:58:07 [W] [error_controller.go:14] this is 404 here 
+2017/04/05 21:58:41 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:58:43 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 21:58:45 [W] [userprofile.go:29] &{0xc420363c60 onestory_main}
+2017/04/05 21:58:45 [W] [userprofile.go:32] 0
+2017/04/05 21:58:45 [W] [userprofile.go:32] 0
+2017/04/05 21:58:45 [W] [userprofile.go:32] 0
+2017/04/05 21:58:45 [W] [error_controller.go:14] this is 404 here 
+2017/04/05 22:00:15 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 22:00:20 [W] [router.go:792] {0 12345  13423134556 1234561 1234 }
+2017/04/05 22:00:20 [W] [userprofile.go:30] &{0xc4201561a0 onestory_main}
+2017/04/05 22:00:20 [W] [userprofile.go:33] 0
+2017/04/05 22:00:20 [W] [userprofile.go:33] 0
+2017/04/05 22:00:20 [W] [userprofile.go:33] 0
+2017/04/05 22:00:20 [W] [error_controller.go:14] this is 404 here 
+2017/04/05 22:01:28 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 22:01:34 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 22:01:52 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 22:01:59 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 22:02:03 [W] [router.go:792] 
+2017/04/05 22:02:03 [W] [router.go:792] {0 12345  13423134556 1234561 1234 }
+2017/04/05 22:02:03 [W] [userprofile.go:31] &{0xc4204208e0 onestory_main}
+2017/04/05 22:02:03 [W] [userprofile.go:34] 0
+2017/04/05 22:02:03 [W] [userprofile.go:34] 0
+2017/04/05 22:02:03 [W] [userprofile.go:34] 0
+2017/04/05 22:02:03 [W] [error_controller.go:14] this is 404 here 
+2017/04/05 22:02:17 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 22:02:54 [W] [router.go:792] {0 12345  13423134556 1234561 1234 }
+2017/04/05 22:02:54 [W] [userprofile.go:30] &{0xc4200cc7e0 onestory_main}
+2017/04/05 22:02:54 [W] [userprofile.go:33] 0
+2017/04/05 22:02:54 [W] [userprofile.go:33] 0
+2017/04/05 22:02:54 [W] [userprofile.go:33] 0
+2017/04/05 22:02:54 [W] [error_controller.go:14] this is 404 here 
+2017/04/05 22:03:06 [W] [router.go:792] {0 12345  13423134556 1234561 1234 }
+2017/04/05 22:03:06 [W] [userprofile.go:30] &{0xc4200cc7e0 onestory_main}
+2017/04/05 22:03:06 [W] [userprofile.go:33] 0
+2017/04/05 22:03:06 [W] [userprofile.go:33] 0
+2017/04/05 22:03:06 [W] [userprofile.go:33] 0
+2017/04/05 22:03:06 [W] [error_controller.go:14] this is 404 here 
+2017/04/05 22:03:13 [W] [router.go:792] {0 12345  13423134556 1234561 1234 }
+2017/04/05 22:03:13 [W] [userprofile.go:30] &{0xc4200cc7e0 onestory_main}
+2017/04/05 22:03:13 [W] [userprofile.go:33] 0
+2017/04/05 22:03:13 [W] [userprofile.go:33] 0
+2017/04/05 22:03:13 [W] [userprofile.go:33] 0
+2017/04/05 22:03:13 [W] [error_controller.go:14] this is 404 here 
+2017/04/05 22:03:43 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 22:03:47 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 22:03:54 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 22:04:00 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 22:04:01 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 22:04:04 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 22:04:07 [W] [router.go:792] {0 12345  13423134556 1234561 1234 }
+2017/04/05 22:04:07 [W] [userprofile.go:30] &{0xc4203ffca0 onestory_main}
+2017/04/05 22:04:07 [W] [userprofile.go:33] 0
+2017/04/05 22:04:07 [W] [userprofile.go:33] Error 1146: Table 'onestory_main.user_profile_data' doesn't exist
+2017/04/05 22:04:07 [W] [userprofile.go:33] 0
+2017/04/05 22:04:07 [W] [error_controller.go:14] this is 404 here 
+2017/04/05 22:04:07 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/05 22:04:12 [W] [router.go:792] {0 12345  13423134556 1234561 1234 }
+2017/04/05 22:04:12 [W] [userprofile.go:30] &{0xc4200b0980 onestory_main}
+2017/04/05 22:04:12 [W] [userprofile.go:33] 0
+2017/04/05 22:04:12 [W] [userprofile.go:33] Error 1146: Table 'onestory_main.user_profile_data' doesn't exist
+2017/04/05 22:04:12 [W] [userprofile.go:33] 0
+2017/04/05 22:04:12 [W] [error_controller.go:14] this is 404 here 
