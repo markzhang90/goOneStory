@@ -25,6 +25,15 @@ type (
 	}
 )
 
+
+
+func NewUser() (*UserProfileDb) {
+
+	dbService := services.NewService("onestory")
+	logs.Warning(dbService)
+	return &UserProfileDb{"user_profile", dbService}
+}
+
 func (userDb *UserProfileDb) GetUserProfileByPhone(phone int64) (targetUser UserProfile, errcode string) {
 	o := userDb.DbConnect.Orm
 	o.Using(userDb.DbConnect.DbName)
@@ -40,13 +49,6 @@ func (userDb *UserProfileDb) GetUserProfileByPhone(phone int64) (targetUser User
 	}
 
 	return targetUser, errcode
-}
-
-func GetPid(phone int64, email string) string {
-	passIdEncode := md5.New()
-	passIdEncode.Write([]byte(string(phone) + "_" + email))
-	passId := hex.EncodeToString(passIdEncode.Sum(nil))
-	return passId
 }
 
 func (userDb *UserProfileDb) AddNewUserProfile(userprofileData UserProfile) {
@@ -70,12 +72,6 @@ func (userDb *UserProfileDb) AddNewUserProfile(userprofileData UserProfile) {
 
 }
 
-func NewUser() (*UserProfileDb) {
-
-	dbService := services.NewService("onestory")
-	logs.Warning(dbService)
-	return &UserProfileDb{"user_profile", dbService}
-}
 
 func (userDb *UserProfileDb) GetUserProfile() (err error) {
 	o := userDb.DbConnect.Orm
@@ -95,4 +91,11 @@ func (userDb *UserProfileDb) GetUserProfile() (err error) {
 	}
 
 	return err
+}
+
+func GetPid(phone int64, email string) string {
+	passIdEncode := md5.New()
+	passIdEncode.Write([]byte(string(phone) + "_" + email))
+	passId := hex.EncodeToString(passIdEncode.Sum(nil))
+	return passId
 }
