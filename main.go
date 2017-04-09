@@ -16,7 +16,11 @@ func main() {
 	orm.RegisterDataBase("default", "mysql", "root:@/test?charset=utf8")
 
 	beego.ErrorController(&controllers.ErrorController{})
+
+	/**
+	//err log config
 	beego.SetLogger("file", `{"filename":"./logs/test.log"}`)
+	**/
 
 	//beego.BConfig.WebConfig.Session.SessionProvider = "redis"
 	//beego.BConfig.WebConfig.Session.SessionProviderConfig = "192.168.121.128:6379"
