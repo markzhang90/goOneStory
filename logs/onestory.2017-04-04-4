@@ -1,0 +1,51 @@
+2017/04/20 17:44:06 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/20 17:44:32 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/20 17:44:41 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/20 17:44:49 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/20 17:44:51 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/20 17:44:57 [W] [router.go:792] 
+2017/04/20 17:44:57 [W] [router.go:792] coooool
+2017/04/20 17:46:13 [W] [pool.go:277] dial tcp 192.168.121.128:6379: getsockopt: operation timed out
+2017/04/20 17:46:13 [W] [pool.go:277] hahahhadial tcp 192.168.121.128:6379: getsockopt: operation timed out
+2017/04/20 17:46:13 [W] [router.go:792] dial tcp 192.168.121.128:6379: getsockopt: operation timed out
+2017/04/20 17:46:13 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m|1m15.218085973s|   match|[44m GET     [0m /hello/123/5   r:/hello/?:id/?:test
+2017/04/20 17:47:16 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/20 17:47:21 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/20 17:47:27 [W] [router.go:792] 
+2017/04/20 17:47:27 [W] [router.go:792] coooool
+2017/04/20 17:48:19 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/20 17:48:25 [W] [router.go:792] 
+2017/04/20 17:48:25 [W] [router.go:792] coooool
+2017/04/20 17:48:26 [W] [router.go:792] 
+2017/04/20 17:48:26 [W] [router.go:792] coooool
+2017/04/20 17:48:26 [W] [pool.go:277] dial tcp 192.168.121.128:6379: i/o timeout
+2017/04/20 17:48:26 [W] [pool.go:277] hahahhadial tcp 192.168.121.128:6379: i/o timeout
+2017/04/20 17:48:26 [W] [router.go:792] dial tcp 192.168.121.128:6379: i/o timeout
+2017/04/20 17:48:26 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m|  1.06566265s|   match|[44m GET     [0m /hello/123/5   r:/hello/?:id/?:test
+2017/04/20 17:48:27 [W] [pool.go:277] dial tcp 192.168.121.128:6379: i/o timeout
+2017/04/20 17:48:27 [W] [pool.go:277] hahahhadial tcp 192.168.121.128:6379: i/o timeout
+2017/04/20 17:48:27 [W] [router.go:792] dial tcp 192.168.121.128:6379: i/o timeout
+2017/04/20 17:48:27 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m| 1.003941916s|   match|[44m GET     [0m /hello/123/5   r:/hello/?:id/?:test
+2017/04/20 17:48:59 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/20 17:49:43 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/20 17:49:45 [W] [router.go:792] 
+2017/04/20 17:49:45 [W] [router.go:792] coooool
+2017/04/20 17:49:47 [W] [pool.go:277] dial tcp 192.168.121.128:6379: i/o timeout
+2017/04/20 17:49:47 [W] [pool.go:277] hahahhadial tcp 192.168.121.128:6379: i/o timeout
+2017/04/20 17:49:47 [W] [router.go:792] dial tcp 192.168.121.128:6379: i/o timeout
+2017/04/20 17:49:47 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m| 2.003805047s|   match|[44m GET     [0m /hello/123/5   r:/hello/?:id/?:test
+2017/04/20 17:50:05 [W] [router.go:792] 
+2017/04/20 17:50:05 [W] [router.go:792] coooool
+2017/04/20 17:50:07 [W] [pool.go:277] dial tcp 192.168.121.128:6379: i/o timeout
+2017/04/20 17:50:07 [W] [pool.go:277] hahahhadial tcp 192.168.121.128:6379: i/o timeout
+2017/04/20 17:50:07 [W] [router.go:792] dial tcp 192.168.121.128:6379: i/o timeout
+2017/04/20 17:50:07 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m| 2.005059515s|   match|[44m GET     [0m /hello/123/5   r:/hello/?:id/?:test
+2017/04/20 17:51:08 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/20 17:51:13 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/20 17:51:44 [I] [asm_amd64.s:2197] http server Running on http://:8080
+2017/04/20 17:51:49 [W] [router.go:792] 
+2017/04/20 17:51:49 [W] [router.go:792] coooool
+2017/04/20 17:51:51 [W] [pool.go:277] dial tcp 192.168.121.128:6379: i/o timeout
+2017/04/20 17:51:51 [W] [pool.go:277] hahahhadial tcp 192.168.121.128:6379: i/o timeout
+2017/04/20 17:51:51 [W] [router.go:792] dial tcp 192.168.121.128:6379: i/o timeout
+2017/04/20 17:51:51 [D] [server.go:2568] |      127.0.0.1|[42m 200 [0m|  2.01499536s|   match|[44m GET     [0m /hello/123/5   r:/hello/?:id/?:test

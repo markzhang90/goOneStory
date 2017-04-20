@@ -27,7 +27,10 @@ type (
 
 func NewPost() (*PostDb) {
 
-	dbService := services.NewService("onestory")
+	dbService, err := services.NewService("onestory")
+	if err != nil{
+		logs.Warn(err)
+	}
 	return &PostDb{"posts", dbService}
 
 }

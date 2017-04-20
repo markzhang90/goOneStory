@@ -2,6 +2,8 @@ package services
 
 import (
 	"github.com/astaxie/beego/orm"
+	"github.com/astaxie/beego/config"
+	"github.com/astaxie/beego/logs"
 )
 
 type (
@@ -29,16 +31,32 @@ func findServicesFromPull(dbname string)(dbInstance *DbService, res bool){
 }
 
 //get connect from here
-func NewService(dbname string) *DbService {
+func NewService(dbname string) (*DbService, error) {
+
 
 	getInstance, ok := findServicesFromPull(dbname)
 
 	if ok && getInstance != nil {
-		return getInstance
+		return getInstance, nil
+	}
+
+
+	dbconf, err := config.NewConfig("ini", "conf/db.conf")
+	if err != nil {
+		logs.Warn(err)
+		panic(err)
+		return nil, err
+	}
+
+	userName := dbconf.String(dbname+"::user")
+	if len(userName) == 0{
+		logs.Warn(err)
+		panic(err)
+		return nil, err
 	}
 
 	orm.RegisterDriver("mysql", orm.DRMySQL)
-	dataSource := "root:@/" + dbname + "?charset=utf8"
+	dataSource := userName+":@/" + dbname + "?charset=utf8"
 
 	//参数1        数据库的别名，用来在 ORM 中切换数据库使用
 	//参数2        driverName
@@ -53,7 +71,7 @@ func NewService(dbname string) *DbService {
 
 	//update connect pool
 	connectPull[newInstance.DbName] = newInstance
-	return newInstance
+	return newInstance, nil
 }
 
 // Finish is called after the controller.

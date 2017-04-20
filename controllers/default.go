@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
 	"onestory/models"
+	"onestory/services/rediscli"
 )
 
 type MainController struct {
@@ -43,7 +44,16 @@ func (c *HelloController) Get() {
 		c.SetSession("asta", v.(int)+1)
 		c.Data["num"] = v.(int)
 	}
-	logs.Warning(v)
+	logs.Warning("coooool")
+
+	conn := rediscli.RedisClient.Get()
+	_, err2 := conn.Do("SET", "hello", "world")
+	//if err2!=nil{
+	//	panic(err2)
+	//}
+	defer conn.Close()
+	logs.Warning(err2)
+
 
 	c.Ctx.WriteString("hello world" + varId + varTest)
 }
