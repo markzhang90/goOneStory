@@ -36,6 +36,7 @@ func NewUser() (*UserProfileDb) {
 
 func (userDb *UserProfileDb) GetUserProfileByPhone(phone int64) (targetUser UserProfile, errcode string) {
 	o := userDb.DbConnect.Orm
+	logs.Warn(userDb.DbConnect.DbName)
 	o.Using(userDb.DbConnect.DbName)
 	targetUser = UserProfile{Phone: phone}
 	err := o.Read(&targetUser, "phone")
