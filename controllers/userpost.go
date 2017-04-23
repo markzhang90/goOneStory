@@ -10,11 +10,17 @@ import (
 	"strconv"
 )
 
-type UserPostController struct {
-	beego.Controller
-}
+type (
+	AddUserPostController struct {
+		beego.Controller
+	}
 
-func (c *UserPostController) Get() {
+	GetUserPostController struct {
+		beego.Controller
+	}
+)
+
+func (c *AddUserPostController) Get() {
 	title := "this is title"
 	content := "this is content"
 	timeNow := time.Now().Unix()
@@ -25,7 +31,7 @@ func (c *UserPostController) Get() {
 	}
 	logs.Warn(timeFormatInt)
 	postData := models.Posts{
-		Uid: 15,
+		Uid: 16,
 		Title: title,
 		Content: content,
 		Update_time: time.Now().Unix(),
@@ -42,10 +48,6 @@ func (c *UserPostController) Get() {
 	//c.Ctx.Redirect(302, "/hello/123/5")
 }
 
-
-type GetUserPostController struct {
-	beego.Controller
-}
 
 func (c *GetUserPostController) Get() {
 	uid := 15

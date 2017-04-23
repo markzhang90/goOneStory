@@ -5,7 +5,6 @@ import (
 	"github.com/astaxie/beego/logs"
 	"onestory/models"
 	"onestory/services/rediscli"
-	"onestory/library"
 )
 
 type MainController struct {
@@ -32,10 +31,18 @@ type HelloController struct {
 }
 
 func (c *HelloController) Get() {
+
+	defer func(){ // 必须要先声明defer，否则不能捕获到panic异常
+		logs.Warning("begin defer")
+
+		if err:=recover();err!=nil{
+			logs.Warning(err)
+		}
+		logs.Warning("ends defer")
+	}()
+
 	varId := c.Ctx.Input.Param(":id")
 	varTest := c.Ctx.Input.Param(":test")
-	logs.Warning(c.GetString("get"))
-
 
 	v := c.GetSession("asta")
 	if v == nil {
@@ -49,14 +56,12 @@ func (c *HelloController) Get() {
 
 	conn := rediscli.RedisClient.Get()
 	_, err2 := conn.Do("SET", "hello", "world")
+
 	if err2!=nil{
 		panic(err2)
 	}
-	logs.Warning(11111)
 
-	library.RecoverPanic()
 	defer conn.Close()
-	logs.Warning(err2)
 
 	c.Ctx.WriteString("hello world" + varId + varTest)
 }

@@ -30,7 +30,6 @@ func ReturnJsonWithError(errNo int, errMsg string, data interface{}) (res string
 	if err != nil {
 		logs.Warn(err)
 		return "", err
-
 	}
 
 	return string(result), nil

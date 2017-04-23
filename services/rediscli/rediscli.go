@@ -13,7 +13,6 @@ var (
 	// 定义常量
 	RedisClient *redis.Pool
 	REDIS_HOST  string
-	REDIS_DB    int
 )
 
 func getFullName() string {
@@ -35,7 +34,7 @@ func init() {
 		logs.Warn(err)
 		panic(err)
 	}
-	REDIS_HOST := host + ":" + port
+	REDIS_HOST = host + ":" + port
 	logs.Warning(REDIS_HOST)
 
 	// 建立连接池
@@ -63,3 +62,4 @@ func init() {
 		},
 	}
 }
+

@@ -1,11 +1,10 @@
 package library
 
 import (
-	"errors"
 	"github.com/astaxie/beego/logs"
 )
 
-func RecoverPanic() (err error)  {
+func RecoverPanic(){
 
 	//捕获 and 恢复 panic.
 	/*注意defer延迟执行的函数可以修改外围函数“testPanic2Error”的命名返回值.
@@ -15,23 +14,36 @@ func RecoverPanic() (err error)  {
 	 *建立最后一道防火墙,就像此处例子代码中所做的一样, 将panic封闭在自己的包内, 不允许蔓延传染给其它包, 包与包之间只通过error传递
 	 *结果状态.
 	*/
-	defer func() {
 
-		if r := recover(); r != nil {
+	defer func(){ // 必须要先声明defer，否则不能捕获到panic异常
+		logs.Warning("c")
 
-			//check exactly what the panic was and create error.
-			switch x := r.(type) {
-			case string:
-				err = errors.New(x)
-			case error:
-				err = x
-			default:
-				err = errors.New("Unknow panic")
-			}
-			logs.Warn(err)
+		if err:=recover();err!=nil{
+			logs.Warning(err)
 		}
-
+		logs.Warning("c")
 	}()
+	//defer func() {
+	//	logs.Warn("in defer")
+	//	r := recover()
+	//	logs.Warn(r)
+	//	if r != nil {
+	//		//check exactly what the panic was and create error.
+	//		switch x := r.(type) {
+	//		case string:
+	//			err = errors.New(x)
+	//		case error:
+	//			err = x
+	//		default:
+	//			err = errors.New("Unknow panic")
+	//		}
+	//		logs.Warn(123)
+	//
+	//		logs.Warn(err)
+	//		logs.Warn(456)
+	//
+	//	}
+	//
+	//}()
 
-	return err
 }
