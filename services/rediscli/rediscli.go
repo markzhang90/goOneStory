@@ -49,11 +49,10 @@ func init() {
 			c, err := redis.Dial(
 				"tcp",
 				REDIS_HOST,
-				redis.DialConnectTimeout(2*time.Second),
+				redis.DialConnectTimeout(1*time.Second),
 				redis.DialReadTimeout(1*time.Second),
 				redis.DialWriteTimeout(1*time.Second),
 			)
-			logs.Warning(err)
 
 			if err != nil {
 				logs.Warning("hahahha" + err.Error())

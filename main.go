@@ -21,7 +21,7 @@ func main() {
 
 
 	//err log config
-	projectName := "./logs/" + beego.AppConfig.String("appname") + "." + time.Now().Format("2006-01-01-1")
+	projectName := "./logs/" + beego.AppConfig.String("appname") + "." + time.Now().Format("2006-01-02-15")
 	beego.SetLogger(logs.AdapterFile, `{"filename":"`+projectName+`","level":7,"maxlines":0,"maxsize":0,"daily":true,"maxdays":3}`)
 
 	//beego.BConfig.WebConfig.Session.SessionProvider = "redis"
