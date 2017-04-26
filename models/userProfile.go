@@ -3,11 +3,11 @@ package models
 import (
 	"github.com/astaxie/beego/orm"
 	"github.com/astaxie/beego/logs"
+	"github.com/astaxie/beego"
 	"onestory/services"
 	"crypto/md5"
 	"encoding/hex"
 	"onestory/services/rediscli"
-
 	"encoding/json"
 	"time"
 	"errors"
@@ -98,7 +98,7 @@ func (userDb *UserProfileDb) AddNewUserProfile(userprofileData UserProfile)(int6
 	profile.Passid = userprofileData.Passid
 	profile.Email = userprofileData.Email
 	profile.Phone = userprofileData.Phone
-	profile.Update_time = userprofileData.Update_time
+	profile.Update_time = time.Now().Unix()
 	profile.Nick_name = userprofileData.Nick_name
 	profile.Password = encriptPass(userprofileData.Password)
 	profile.Ext = userprofileData.Ext
@@ -111,14 +111,60 @@ func (userDb *UserProfileDb) AddNewUserProfile(userprofileData UserProfile)(int6
 		logs.Trace("add user succ " + string(res))
 	}
 	return res, nil
-
 }
 
+
+
+func (userDb *UserProfileDb) UpdateNewUserProfile(userprofileData UserProfile) (UserProfile, error) {
+	o := userDb.DbConnect.Orm
+	o.Using(userDb.DbConnect.DbName)
+
+	requireUpdate := false
+
+	var profile UserProfile
+	profile.Id = userprofileData.Id
+	//profile.Passid = userprofileData.Passid
+	//profile.Email = userprofileData.Email
+	//profile.Phone = userprofileData.Phone
+
+
+	if o.Read(&profile) == nil {
+
+		//update fields
+		profile.Update_time = time.Now().Unix()
+		if len(userprofileData.Nick_name) > 0 {
+			requireUpdate = true
+			profile.Nick_name = userprofileData.Nick_name
+		}
+		if len(userprofileData.Password) > 0 {
+			requireUpdate = true
+			profile.Password = encriptPass(userprofileData.Password)
+		}
+		if len(userprofileData.Ext) > 0 {
+			requireUpdate = true
+			profile.Ext = userprofileData.Ext
+		}
+		if !requireUpdate {
+			return profile, nil
+		}
+		if num, err := o.Update(&profile); err == nil && num == 1{
+			logs.Trace(string(profile.Id) + " update userprofile succ " + string(num))
+			return profile, nil
+		}else{
+			logs.Warning(string(profile.Id) + " update userprofile fail " + err.Error())
+			return profile, err
+		}
+
+	}else{
+		logs.Warning("get user fail " + string(profile.Id))
+		return profile, errors.New("获取用户失败")
+	}
+	return profile, errors.New("更新用户失败")
+}
 
 func (userDb *UserProfileDb) GetUserProfile() (err error) {
 	o := userDb.DbConnect.Orm
 	o.Using(userDb.DbConnect.DbName)
-	logs.Warning(userDb.DbConnect.DbName)
 
 	var maps []orm.Params
 	res, err := o.Raw("select * from user_profile where nick_name = ?", "oooook").Values(&maps)
@@ -159,17 +205,38 @@ func SyncSetUserCache(userObj UserProfile) (UserCache, bool) {
 	jsonUser, err := json.Marshal(userCache)
 
 	if err != nil {
+		userCache.LastLogin = -1
 		logs.Warn("SyncSetUserCache Fail" + userObj.Passid)
 		return userCache, false
 	}
 
 	res, errCache := redsiConn.Do("SET", userObj.Passid, jsonUser)
+	//expire user
+	expireTime, confErr := beego.AppConfig.Int("redisuserexpire")
+	if confErr != nil {
+		expireTime = 60*60*24*30
+	}
+	redsiConn.Do("EXPIRE", userObj.Passid,expireTime)
+
 	defer redsiConn.Close()
 	if errCache == nil || res == "OK"{
 		return userCache, true
+	}else {
+		userCache.LastLogin = -1
 	}
 	logs.Warn("SyncSetUserCache Fail" + errCache.Error())
 	return userCache, false
+}
+
+func CleanUserCache(passId string) (bool, error) {
+	redsiConn := rediscli.RedisClient.Get()
+	res, errCache := redsiConn.Do("DEL", passId)
+	if errCache != nil{
+		return false, errCache
+	}
+	logs.Warn(res)
+	return true, nil
+
 }
 
 func GetUserFromCache(passId string) (UserCache, error) {
