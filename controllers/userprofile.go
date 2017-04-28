@@ -20,6 +20,9 @@ type (
 	LoginUserController struct {
 		beego.Controller
 	}
+	LogoutUserController struct {
+		beego.Controller
+	}
 	UpdateUserProfileController struct {
 		beego.Controller
 	}

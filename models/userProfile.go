@@ -230,11 +230,10 @@ func SyncSetUserCache(userObj UserProfile) (UserCache, bool) {
 
 func CleanUserCache(passId string) (bool, error) {
 	redsiConn := rediscli.RedisClient.Get()
-	res, errCache := redsiConn.Do("DEL", passId)
+	_, errCache := redsiConn.Do("DEL", passId)
 	if errCache != nil{
 		return false, errCache
 	}
-	logs.Warn(res)
 	return true, nil
 
 }

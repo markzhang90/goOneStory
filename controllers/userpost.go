@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
-	//"github.com/astaxie/beego/logs"
 	"onestory/models"
 	"onestory/library"
 	"github.com/astaxie/beego/logs"
@@ -21,6 +20,7 @@ type (
 )
 
 func (c *AddUserPostController) Get() {
+
 	title := "this is title"
 	content := "this is content"
 	timeNow := time.Now().Unix()
@@ -29,7 +29,6 @@ func (c *AddUserPostController) Get() {
 	if err != nil{
 		logs.Warn("failed convert", err)
 	}
-	logs.Warn(timeFormatInt)
 	postData := models.Posts{
 		Uid: 16,
 		Title: title,
@@ -37,15 +36,20 @@ func (c *AddUserPostController) Get() {
 		Update_time: time.Now().Unix(),
 		Create_date: timeFormatInt,
 	}
-	logs.Warn(postData)
 	c.EnableXSRF = false
 	var newPostDb = models.NewPost()
 	//var getUser = newUser.GetUserProfile()
 	//logs.Warning(getUser)
-	newPostDb.AddNewUserPost(postData)
-	//redirect
-	c.Abort("500")
-	//c.Ctx.Redirect(302, "/hello/123/5")
+	res, err := newPostDb.AddNewUserPost(postData)
+	var output string
+
+	if err != nil{
+		output, _ = library.ReturnJsonWithError(library.AddPostFail, err.Error(), nil)
+
+	}else {
+		output, _ = library.ReturnJsonWithError(library.AddPostFail, "ref", res)
+	}
+	c.Ctx.WriteString(output)
 }
 
 
@@ -55,6 +59,7 @@ func (c *GetUserPostController) Get() {
 	if err != nil{
 		limit = 1
 	}
+
 	c.EnableXSRF = false
 	var newPostDb = models.NewPost()
 	//var getUser = newUser.GetUserProfile()

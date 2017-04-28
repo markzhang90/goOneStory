@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego/logs"
 	"onestory/services"
 	"github.com/mitchellh/mapstructure"
+	"encoding/json"
 )
 
 type (
@@ -133,7 +134,7 @@ func (postDb *PostDb) AddNewUserPost(NewPost Posts) (postId int64, err error) {
 	logs.Warning("err", err)
 
 	if err != nil {
-		logs.Warning(postId)
+		logs.Warning("post fail %s error: %s ", json.Marshal(mypost), err.Error())
 	} else {
 		postId = res
 	}
