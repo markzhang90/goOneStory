@@ -1,0 +1,319 @@
+<style type="text/css">
+    /*body {*/
+        /*background-color: #FFF6F6;*/
+    /*}*/
+
+    body > .grid {
+        height: 100%;
+    }
+
+    #feedpage {
+        margin-top: 100px;
+        height: 700px;
+    }
+
+    .column {
+        max-width: 600px;
+    }
+
+    .padleft {
+        margin-left: 50px;
+        margin-right: 10px;
+    }
+
+    #test {
+        height: 700px;
+        max-width: 700px;
+        overflow: auto;
+    }
+
+    .yellow {
+        color: yellow;
+    }
+</style>
+
+<div id="feedpage">
+    <div id="center" class="ui grid">
+        <div class="six wide centered column ">
+            <div class="ui middle aligned grid">
+                <div class="twelve wide column ">
+                    <div id="datacard" class="ui card blurring">
+                        <div class="ui inverted dimmer">
+                            <div class="ui text loader">Loading</div>
+                        </div>
+                        <div class="content">
+                            <div class="left floated">
+                                <img class="ui avatar image" src="../../static/assets/images/avatar/tom.jpg">
+                                Elliot
+                            </div>
+                            <div class="right floated meta">14h</div>
+                        </div>
+                        <div class="image">
+                            <img src="../../static/assets/images/avatar/tom.jpg">
+                        </div>
+                        <div class="content">
+                            <div class="header">Watchmen</div>
+                            <div class="description">In a gritty and alternate 1985 the glory days of costumed
+                                vigilantes have
+                            </div>
+                        </div>
+                        <div class="ui two bottom attached buttons">
+                            <div class="ui button"><i class="add icon"></i> Queue</div>
+                            <div class="ui primary button"><i class="add icon"></i> Watch</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="four wide column ">
+                    <div class="left floated ui labeled icon vertical menu ">
+                        <a v-on:click="swingUp" class="item">
+                            <i class="angle double up icon"></i>
+                        </a>
+                        <a v-on:click="showCalander" id="getcalander" class="item">
+                            <i class="calendar icon"></i> ${pickeddate}
+                        </a>
+                        <a v-on:click="swingDown" class="item">
+                            <i class="angle double down icon"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="test" class="ten wide centered column padleft">
+            <div v-if="show_content_loading" class="ui active loader">
+            </div>
+            <div v-if="cleardata === false">
+                <div class="ui divided items">
+                    <div class="item">
+                        <div class="content">
+                            <a class="header">我的标题啊</a>
+                            <div class="meta">
+                                <span class="cinema">${pickeddate}</span>
+                                <span class="cinema">晴</span>
+                                <span class="cinema"></span>
+                            </div>
+                            <div class="description">
+                                <p></p>
+                            </div>
+                            <div class="extra">
+                                <div class="ui label yellow"><i class="smile icon"></i>happy</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui divider"></div>
+                <div class="ui items">
+                    <div class="item">
+                        <a class="ui small image">
+                            <img src="/static/assets/images/avatar/tom.jpg">
+                        </a>
+                        <div class="content">
+                            <a class="header">Cute Dog</a>
+                            <div class="description">
+                                <p>Cute dogs come in a variety of shapes and sizes. Some cute dogs are cute for their
+                                    adorable faces, others for their tiny stature, and even others for their massive
+                                    size.</p>
+                                <p>Cute dogs come in a variety of shapes and sizes. Some cute dogs are cute for their
+                                    adorable faces, others for their tiny stature, and even others for their massive
+                                    size.</p>
+                                <p>Cute dogs come in a variety of shapes and sizes. Some cute dogs are cute for their
+                                    adorable faces, others for their tiny stature, and even others for their massive
+                                    size.</p>
+                                <p>Cute dogs come in a variety of shapes and sizes. Some cute dogs are cute for their
+                                    adorable faces, others for their tiny stature, and even others for their massive
+                                    size.</p>
+                                <p>Cute dogs come in a variety of shapes and sizes. Some cute dogs are cute for their
+                                    adorable faces, others for their tiny stature, and even others for their massive
+                                    size.</p>
+                                <p>Cute dogs come in a variety of shapes and sizes. Some cute dogs are cute for their
+                                    adorable faces, others for their tiny stature, and even others for their massive
+                                    size.</p>
+                                <p>Many people also have their own barometers for what makes a cute dog.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="ui items">
+                    <div class="item">
+                        OP这边在收集上线系统的需求，大家在平时使用pacific的时候，有哪些不爽的地方或者不满足的需求的地方可以提出来，我统一反馈给燕姐。我先来一个：上线无代码diff功能
+                    </div>
+                </div>
+                <div class="content">
+                    <a class="ui large image">
+                        <img src="https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3032870824,1530799279&fm=23&gp=0.jpg">
+                    </a>
+                </div>
+                <div class="ui items">
+                    <div class="item">
+
+                        <div class="content">
+                            <p>Cute dogs come in a variety of shapes and sizes. Some cute dogs are cute for their
+                                adorable faces, others for their tiny stature, and even others for their massive
+                                size.</p>
+                            <p>
+                                OP这边在收集上线系统的需求，大家在平时使用pacific的时候，有哪些不爽的地方或者不满足的需求的地方可以提出来，我统一反馈给燕姐。我先来一个：上线无代码diff功能OP这边在收集上线系统的需求，大家在平时使用pacific的时候，有哪些不爽的地方或者不满足的需求的地方可以提出来，我统一反馈给燕姐。我先来一个：上线无代码diff功能OP这边在收集上线系统的需求，大家在平时使用pacific的时候，有哪些不爽的地方或者不满足的需求的地方可以提出来，我统一反馈给燕姐。我先来一个：上线无代码diff功能OP这边在收集上线系统的需求，大家在平时使用pacific的时候，有哪些不爽的地方或者不满足的需求的地方可以提出来，我统一反馈给燕姐。我先来一个：上线无代码diff功能OP这边在收集上线系统的需求，大家在平时使用pacific的时候，有哪些不爽的地方或者不满足的需求的地方可以提出来，我统一反馈给燕姐。我先来一个：上线无代码diff功能</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui items">
+                    <div class="item">
+                        <a class="ui small image">
+                            <img src="../../static/assets/images/avatar/tom.jpg">
+                        </a>
+                        <div class="content">
+                            <a class="header">Cute Dog</a>
+                            <div class="description">
+                                <p>Cute dogs come in a variety of shapes and sizes. Some cute dogs are cute for their
+                                    adorable faces, others for their tiny stature, and even others for their massive
+                                    size.</p>
+                                <p>Many people also have their own barometers for what makes a cute dog.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui items">
+                    <div class="item">
+                        <a class="ui small image">
+                            <img src="../../static/assets/images/avatar/tom.jpg">
+                        </a>
+                        <div class="content">
+                            <a class="header">Cute Dog</a>
+                            <div class="description">
+                                <p>Cute dogs come in a variety of shapes and sizes. Some cute dogs are cute for their
+                                    adorable faces, others for their tiny stature, and even others for their massive
+                                    size.</p>
+                                <p>Many people also have their own barometers for what makes a cute dog.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui items">
+                    <div class="item">
+                        <a class="ui small image">
+                            <img src="../../static/assets/images/avatar/tom.jpg">
+                        </a>
+                        <div class="content">
+                            <a class="header">Cute Dog</a>
+                            <div class="description">
+                                <p>Cute dogs come in a variety of shapes and sizes. Some cute dogs are cute for their
+                                    adorable faces, others for their tiny stature, and even others for their massive
+                                    size.</p>
+                                <p>Many people also have their own barometers for what makes a cute dog.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+
+        var thispage = new Vue({
+            delimiters: ['${', '}'],
+            el: '#feedpage',
+            data: {
+                show_content_loading: false,
+                cleardata: true,
+                pass_name: '',
+                pass_word: '',
+                counter: 0,
+                return_info: {},
+                passid: '',
+                nickname: '',
+                pickeddate: getToday(),
+            },
+            methods: {
+
+                swingUp: function(){
+
+                    $('#datacard').dimmer('show');
+                    var _self = this
+                    _self.counter += 1
+                    _self.show_content_loading = true;
+                    var inputdata = {}
+                    inputdata['_xsrf'] = getCookie("_xsrf");
+
+                    $.ajax({
+                        type: "POST",
+                        url:  "/post/getuserpost",
+                        data: inputdata,
+                        dataType: "json",
+                        beforeSend: function () {
+
+                        },
+                        success: function (data) {
+                            _self.show_content_loading = false;
+                            _self.cleardata = true;
+                            $('#datacard').transition('fly up', '1000ms');
+                            console.log(data)
+                        },
+                        error: function (e) {
+                            alert("登录失败")
+                        },
+                        complete: function () {
+                            $('#datacard').transition('fly down');
+                            $('#datacard').dimmer('hide');
+                            _self.pickeddate = changeDate(1, _self.pickeddate, 1);
+                            // $('#datacard').dimmer('hide');
+                        },
+                    })
+
+                },
+
+                swingDown: function(){
+                    $('#datacard').dimmer('show');
+                    var _self = this
+                    this.counter += 1
+                    _self.show_content_loading = true;
+                    var inputdata = {}
+                    inputdata['_xsrf'] = getCookie("_xsrf");
+
+                    $.ajax({
+                        type: "POST",
+                        url:  "post/getuserpost",
+                        data: inputdata,
+                        dataType: "json",
+                        beforeSend: function () {
+                        },
+                        success: function (data) {
+                            _self.show_content_loading = false;
+                            _self.cleardata = false;
+                            $('#datacard').transition('fly down', '1000ms');
+                            console.log(data)
+
+                        },
+                        error: function (e) {
+                            alert("登录失败")
+                        },
+                        complete: function () {
+                            $('#datacard').transition('fly up');
+                            $('#datacard').dimmer('hide');
+                            _self.pickeddate = changeDate(1,_self.pickeddate, 0);
+                        },
+                    })
+                },
+
+                showCalander: function(){
+                    var _self = this
+                    $('#getcalander').calendar({
+                        type: 'date',
+                        onChange: function (date, text) {
+                            _self.pickeddate = stringToDate(text);
+                        },
+                    });
+                },
+            }
+        })
+
+    });
+
+</script>

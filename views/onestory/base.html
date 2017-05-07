@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--<link rel="stylesheet" href="style.css" />-->
+    <link rel="stylesheet" type="text/css" href="../../static/lib/semantic/components/reset.css">
+    <link rel="stylesheet" type="text/css" href="../../static/lib/semantic/components/site.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/lib/semantic/components/container.css">
+    <link rel="stylesheet" type="text/css" href="../../static/lib/semantic/components/grid.css">
+    <link rel="stylesheet" type="text/css" href="../../static/lib/semantic/components/header.css">
+    <link rel="stylesheet" type="text/css" href="../../static/lib/semantic/components/image.css">
+    <link rel="stylesheet" type="text/css" href="../../static/lib/semantic/components/menu.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/lib/semantic/components/divider.css">
+    <link rel="stylesheet" type="text/css" href="../../static/lib/semantic/components/dropdown.css">
+    <link rel="stylesheet" type="text/css" href="../../static/lib/semantic/components/segment.css">
+    <link rel="stylesheet" type="text/css" href="../../static/lib/semantic/components/button.css">
+
+    <link rel="stylesheet" type="text/css" href="../../static/lib/semantic/components/list.css">
+    <link rel="stylesheet" type="text/css" href="../../static/lib/semantic/components/icon.css">
+    <link rel="stylesheet" type="text/css" href="../../static/lib/semantic/components/sidebar.css">
+    <link rel="stylesheet" type="text/css" href="../../static/lib/semantic/components/transition.css">
+
+    <!-- Standard Meta -->
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+
+    <link rel="stylesheet" type="text/css" href="../../static/lib/semantic/semantic.css"/>
+
+    <!-- vue.js -->
+    <script src="../../static/assets/library/jquery.min.js"></script>
+    <script src="../../static/assets/library/jquery.cookie.js"></script>
+    <script src="../../static/assets/library/jquery.base64.js"></script>
+
+    <script src="../../static/lib/semantic/semantic.min.js"></script>
+
+    <script src="../../static/assets/library/vue.js"></script>
+    <script src="../../static/js/common.js"></script>
+
+    <style type="text/css">
+        [v-cloak] {
+            display: none;
+        }
+        body {
+            background-color: #f8f8f8;
+        }
+
+    </style>
+</head>
+
+<body>
+<div id="header">
+    {{ .Fixheader }}
+</div>
+
+<div id="content">
+    {{ .LayoutContent }}
+</div>
+
+<div id="footer">
+    {{ .Footer }}
+</div>
+</body>
+</html>

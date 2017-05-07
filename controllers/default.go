@@ -3,34 +3,43 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
-	"onestory/models"
 	"onestory/services/rediscli"
+	"html/template"
 )
 
-type MainController struct {
-	beego.Controller
-}
+type (
+	MainController struct {
+		beego.Controller
+	}
+	EditController struct {
+		beego.Controller
+	}
+	TestController struct {
+		beego.Controller
+	}
+)
 
 
 func (c *MainController) Get() {
-	c.Data["Website"] = "beego.me"
-	c.Data["Email"] = "astaxie@gmail.com"
-	c.TplName = "index.tpl"
-	c.EnableXSRF = false
-	var newUser = models.NewUser()
-	var getUser = newUser.GetUserProfile()
-	logs.Warning(getUser)
-
-	//redirect
-	c.Abort("404")
-	//c.Ctx.Redirect(302, "/hello/123/5")
+	c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
+	c.Layout = "onestory/base.html"
+	c.TplName = "onestory/feed.html"
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["Fixheader"] = "onestory/fixheader.html"
+	c.LayoutSections["Footer"] = "onestory/footer.html"
 }
 
-type HelloController struct {
-	beego.Controller
+func (c *EditController) Get() {
+	c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
+	c.Layout = "onestory/base.html"
+	c.TplName = "onestory/edit.html"
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["Fixheader"] = "onestory/fixheader.html"
+	c.LayoutSections["Footer"] = "onestory/footer.html"
 }
 
-func (c *HelloController) Get() {
+
+func (c *TestController) Get() {
 
 	defer func(){ // 必须要先声明defer，否则不能捕获到panic异常
 		logs.Warning("begin defer")

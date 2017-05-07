@@ -90,6 +90,18 @@ func (userDb *UserProfileDb) GetUserProfileByEmail(email string) (targetUser Use
 	return targetUser, nil
 }
 
+func (userDb *UserProfileDb) GetUserProfileByPassId(passId string) (targetUser UserProfile, err error) {
+	o := userDb.DbConnect.Orm
+	o.Using(userDb.DbConnect.DbName)
+	targetUser = UserProfile{Passid: passId}
+	err = o.Read(&targetUser, "passid")
+	if err != nil {
+		logs.Warning("get user fail " + err.Error())
+		return targetUser, err
+	}
+	return targetUser, nil
+}
+
 func (userDb *UserProfileDb) AddNewUserProfile(userprofileData UserProfile)(int64, error){
 	o := userDb.DbConnect.Orm
 	o.Using(userDb.DbConnect.DbName)
@@ -247,8 +259,15 @@ func GetUserFromCache(passId string) (UserCache, error) {
 	defer redsiConn.Close()
 
 	if errCache != nil{
-		logs.Warn("SyncSetUserCache Fail" + errCache.Error())
-		return userCache, errCache
+		//try to get user from db
+		var newUserDb = NewUser()
+		targetUser, err := newUserDb.GetUserProfileByPassId(passId)
+		if err !=nil {
+			logs.Warn("GetUser Fail" + err.Error())
+			return userCache, errCache
+		}
+		userCache.UserProfile = targetUser
+		return userCache, nil
 	}
 
 	if jsonRes, ok := res.([]byte); !ok {

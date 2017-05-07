@@ -130,11 +130,10 @@ func (postDb *PostDb) AddNewUserPost(NewPost Posts) (postId int64, err error) {
 	mypost.Update_time = NewPost.Update_time
 	mypost.Create_date = NewPost.Create_date
 	res, err := o.Insert(mypost)
-	logs.Warning(res)
-	logs.Warning("err", err)
 
 	if err != nil {
-		logs.Warning("post fail %s error: %s ", json.Marshal(mypost), err.Error())
+		jsonData,_ := json.Marshal(mypost)
+		logs.Warning("post fail %s error: %s ", jsonData, err.Error())
 	} else {
 		postId = res
 	}

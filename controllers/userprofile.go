@@ -8,6 +8,7 @@ import (
 	"time"
 	"onestory/library"
 	"errors"
+	"html/template"
 )
 
 type (
@@ -115,7 +116,7 @@ func (c *UpdateUserProfileController) Get() {
 }
 
 //登录
-func (c *LoginUserController) Get() {
+func (c *LoginUserController) Post() {
 	cookiekey := beego.AppConfig.String("passid")
 
 	password := c.GetString("password")
@@ -131,14 +132,27 @@ func (c *LoginUserController) Get() {
 		output, _ = library.ReturnJsonWithError(0, "ref", res)
 		_, cacheUser := models.SyncSetUserCache(res)
 		if cacheUser {
-			c.SetSecureCookie(cookiekey, "passid", res.Passid)
+			//set redis fail
 		}
+		c.SetSecureCookie(cookiekey, "passid", res.Passid)
+
 
 	} else {
 		errCode := library.GetUserFail
 		output, _ = library.ReturnJsonWithError(errCode, "ref", err.Error())
 	}
 	c.Ctx.WriteString(output)
+	return
+}
+
+//登录渲染页
+func (c *LoginUserController) Get() {
+	c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
+	c.Layout = "onestory/base.html"
+	c.TplName = "onestory/login.html"
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["Fixheader"] = "onestory/fixheader.html"
+	c.LayoutSections["Footer"] = "onestory/footer.html"
 	return
 }
 

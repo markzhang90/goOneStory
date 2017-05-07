@@ -53,8 +53,28 @@ func (c *AddUserPostController) Get() {
 }
 
 
-func (c *GetUserPostController) Get() {
-	uid := 15
+
+
+func (c *GetUserPostController) Post() {
+	cookiekey := beego.AppConfig.String("passid")
+
+
+	//get from cache
+	passId, _ := c.GetSecureCookie(cookiekey, "passid")
+	logs.Warning(passId)
+	if len(passId) <= 0 {
+		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
+		c.Ctx.WriteString(output)
+		return
+	}
+	cahchedUser, err := models.GetUserFromCache(passId)
+	if err != nil {
+		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", err.Error())
+		c.Ctx.WriteString(output)
+		return
+	}
+	uid := cahchedUser.UserProfile.Id
+
 	limit, err := c.GetInt("num")
 	if err != nil{
 		limit = 1
@@ -72,7 +92,7 @@ func (c *GetUserPostController) Get() {
 		output, _ = library.ReturnJsonWithError(library.CodeErrCommen, err.Error(), nil)
 
 	}else {
-		output, _ = library.ReturnJsonWithError(library.CodeErrCommen, "ref", postList)
+		output, _ = library.ReturnJsonWithError(library.CodeSucc, "ref", postList)
 	}
 
 	c.Ctx.WriteString(output)
