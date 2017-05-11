@@ -36,7 +36,7 @@ var ImageSection = Vue.extend({
             var _self = this;
     		$('#'+_self.getImgUploadId).click();
     	},
-    	onFileChange(e) {
+    	onFileChange: function(e) {
 	      	var files = e.target.files || e.dataTransfer.files;
             var _self = this;
 	      	if (!files.length)

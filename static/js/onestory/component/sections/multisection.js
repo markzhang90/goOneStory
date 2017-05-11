@@ -48,7 +48,7 @@ var MultiSection = Vue.extend({
             var _self = this;
     		$('#'+_self.getImgUploadId).click();
     	},
-    	onFileChange(e) {
+    	onFileChange: function(e) {
 	      	var files = e.target.files || e.dataTransfer.files;
             var _self = this;
 	      	if (!files.length)
@@ -71,7 +71,7 @@ var MultiSection = Vue.extend({
 	      	reader.readAsDataURL(file);
 	    },
 
-	   	updateValue(){
+	   	updateValue: function(){
     		var _self = this
         	this.tar_obj.para = _self.para
     	}

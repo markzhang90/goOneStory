@@ -18,7 +18,7 @@ var ParagraphSection = Vue.extend({
     	}
     },
     methods: {
-    	updateValue(){
+    	updateValue: function(){
     		var _self = this
         	this.tar_obj.para = _self.para
     	}
