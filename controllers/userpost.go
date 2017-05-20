@@ -7,6 +7,7 @@ import (
 	"github.com/astaxie/beego/logs"
 	"time"
 	"strconv"
+	"strings"
 )
 
 type (
@@ -15,6 +16,10 @@ type (
 	}
 
 	GetUserPostController struct {
+		beego.Controller
+	}
+
+	GetUserPostClosestController struct {
 		beego.Controller
 	}
 )
@@ -98,4 +103,51 @@ func (c *GetUserPostController) Post() {
 	c.Ctx.WriteString(output)
 }
 
+
+func (c *GetUserPostClosestController) Post() {
+	cookiekey := beego.AppConfig.String("passid")
+
+
+	//get from cache
+	passId, _ := c.GetSecureCookie(cookiekey, "passid")
+	logs.Warning(passId)
+	if len(passId) <= 0 {
+		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
+		c.Ctx.WriteString(output)
+		return
+	}
+	cahchedUser, err := models.GetUserFromCache(passId)
+	if err != nil {
+		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", err.Error())
+		c.Ctx.WriteString(output)
+		return
+	}
+	uid := cahchedUser.UserProfile.Id
+
+	option := c.GetString("option")
+	var isNext bool = false
+	if option == "next"{
+		isNext = true
+	}
+	date := c.GetString("date")
+	dateCorrect := strings.Replace(date, "/", "", -1)
+	intDate ,_ := strconv.Atoi(dateCorrect)
+	logs.Warning(uid)
+	c.EnableXSRF = false
+	var newPostDb = models.NewPost()
+	//var getUser = newUser.GetUserProfile()
+	//logs.Warning(getUser)
+	postList, err := newPostDb.GetUserClosestPost(uid, intDate, isNext)
+
+	var output string
+
+	if err != nil{
+		output, _ = library.ReturnJsonWithError(library.CodeErrCommen, err.Error(), nil)
+
+	}else {
+		output, _ = library.ReturnJsonWithError(library.CodeSucc, "ref", postList)
+	}
+
+	c.Ctx.WriteString(output)
+}
 

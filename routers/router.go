@@ -14,4 +14,5 @@ func init() {
 	beego.Router("/user/logintosys", &controllers.LoginUserController{})
 	beego.Router("/post/adduserpost", &controllers.AddUserPostController{})
 	beego.Router("/post/getuserpost", &controllers.GetUserPostController{})
+	beego.Router("/post/getuserclosestpost", &controllers.GetUserPostClosestController{})
 }

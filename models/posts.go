@@ -36,6 +36,22 @@ func NewPost() (*PostDb) {
 
 }
 
+func (postDb *PostDb) GetUserClosestPost(uid int, givenDate int, isNext bool) (postList Posts, err error) {
+	o := postDb.DbConnect.Orm
+	o.Using(postDb.DbConnect.DbName)
+	var queryGet string
+	if isNext {
+		queryGet = "select * from "+postDb.tableName+" where uid = ? and create_date > ? order by create_date asc limit 1";
+	}else{
+		queryGet = "select * from "+postDb.tableName+" where uid = ? and create_date < ? order by create_date desc limit 1";
+	}
+	var posts Posts
+	logs.Warning(o.Raw(queryGet, uid, givenDate))
+	err = o.Raw(queryGet, uid, givenDate).QueryRow(&posts)
+
+	return posts, err
+}
+
 func (postDb *PostDb) GetUserAllRecentPosts(uid int, limit int) (postList []Posts, err error) {
 
 	o := postDb.DbConnect.Orm

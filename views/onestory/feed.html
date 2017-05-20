@@ -12,10 +12,6 @@
         height: 700px;
     }
 
-    .column {
-        max-width: 600px;
-    }
-
     .padleft {
         margin-left: 50px;
         margin-right: 10px;
@@ -34,13 +30,14 @@
 
 <div id="feedpage">
     <div id="center" class="ui grid">
+        <div class="one wide centered column "></div>
         <div class="six wide centered column ">
-            <div class="ui middle aligned grid">
                 <div class="twelve wide column ">
-                    <div id="datacard" class="ui card blurring">
+                    <div id="datacard" class="ui centered card blurring">
                         <div class="ui inverted dimmer">
                             <div class="ui text loader">Loading</div>
                         </div>
+
                         <div class="content">
                             <div class="left floated">
                                 <img class="ui avatar image" src="../../static/assets/images/avatar/tom.jpg">
@@ -57,29 +54,18 @@
                                 vigilantes have
                             </div>
                         </div>
-                        <div class="ui two bottom attached buttons">
-                            <div class="ui button"><i class="add icon"></i> Queue</div>
-                            <div class="ui primary button"><i class="add icon"></i> Watch</div>
+                        <div class="ui three bottom attached buttons">
+                            <button class="ui icon button" v-on:click="swingUp"><i class="large angle double up icon"></i></button>
+                            <button class="ui icon button" v-on:click="showCalander"><i class="calendar icon"></i>${pickeddate} </button>
+                            <button class="ui icon button" v-on:click="swingDown"><i class="large angle double down icon"></i></button>
                         </div>
+
                     </div>
                 </div>
-                <div class="four wide column ">
-                    <div class="left floated ui labeled icon vertical menu ">
-                        <a v-on:click="swingUp" class="item">
-                            <i class="angle double up icon"></i>
-                        </a>
-                        <a v-on:click="showCalander" id="getcalander" class="item">
-                            <i class="calendar icon"></i> ${pickeddate}
-                        </a>
-                        <a v-on:click="swingDown" class="item">
-                            <i class="angle double down icon"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
+
         </div>
 
-        <div id="test" class="ten wide centered column padleft">
+        <div id="test" class="eight wide centered column padleft">
             <div v-if="show_content_loading" class="ui active loader">
             </div>
             <div v-if="cleardata === false">
@@ -210,6 +196,8 @@
                 </div>
             </div>
         </div>
+        <div class="one wide centered column "></div>
+
     </div>
 
 </div>
@@ -240,11 +228,13 @@
                     _self.counter += 1
                     _self.show_content_loading = true;
                     var inputdata = {}
+                    inputdata['option'] = 'next'
                     inputdata['_xsrf'] = getCookie("_xsrf");
+                    inputdata['date'] = _self.pickeddate
 
                     $.ajax({
                         type: "POST",
-                        url:  "/post/getuserpost",
+                        url:  "/post/getuserclosestpost",
                         data: inputdata,
                         dataType: "json",
                         beforeSend: function () {
@@ -276,10 +266,12 @@
                     _self.show_content_loading = true;
                     var inputdata = {}
                     inputdata['_xsrf'] = getCookie("_xsrf");
+                    inputdata['option'] = 'previous'
+                    inputdata['date'] = _self.pickeddate
 
                     $.ajax({
                         type: "POST",
-                        url:  "post/getuserpost",
+                        url:  "post/getuserclosestpost",
                         data: inputdata,
                         dataType: "json",
                         beforeSend: function () {

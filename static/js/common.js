@@ -5,7 +5,7 @@
 function getToday() {
     var today = new Date();
     var thisMonth = today.getMonth()+1;
-    return today.getFullYear() + "/" + thisMonth + "/" + today.getDate()
+    return today.getFullYear() + "/" + zeroize(thisMonth) + "/" + today.getDate()
 }
 
 function changeDate(dateToGo, pidkcedData, type){
@@ -24,6 +24,22 @@ function changeDate(dateToGo, pidkcedData, type){
 
 }
 
+function zeroize(value, length) {
+
+    if (!length) length = 2;
+
+    value = String(value);
+
+    for (var i = 0, zeros = ''; i < (length - value.length); i++) {
+
+        zeros += '0';
+
+    }
+
+    return zeros + value;
+
+};
+
 function stringToDate(DateStr){
 
     var converted = Date.parse(DateStr);
@@ -34,7 +50,7 @@ function stringToDate(DateStr){
         myDate = new Date(arys[0],arys[1],arys[2]);
     }
     month = myDate.getMonth() + 1;
-    return myDate.getFullYear() + "/" + month + "/" + myDate.getDate();
+    return myDate.getFullYear() + "/" + zeroize(month) + "/" + myDate.getDate();
 }
 
 function getCookie() {
