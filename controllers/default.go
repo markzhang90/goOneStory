@@ -3,7 +3,8 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
-	"onestory/services/rediscli"
+	//"onestory/services/rediscli"
+	"onestory/services/request"
 	"html/template"
 )
 
@@ -50,28 +51,32 @@ func (c *TestController) Get() {
 		logs.Warning("ends defer")
 	}()
 
-	varId := c.Ctx.Input.Param(":id")
-	varTest := c.Ctx.Input.Param(":test")
+	//varId := c.Ctx.Input.Param(":id")
+	//varTest := c.Ctx.Input.Param(":test")
+	//
+	//v := c.GetSession("asta")
+	//if v == nil {
+	//	c.SetSession("asta", int(1))
+	//	c.Data["num"] = 0
+	//} else {
+	//	c.SetSession("asta", v.(int)+1)
+	//	c.Data["num"] = v.(int)
+	//}
+	//logs.Warning("coooool")
 
-	v := c.GetSession("asta")
-	if v == nil {
-		c.SetSession("asta", int(1))
-		c.Data["num"] = 0
-	} else {
-		c.SetSession("asta", v.(int)+1)
-		c.Data["num"] = v.(int)
-	}
-	logs.Warning("coooool")
+	var requestVars = make(map[string]string)
+	requestVars["key"] = "77514aacee204dc697a27743f714d434";
+	requestVars["cityname"] = "北京";
+	stringRes, _ := request.HttpGet("http://api.avatardata.cn/Weather/Query", requestVars)
+	//conn := rediscli.RedisClient.Get()
+	//_, err2 := conn.Do("SET", "hello", "world")
+	//
+	//if err2!=nil{
+	//	panic(err2)
+	//}
+	//
+	//defer conn.Close()
 
-	conn := rediscli.RedisClient.Get()
-	_, err2 := conn.Do("SET", "hello", "world")
-
-	if err2!=nil{
-		panic(err2)
-	}
-
-	defer conn.Close()
-
-	c.Ctx.WriteString("hello world" + varId + varTest)
+	c.Ctx.WriteString(stringRes)
 }
 

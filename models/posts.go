@@ -36,6 +36,9 @@ func NewPost() (*PostDb) {
 
 }
 
+/**
+get most recent post
+ */
 func (postDb *PostDb) GetUserClosestPost(uid int, givenDate int, isNext bool) (postList Posts, err error) {
 	o := postDb.DbConnect.Orm
 	o.Using(postDb.DbConnect.DbName)
@@ -52,6 +55,9 @@ func (postDb *PostDb) GetUserClosestPost(uid int, givenDate int, isNext bool) (p
 	return posts, err
 }
 
+/**
+get all user posts
+ */
 func (postDb *PostDb) GetUserAllRecentPosts(uid int, limit int) (postList []Posts, err error) {
 
 	o := postDb.DbConnect.Orm
@@ -135,6 +141,9 @@ func _assignMapToPost(fromMap orm.Params) (eachPost Posts ,err error) {
 	//eachPost.Ext = ext
 }
 
+/**
+add a new post
+ */
 func (postDb *PostDb) AddNewUserPost(NewPost Posts) (postId int64, err error) {
 	o := postDb.DbConnect.Orm
 	o.Using(postDb.DbConnect.DbName)

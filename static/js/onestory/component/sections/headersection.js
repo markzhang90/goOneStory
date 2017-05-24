@@ -2,7 +2,7 @@
 var templateHeader = '';
 var HeaderSection = Vue.extend({
     delimiters : ['${', '}'],
-  	template: '<h2 class="centered compact ui header"><img class="ui avatar image" :src="avatar_img" ><div class="content"><div class="ui form"><input type="text" name="title" placeholder="今天的标题" v-on:input="updateValue" v-model="title"></div><div class="sub header">${getDate}</div></div></h2>',
+  	template: '<h2 class="centered compact ui header"><img class="ui avatar image" :src="avatar_img" ><div class="content"><div class="ui form"><input type="text" name="title" placeholder="今天写点什么" v-on:input="updateValue" v-model="title"></div><div class="sub header">${getDate}</div></div></h2>',
   	props: [
 	    'avatar_img',
 	    'input_title',
@@ -16,9 +16,7 @@ var HeaderSection = Vue.extend({
 
     computed: {
     	getDate: function(){
-    		var myDate = new Date();
-            month = myDate.getMonth() + 1;
-            return myDate.getFullYear() + "/" + month + "/" + myDate.getDate();
+            return getToday();
     	}
     },
 
