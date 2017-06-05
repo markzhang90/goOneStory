@@ -6,7 +6,32 @@ import (
 	"io/ioutil"
 	"fmt"
 	"strings"
+	"net"
+	"time"
+	"github.com/astaxie/beego/logs"
 )
+
+var (
+	client *http.Client
+)
+
+func init()  {
+
+	client = &http.Client{
+		Transport: &http.Transport{
+			Dial: func(netw, addr string) (net.Conn, error) {
+				conn, err := net.DialTimeout(netw, addr, time.Second*2)
+				if err != nil {
+					return nil, err
+				}
+				conn.SetDeadline(time.Now().Add(time.Second * 2))
+				return conn, nil
+			},
+			ResponseHeaderTimeout: time.Second * 2,
+		},
+	}
+
+}
 
 // 简单直接的GET请求
 func HttpGet(urlStr string, queryList map[string]string) (string, error){
@@ -19,7 +44,7 @@ func HttpGet(urlStr string, queryList map[string]string) (string, error){
 
 	queryVar := strings.Join(temp, "&")
 	fullQuery := urlStr + "?" + queryVar
-	resp, err := http.Get(fullQuery)
+	resp, err := client.Get(fullQuery)
 	if err != nil {
 		return "", err
 		// handle error
@@ -28,6 +53,7 @@ func HttpGet(urlStr string, queryList map[string]string) (string, error){
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
+		logs.Warning("request fail for " + fullQuery + " " + err.Error())
 		return "", err
 		// handle error
 	}
@@ -38,7 +64,7 @@ func HttpGet(urlStr string, queryList map[string]string) (string, error){
 //Tips：使用这个方法的话，第二个参数要设置成”application/x-www-form-urlencoded”，否则post参数无法传递。
 
 func HttpPost(urlStr string) {
-	resp, err := http.Post(urlStr,
+	resp, err := client.Post(urlStr,
 		"application/x-www-form-urlencoded",
 		strings.NewReader("name=cjb"))
 	if err != nil {
@@ -56,7 +82,7 @@ func HttpPost(urlStr string) {
 
 // POST请求 -- 使用http.PostForm()方法
 func HttpPostForm(urlStr string) {
-	resp, err := http.PostForm(urlStr,
+	resp, err := client.PostForm(urlStr,
 		url.Values{"key": {"Value"}, "id": {"123"}})
 
 	if err != nil {
@@ -74,7 +100,6 @@ func HttpPostForm(urlStr string) {
 
 // 复杂的请求（设置头参数、cookie之类的数据），可以使用http.Client的Do()方法</strong>
 func HttpDo() {
-	client := &http.Client{}
 
 	req, err := http.NewRequest("POST", "http://www.baidu.com", strings.NewReader("name=cjb"))
 	if err != nil {

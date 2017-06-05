@@ -6,6 +6,7 @@ import (
 	//"onestory/services/rediscli"
 	"onestory/services/request"
 	"html/template"
+	"onestory/library"
 )
 
 type (
@@ -67,7 +68,8 @@ func (c *TestController) Get() {
 	var requestVars = make(map[string]string)
 	requestVars["key"] = "77514aacee204dc697a27743f714d434";
 	requestVars["cityname"] = "北京";
-	stringRes, _ := request.HttpGet("http://api.avatardata.cn/Weather/Query", requestVars)
+	stringRes, _ := request.GetWeatherInfo("北京")
+	res, _ := library.Json2Map(stringRes)
 	//conn := rediscli.RedisClient.Get()
 	//_, err2 := conn.Do("SET", "hello", "world")
 	//
@@ -76,7 +78,7 @@ func (c *TestController) Get() {
 	//}
 	//
 	//defer conn.Close()
-
+	logs.Warning(res)
 	c.Ctx.WriteString(stringRes)
 }
 

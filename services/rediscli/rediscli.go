@@ -34,6 +34,7 @@ func init() {
 		logs.Warn(err)
 		panic(err)
 	}
+
 	REDIS_HOST = host + ":" + port
 	logs.Warning(REDIS_HOST)
 
