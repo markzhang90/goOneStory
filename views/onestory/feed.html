@@ -229,7 +229,7 @@
                     _self.show_content_loading = true;
                     var inputdata = {}
                     inputdata['option'] = 'next'
-                    inputdata['_xsrf'] = getCookie("_xsrf");
+                    inputdata['_xsrf'] = getXsrfCookie("_xsrf");
                     inputdata['date'] = _self.pickeddate
 
                     $.ajax({
@@ -265,7 +265,7 @@
                     this.counter += 1
                     _self.show_content_loading = true;
                     var inputdata = {}
-                    inputdata['_xsrf'] = getCookie("_xsrf");
+                    inputdata['_xsrf'] = getXsrfCookie("_xsrf");
                     inputdata['option'] = 'previous'
                     inputdata['date'] = _self.pickeddate
 

@@ -38,7 +38,7 @@ function zeroize(value, length) {
 
     return zeros + value;
 
-};
+}
 
 function stringToDate(DateStr){
 
@@ -53,9 +53,26 @@ function stringToDate(DateStr){
     return myDate.getFullYear() + "/" + zeroize(month) + "/" + myDate.getDate();
 }
 
-function getCookie() {
+function getXsrfCookie() {
     var xsrf = $.cookie('_xsrf');
     var xsrflist = xsrf.split("|");
     var _xsrf = $.base64.decode(xsrflist[0])
     return _xsrf ? _xsrf : undefined;
+}
+
+function setCookie(name,value, expire)
+{
+    if(expire == null){
+        expire = 7
+    }
+    $.cookie(name, value, { expires: expire });
+}
+
+function getCookie(name)
+{
+    var result = $.cookie(name);
+    if (result == null || result.length == 0){
+        return null;
+    }
+    return result;
 }

@@ -100,7 +100,7 @@
                     this.counter += 1
                     var inputdata = {}
 
-                    inputdata['_xsrf'] = getCookie("_xsrf");
+                    inputdata['_xsrf'] = getXsrfCookie("_xsrf");
                     inputdata['phone'] = this.phone
                     inputdata['password'] = this.pass_word
                     $.ajax({

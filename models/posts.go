@@ -17,7 +17,7 @@ type (
 	Posts struct {
 		Id          int `orm:"auto"`
 		Uid         int
-		Title       string
+		Header       string
 		Create_date int64
 		Rel         string
 		Update_time int64
@@ -150,7 +150,8 @@ func (postDb *PostDb) AddNewUserPost(NewPost Posts) (postId int64, err error) {
 	postId = -1
 	mypost := new(Posts)
 	mypost.Uid = NewPost.Uid
-	mypost.Title = NewPost.Title
+	mypost.Header = NewPost.Header
+	mypost.Rel = NewPost.Rel
 	mypost.Content = NewPost.Content
 	mypost.Update_time = NewPost.Update_time
 	mypost.Create_date = NewPost.Create_date

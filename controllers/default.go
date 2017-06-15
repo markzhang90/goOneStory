@@ -7,6 +7,7 @@ import (
 	"onestory/services/request"
 	"html/template"
 	"onestory/library"
+	"fmt"
 )
 
 type (
@@ -64,12 +65,13 @@ func (c *TestController) Get() {
 	//	c.Data["num"] = v.(int)
 	//}
 	//logs.Warning("coooool")
+	city := c.GetString("city")
+	mapRes, err := request.GetWeatherInfo(city)
 
-	var requestVars = make(map[string]string)
-	requestVars["key"] = "77514aacee204dc697a27743f714d434";
-	requestVars["cityname"] = "北京";
-	stringRes, _ := request.GetWeatherInfo("北京")
-	res, _ := library.Json2Map(stringRes)
+	if err != nil{
+		c.Ctx.WriteString(err.Error())
+	}
+
 	//conn := rediscli.RedisClient.Get()
 	//_, err2 := conn.Do("SET", "hello", "world")
 	//
@@ -78,7 +80,16 @@ func (c *TestController) Get() {
 	//}
 	//
 	//defer conn.Close()
-	logs.Warning(res)
+	mapVal, ok := mapRes.(map[string]interface{})
+	if !ok {
+		fmt.Print("get wether fail")
+	}
+
+	realtimeVal , ok := mapVal["realtime"].(map[string]interface{})
+	if !ok {
+		fmt.Print("get wether fail")
+	}
+	stringRes, _ := library.ReturnJsonWithError(0,"", realtimeVal["weather"])
 	c.Ctx.WriteString(stringRes)
 }
 
