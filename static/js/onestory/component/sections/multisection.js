@@ -9,11 +9,11 @@ var MultiSection = Vue.extend({
 		  						<div class="ui inverted dimmer">\
 		  							<div class="content">\
 		  								<div class="center">\
-		  									<div class="ui black basic button" @click="uploadImage()">上传图片</div>\
+		  									<div class="ui black basic button" @click="uploadImage()">上传图片  <div :class="isActive ? active : disabled" class="ui inline small loader"></div></div>\
 										</div>\
 									</div>\
 								</div>\
-								<img class="ui image" @mouseenter="openDimmer()" @mousedown="closeDimmer()" :src=img_file >\
+								<img class="ui image" @mouseover="openDimmer()" :src=img_file >\
 							</div>\
 						</div>\
 						<div class="column">\
@@ -32,6 +32,9 @@ var MultiSection = Vue.extend({
     	return {
     		para: this.tar_obj.para,
     		img_file: this.tar_obj.upload_img,
+            isActive: false,
+            active: "active",
+            disabled: "disabled",
     	}
     },
     methods: {
@@ -54,22 +57,43 @@ var MultiSection = Vue.extend({
 	      	if (!files.length)
 	        	return;
 	      	var _self = this;
-			_self.tar_obj.upload_file = files[0]
-
+			// _self.tar_obj.upload_file = files[0]
+            _self.isActive = true
 	      	this.createImage(files[0]);
-			$('#'+_self.getImgSectionId).dimmer('hide');
 	    },
-	    createImage(file) {
-	      	var image = new Image();
-	      	var reader = new FileReader();
-	      	var _self = this;
+        createImage: function(file) {
+            var image = new Image();
+            var _self = this;
+            var formdata = new FormData();
+            formdata.append('myfile', file);
+            formdata.append('_xsrf', getXsrfCookie("_xsrf"));
+            $.ajax({
+                type: "POST",
+                url:  "/uploader",
+                data: formdata,
+                cache : false,
+                contentType : false,
+                processData : false,
+                dataType: "json",
+                success: function (data) {
+                    if (data.ErrNo == 0){
+                        // _self.img_file = data.Data.url
+                        loadImage(data.Data.url, _self.updateImage)
+                        _self.tar_obj.upload_key = data.Data.key
+                    }else{
+                        alert("上传失败")
+                    }
+                    console.log(data);
+                },
+            });
+        },
 
-	      	reader.onload = (e) => {
-	        	_self.tar_obj.upload_img = e.target.result;
-	        	_self.img_file = _self.tar_obj.upload_img;
-	      	};
-	      	reader.readAsDataURL(file);
-	    },
+        updateImage:function (url) {
+            var _self = this;
+            _self.img_file = url
+            _self.isActive = false
+            _self.closeDimmer()
+        },
 
 	   	updateValue: function(){
     		var _self = this

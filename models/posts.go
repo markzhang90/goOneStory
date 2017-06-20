@@ -17,9 +17,9 @@ type (
 	Posts struct {
 		Id          int `orm:"auto"`
 		Uid         int
-		Header       string
-		Create_date int64
+		Header      string
 		Rel         string
+		Create_date int64
 		Update_time int64
 		Content     string
 		Ext         string
@@ -147,6 +147,7 @@ add a new post
 func (postDb *PostDb) AddNewUserPost(NewPost Posts) (postId int64, err error) {
 	o := postDb.DbConnect.Orm
 	o.Using(postDb.DbConnect.DbName)
+
 	postId = -1
 	mypost := new(Posts)
 	mypost.Uid = NewPost.Uid

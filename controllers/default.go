@@ -8,6 +8,7 @@ import (
 	"html/template"
 	"onestory/library"
 	"fmt"
+	"time"
 )
 
 type (
@@ -20,6 +21,9 @@ type (
 	TestController struct {
 		beego.Controller
 	}
+	UploadController struct {
+		beego.Controller
+	}
 )
 
 
@@ -30,6 +34,28 @@ func (c *MainController) Get() {
 	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["Fixheader"] = "onestory/fixheader.html"
 	c.LayoutSections["Footer"] = "onestory/footer.html"
+}
+
+func (c *UploadController) Post() {
+	//c.EnableXSRF = false
+	f, h, _ := c.GetFile("myfile")
+	nowTimging := time.Now().Format("2006-01-02-03-04-05")
+	path := "./temp/" + nowTimging + h.Filename;
+	defer f.Close()
+	c.SaveToFile("myfile", path)
+	qiuniuApi := library.NewQiNiu(false)
+	imgKey, errUp := qiuniuApi.Upoloader(path)
+	var output string
+	if errUp == nil{
+		var outRes = make(map[string]string)
+		outRes["key"] = imgKey
+		url := qiuniuApi.DownloadUrl(imgKey)
+		outRes["url"] = url
+		output, _ = library.ReturnJsonWithError(library.CodeSucc, library.CodeString(library.CodeSucc), outRes)
+	}else {
+		output, _ = library.ReturnJsonWithError(library.CodeErrCommen, "upload pic fail", "")
+	}
+	c.Ctx.WriteString(output)
 }
 
 func (c *EditController) Get() {

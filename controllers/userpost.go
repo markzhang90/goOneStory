@@ -57,12 +57,12 @@ func (c *AddUserPostController) Post() {
 	postData := models.Posts{
 		Uid: uid,
 		Header: header,
-		Content: content,
-		Rel: ref,
+		Content: string(content),
+		Rel: string(ref),
 		Update_time: time.Now().Unix(),
 		Create_date: timeFormatInt,
 	}
-	c.EnableXSRF = false
+
 	var newPostDb = models.NewPost()
 	//var getUser = newUser.GetUserProfile()
 	//logs.Warning(getUser)
@@ -73,7 +73,7 @@ func (c *AddUserPostController) Post() {
 		output, _ = library.ReturnJsonWithError(library.AddPostFail, err.Error(), nil)
 
 	}else {
-		output, _ = library.ReturnJsonWithError(library.AddPostFail, "ref", res)
+		output, _ = library.ReturnJsonWithError(library.CodeSucc, "ref", res)
 	}
 	c.Ctx.WriteString(output)
 }

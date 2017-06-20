@@ -11,9 +11,10 @@
 
 <div id="editpage">
     <div class="ui grid">
+        {{ .xsrfdata }}
         <div class="one wide column"></div>
         <div class="seven wide column">
-            <button @click="addnewpost()" class="ui secondary button">Okay</button>
+            <!--<button @click="addnewpost()" class="ui secondary button">Okay</button>-->
             <component is="header-section" :avatar_img="avatar_img" :input_title="head_title"
                        @update-title="updateTitleValue"></component>
             <h2 class="centered compact ui header">
@@ -36,6 +37,9 @@
                     <component :is="eachElement.component" :tar_obj="eachElement"></component>
                 </div>
             </div>
+
+            <div v-if="allElements.length > 0"><button @click="showModal()"  :class="isLoading ? 'loading' : ''" class="ui primary button">保存</button></div>
+
         </div>
 
         <div class="one wide column"></div>
@@ -73,6 +77,33 @@
         <div class="one wide column"></div>
     </div>
 </div>
+
+
+<div class="ui basic modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Archive Old Messages
+    </div>
+    <div class="image content">
+        <div class="image">
+            <i class="file text outline icon"></i>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="two fluid ui inverted buttons">
+            <div class="ui cancel red basic inverted button">
+                <i class="remove icon"></i>
+                No
+            </div>
+            <div class="ui ok green basic inverted button">
+                <i class="checkmark icon"></i>
+                Yes
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="../../static/js/onestory/component/sections/headersection.js"></script>
 <script src="../../static/js/onestory/component/sections/imagesection.js"></script>
 <script src="../../static/js/onestory/component/sections/multisection.js"></script>
@@ -109,6 +140,7 @@
                 pickeddate: getToday(),
                 weatherInfo:{},
                 city:"",
+                isLoading: false,
             },
 
             methods: {
@@ -145,7 +177,8 @@
                             element.namespace = 'image';
                             element.component = 'image-section';
                             element.upload_img = '/static/assets/images/image.png';
-                            element.upload_file = '';
+                            element.upload_key = '';
+//                            element.upload_file = '';
                             break;
                         case 'para':
                             element.namespace = 'para';
@@ -156,7 +189,8 @@
                             element.namespace = 'multi';
                             element.component = 'multi-section';
                             element.upload_img = '/static/assets/images/image.png';
-                            element.upload_file = '';
+                            element.upload_key = '';
+//                            element.upload_file = '';
                             element.para = '';
                             break;
                         default:
@@ -178,35 +212,49 @@
                         }
                     });
                 },
-
+                showModal: function () {
+                    $('.ui.modal')
+                        .modal('setting', 'closable', false)
+                        .modal('show')
+                    ;
+                },
                 updateTitleValue: function (val) {
                     var _self = this;
                     _self.head_title = val;
                 },
                 addnewpost: function(){
                     var _self = this;
-                    var inputdata = {};
-                    inputdata['content'] = _self.allElements;
-                    inputdata['header'] = _self.head_title;
+                    var formdata = new FormData();
                     var ref = {};
+                    formdata.append('_xsrf', getXsrfCookie("_xsrf"));
+                    formdata.append('content' , JSON.stringify(_self.allElements));
+                    formdata.append('header',  _self.head_title);
                     ref['city'] = _self.city;
-                    ref['weather'] = _self.weatherInfo;
-                    inputdata['ref'] = ref;
-                    console.log(inputdata);
+                    ref['weather']=  _self.weatherInfo;
+                    formdata.append('ref', JSON.stringify(ref));
+                    console.log(formdata);
+                    _self.isLoading = true;
                     $.ajax({
-                        type: "GET",
+                        type: "POST",
                         url:  "/post/adduserpost",
-                        data: inputdata,
+                        data: formdata,
+                        cache : false,
+                        contentType : false,
+                        processData : false,
                         dataType: "json",
                         beforeSend: function () {
 
                         },
                         success: function (data) {
+                            console.log(data);
+
                             if(data.ErrNo == 0){
 
                             }
-                            console.log(data);
                         },
+                        complete:function () {
+                            _self.isLoading = false;
+                        }
                     });
                 },
                 showobj: function () {

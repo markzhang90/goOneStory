@@ -13,6 +13,7 @@ func init() {
 	beego.Router("/user/updateuserprofile", &controllers.UpdateUserProfileController{})
 	beego.Router("/user/getuserprofile", &controllers.GetUserProfileController{})
 	beego.Router("/user/logintosys", &controllers.LoginUserController{})
+	beego.Router("/uploader", &controllers.UploadController{})
 	beego.Router("/post/adduserpost", &controllers.AddUserPostController{})
 	beego.Router("/post/getuserpost", &controllers.GetUserPostController{})
 	beego.Router("/post/getuserclosestpost", &controllers.GetUserPostClosestController{})
