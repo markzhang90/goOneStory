@@ -78,31 +78,16 @@
     </div>
 </div>
 
-
-<div class="ui basic modal">
-    <i class="close icon"></i>
-    <div class="header">
-        Archive Old Messages
-    </div>
-    <div class="image content">
-        <div class="image">
-            <i class="file text outline icon"></i>
-        </div>
+<div class="ui small basic modal">
+    <div class="ui icon header"><i class="large edit icon"></i>提交，记录这一天</div>
+    <div class="content">
+        <p></p>
     </div>
     <div class="actions">
-        <div class="two fluid ui inverted buttons">
-            <div class="ui cancel red basic inverted button">
-                <i class="remove icon"></i>
-                No
-            </div>
-            <div class="ui ok green basic inverted button">
-                <i class="checkmark icon"></i>
-                Yes
-            </div>
-        </div>
+        <div class="ui red basic cancel inverted button"><i class="remove icon"></i> 不，继续编辑 </div>
+        <div class="ui green ok inverted button"><i class="checkmark icon"></i> 是的 </div>
     </div>
 </div>
-
 
 <script src="../../static/js/onestory/component/sections/headersection.js"></script>
 <script src="../../static/js/onestory/component/sections/imagesection.js"></script>
@@ -213,8 +198,18 @@
                     });
                 },
                 showModal: function () {
-                    $('.ui.modal')
-                        .modal('setting', 'closable', false)
+                    var _self = this;
+
+                    $('.ui.basic.modal')
+                        .modal({
+                            closable  : false,
+                            onDeny    : function(){
+
+                            },
+                            onApprove : function() {
+                                _self.addnewpost()
+                            }
+                        })
                         .modal('show')
                     ;
                 },
@@ -247,13 +242,13 @@
                         },
                         success: function (data) {
                             console.log(data);
-
                             if(data.ErrNo == 0){
 
                             }
                         },
                         complete:function () {
                             _self.isLoading = false;
+                            location.href="/main"
                         }
                     });
                 },

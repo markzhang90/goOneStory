@@ -41,23 +41,23 @@
 
                         <div class="content">
                             <div class="left floated">
-                                <img class="ui avatar image" src="../../static/assets/images/avatar/tom.jpg">
-                                Elliot
+                                <img class="ui avatar image" :src="avatar.length > 1 ? avatar : '../../static/assets/images/avatar/tom.jpg'">
+                                ${nickname}
                             </div>
-                            <div class="right floated meta">14h</div>
+                            <div class="right floated meta">${pickeddate}</div>
                         </div>
                         <div class="image">
                             <img src="../../static/assets/images/avatar/tom.jpg">
                         </div>
                         <div class="content">
-                            <div class="header">Watchmen</div>
+                            <div class="header">${header}</div>
                             <div class="description">In a gritty and alternate 1985 the glory days of costumed
                                 vigilantes have
                             </div>
                         </div>
                         <div class="ui three bottom attached buttons">
                             <button class="ui icon button" v-on:click="swingUp"><i class="large angle double up icon"></i></button>
-                            <button class="ui icon button" v-on:click="showCalander"><i class="calendar icon"></i>${pickeddate} </button>
+                            <button class="ui icon button" v-on:click="showCalander"><i class="calendar icon"></i></button>
                             <button class="ui icon button" v-on:click="swingDown"><i class="large angle double down icon"></i></button>
                         </div>
 
@@ -73,10 +73,10 @@
                 <div class="ui divided items">
                     <div class="item">
                         <div class="content">
-                            <a class="header">我的标题啊</a>
+                            <a class="header">${header}</a>
                             <div class="meta">
                                 <span class="cinema">${pickeddate}</span>
-                                <span class="cinema">晴</span>
+                                <span class="cinema">${weatherInfo.info}</span>
                                 <span class="cinema"></span>
                             </div>
                             <div class="description">
@@ -217,9 +217,15 @@
                 counter: 0,
                 return_info: {},
                 passid: '',
-                nickname: '',
+                nickname: {{.nickname}},
+                avatar: {{.avatar}},
                 pickeddate: getToday(),
+                header:'',
+                allElements: [], //组件池
+                weatherInfo:{},
+                city:'',
             },
+
             methods: {
 
                 swingUp: function(){
@@ -304,8 +310,68 @@
                         },
                     });
                 },
-            }
+                
+                getPost: function () {
+                    var _self = this
+                    var inputdata = {}
+                    inputdata['_xsrf'] = getXsrfCookie("_xsrf");
+                    inputdata['option'] = 'previous'
+                    inputdata['date'] = _self.pickeddate
+
+                    $.ajax({
+                        type: "POST",
+                        url:  "post/getuserclosestpost",
+                        data: inputdata,
+                        dataType: "json",
+                        beforeSend: function () {
+                        },
+                        success: function (data) {
+                            if(data.ErrNo == 0){
+                                _self._assignPostData2Render(data.Data)
+                            }else{
+                                alert(data.ErrMsg);
+                            }
+                            console.log(data)
+                        },
+                        error: function (e) {
+                            alert("get fail")
+                        },
+                        complete: function () {
+                            _self.pickeddate = changeDate(1,_self.pickeddate, 0);
+                        },
+                    })
+                },
+                _assignPostData2Render :function (postData) {
+                    var _self = this
+                    if(postData.Create_date){
+                        _self.pickeddate = unixToDate(postData.Update_time);
+                    }
+                    if(postData.Content) {
+                        _self.allElements = jQuery.parseJSON(postData.Content)
+                    }
+                    if(postData.Header) {
+                        _self.header = postData.Header
+                    }
+                    if(postData.Rel){
+                        var Rel = jQuery.parseJSON(postData.Rel)
+                        if(Rel.weather){
+                            _self.weatherInfo = Rel.weather;
+                        }
+                        if(Rel.city){
+                            _self.city = Rel.city;
+                        }
+                    }
+                },
+            },
+            computed: {
+
+            },
+            mounted() {
+                this.getPost();
+            },
         })
+
+//        thispage.getPost();
 
     });
 

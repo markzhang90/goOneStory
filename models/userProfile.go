@@ -28,6 +28,7 @@ type (
 		Update_time int64
 		Nick_name   string
 		Ext         string
+		Avatar      string
 	}
 
 	UserCache struct {
@@ -113,6 +114,7 @@ func (userDb *UserProfileDb) AddNewUserProfile(userprofileData UserProfile)(int6
 	profile.Update_time = time.Now().Unix()
 	profile.Nick_name = userprofileData.Nick_name
 	profile.Password = encriptPass(userprofileData.Password)
+	profile.Avatar = userprofileData.Avatar
 	profile.Ext = userprofileData.Ext
 	res, err := o.Insert(profile)
 
@@ -155,6 +157,10 @@ func (userDb *UserProfileDb) UpdateNewUserProfile(userprofileData UserProfile) (
 		if len(userprofileData.Ext) > 0 {
 			requireUpdate = true
 			profile.Ext = userprofileData.Ext
+		}
+		if len(userprofileData.Avatar) > 0 {
+			requireUpdate = true
+			profile.Avatar = userprofileData.Avatar
 		}
 		if !requireUpdate {
 			return profile, nil

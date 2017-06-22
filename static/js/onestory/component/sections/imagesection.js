@@ -98,11 +98,6 @@ var ImageSection = Vue.extend({
             return 'img_section_' + _self.tar_obj.finder;
         },
 
-        getImgSectionIdLoader: function () {
-            var _self = this;
-            return 'img_section_loader_' + _self.tar_obj.finder;
-        },
-
         getImgUploadId: function () {
             var _self = this;
             return 'img_upload_' + _self.tar_obj.finder;

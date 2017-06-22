@@ -9,6 +9,7 @@ import (
 	"onestory/library"
 	"fmt"
 	"time"
+	"onestory/models"
 )
 
 type (
@@ -28,9 +29,33 @@ type (
 
 
 func (c *MainController) Get() {
+
+	//get userinfo
+	cookiekey := beego.AppConfig.String("passid")
+
+	//get from cache
+	var cahchedUser models.UserCache
+	passId, resBool := c.GetSecureCookie(cookiekey, "passid")
+	if resBool {
+		cahchedUser, _ = models.GetUserFromCache(passId)
+	}
+
+	if len(cahchedUser.UserProfile.Nick_name)>1 {
+		c.Data["nickname"] = cahchedUser.UserProfile.Nick_name
+	}else {
+		c.Data["nickname"] = ""
+	}
+
+	if len(cahchedUser.UserProfile.Avatar)>1 {
+		c.Data["avatar"] = cahchedUser.UserProfile.Avatar
+	}else {
+		c.Data["avatar"] = ""
+	}
+
 	c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
 	c.Layout = "onestory/base.html"
 	c.TplName = "onestory/feed.html"
+
 	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["Fixheader"] = "onestory/fixheader.html"
 	c.LayoutSections["Footer"] = "onestory/footer.html"
