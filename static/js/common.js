@@ -24,22 +24,6 @@ function changeDate(dateToGo, pidkcedData, type){
 
 }
 
-function unixToDate(unixTime, isFull) {
-
-    var time = new Date(unixTime * 1000);
-    var ymdhis = "";
-    ymdhis += time.getUTCFullYear() + "/";
-    ymdhis += (time.getUTCMonth()+1) + "/";
-    ymdhis += time.getUTCDate();
-    if (isFull === true)
-    {
-        ymdhis += " " + time.getUTCHours() + ":";
-        ymdhis += time.getUTCMinutes() + ":";
-        ymdhis += time.getUTCSeconds();
-    }
-    return ymdhis;
-}
-
 function zeroize(value, length) {
 
     if (!length) length = 2;

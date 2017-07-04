@@ -94,6 +94,51 @@ func _assignMapToPost(fromMap orm.Params) (eachPost Posts ,err error) {
 		panic(err)
 	}
 	return eachPost, nil
+	//logs.Warn(fromMap["Id"])
+	//var emptyRes Posts
+	//id, ok := fromMap["Id"].(int)
+	//if !ok {
+	//	return emptyRes, ok
+	//}
+	//uid, ok := fromMap["Uid"].(int)
+	//if !ok {
+	//	return emptyRes, ok
+	//}
+	//title, ok := fromMap["Title"].(string)
+	//if !ok {
+	//	return emptyRes, ok
+	//}
+	//createTime, ok := fromMap["Create_date"].(int64)
+	//if !ok {
+	//	return emptyRes, ok
+	//}
+	//
+	//rel,ok := fromMap["Rel"].(string)
+	//if !ok {
+	//	return emptyRes, ok
+	//}
+	//updateTime,ok := fromMap["Update_time"].(int64)
+	//if !ok {
+	//	return emptyRes, ok
+	//}
+	//content, ok := fromMap["Content"].(string)
+	//if !ok {
+	//	return emptyRes, ok
+	//}
+	//
+	//ext,ok := fromMap["Ext"].(string)
+	//if !ok {
+	//	return emptyRes, ok
+	//}
+	//
+	//eachPost.Id = id
+	//eachPost.Uid = uid
+	//eachPost.Title = title
+	//eachPost.Create_date = createTime
+	//eachPost.Rel = rel
+	//eachPost.Update_time = updateTime
+	//eachPost.Content = content
+	//eachPost.Ext = ext
 }
 
 /**
