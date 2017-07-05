@@ -110,12 +110,13 @@ func (c *TestController) Get() {
 	if !ok {
 		fmt.Print("get wether fail")
 	}
+	fmt.Print(mapVal)
 
-	realtimeVal , ok := mapVal["realtime"].(map[string]interface{})
+	//realtimeVal , ok := mapVal["realtime"].(map[string]interface{})
 	if !ok {
 		fmt.Print("get wether fail")
 	}
-	stringRes, _ := library.ReturnJsonWithError(0,"", realtimeVal["weather"])
+	stringRes, _ := library.ReturnJsonWithError(0,"", mapVal)
 	c.Ctx.WriteString(stringRes)
 }
 
