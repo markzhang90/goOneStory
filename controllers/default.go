@@ -116,7 +116,7 @@ func (c *TestController) Get() {
 	if !ok {
 		fmt.Print("get wether fail")
 	}
-	stringRes, _ := library.ReturnJsonWithError(0,"", mapVal)
+	stringRes, _ := library.ReturnJsonWithError(0,"", mapVal["realtime"])
 	c.Ctx.WriteString(stringRes)
 }
 
