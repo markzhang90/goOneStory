@@ -110,7 +110,7 @@ func (c *TestController) Get() {
 	if !ok {
 		fmt.Print("get wether fail")
 	}
-	fmt.Print(mapVal)
+	fmt.Print(mapVal["realtime"])
 
 	//realtimeVal , ok := mapVal["realtime"].(map[string]interface{})
 	if !ok {
