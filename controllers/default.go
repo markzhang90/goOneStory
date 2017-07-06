@@ -111,12 +111,12 @@ func (c *TestController) Get() {
 		fmt.Print("get wether fail")
 	}
 	fmt.Print(mapVal["realtime"])
-
-	//realtimeVal , ok := mapVal["realtime"].(map[string]interface{})
+	fmt.Print("11111111111111")
+	realtimeVal , ok := mapVal["realtime"].(map[string]interface{})
 	if !ok {
 		fmt.Print("get wether fail")
 	}
-	stringRes, _ := library.ReturnJsonWithError(0,"", mapVal["realtime"])
+	stringRes, _ := library.ReturnJsonWithError(1,"", realtimeVal)
 	c.Ctx.WriteString(stringRes)
 }
 

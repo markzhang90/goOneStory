@@ -41,6 +41,7 @@ type (
 func NewUser() (*UserProfileDb) {
 
 	dbService, err := services.NewService("onestory")
+
 	if err != nil{
 		logs.Warn(err)
 	}

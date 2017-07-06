@@ -54,16 +54,18 @@ func NewService(dbname string) (*DbService, error) {
 		panic(err)
 		return nil, err
 	}
+	userPass := dbconf.String(dbname+"::pass")
+	dbUrl :=  dbconf.String(dbname+"::url")
 
 	orm.RegisterDriver("mysql", orm.DRMySQL)
-	dataSource := userName+":@/" + dbname + "?charset=utf8"
+	dataSource := userName+":" + userPass + "@tcp("+dbUrl+")/"+dbname+"?charset=utf8"
 
 	//参数1        数据库的别名，用来在 ORM 中切换数据库使用
 	//参数2        driverName
 	//参数3        对应的链接字符串
 	//参数4(可选)  设置最大空闲连接
 	//参数5(可选)  设置最大数据库连接 (go >= 1.2)
-	//user:password@/dbname
+	//user:password@tcp(url)/dbname
 
 	orm.RegisterDataBase(dbname, "mysql", dataSource, maxIdle, maxConn)
 	newOrm := orm.NewOrm()

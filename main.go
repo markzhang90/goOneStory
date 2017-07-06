@@ -14,8 +14,14 @@ import (
 
 
 func main() {
+
+	userName := beego.AppConfig.String("mysqluser")
+	passWord := beego.AppConfig.String("mysqlpass")
+	url := beego.AppConfig.String("mysqlurls")
+
+	dataSource := userName+":" + passWord + "@tcp("+url+")/onestory?charset=utf8"
 	//default
-	orm.RegisterDataBase("default", "mysql", "root:@/test?charset=utf8")
+	orm.RegisterDataBase("default", "mysql", dataSource)
 
 	beego.ErrorController(&controllers.ErrorController{})
 
