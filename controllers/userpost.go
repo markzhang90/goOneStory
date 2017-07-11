@@ -22,6 +22,14 @@ type (
 	GetUserPostClosestController struct {
 		beego.Controller
 	}
+
+	GetUserPostDateController struct {
+		beego.Controller
+	}
+
+	GetUserPostDateRangeController struct {
+		beego.Controller
+	}
 )
 
 func (c *AddUserPostController) Post() {
@@ -81,7 +89,7 @@ func (c *AddUserPostController) Post() {
 
 
 
-func (c *GetUserPostController) Post() {
+func (c *GetUserPostController) Get() {
 	cookiekey := beego.AppConfig.String("passid")
 
 
@@ -126,8 +134,9 @@ func (c *GetUserPostController) Post() {
 
 
 func (c *GetUserPostClosestController) Post() {
-	cookiekey := beego.AppConfig.String("passid")
+	c.EnableXSRF = false
 
+	cookiekey := beego.AppConfig.String("passid")
 
 	//get from cache
 	passId, _ := c.GetSecureCookie(cookiekey, "passid")
@@ -153,8 +162,6 @@ func (c *GetUserPostClosestController) Post() {
 	date := c.GetString("date")
 	dateCorrect := strings.Replace(date, "/", "", -1)
 	intDate ,_ := strconv.Atoi(dateCorrect)
-	logs.Warning(uid)
-	c.EnableXSRF = false
 	var newPostDb = models.NewPost()
 	//var getUser = newUser.GetUserProfile()
 	//logs.Warning(getUser)
@@ -165,6 +172,119 @@ func (c *GetUserPostClosestController) Post() {
 	if err != nil{
 		output, _ = library.ReturnJsonWithError(library.CodeErrCommen, err.Error(), nil)
 
+	}else {
+		output, _ = library.ReturnJsonWithError(library.CodeSucc, "ref", postList)
+	}
+
+	c.Ctx.WriteString(output)
+}
+
+func (c *GetUserPostDateRangeController) Get() {
+	c.EnableXSRF = false
+
+	cookiekey := beego.AppConfig.String("passid")
+
+	//get from cache
+	passId, _ := c.GetSecureCookie(cookiekey, "passid")
+
+	if len(passId) <= 0 {
+		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
+		c.Ctx.WriteString(output)
+		return
+	}
+	cahchedUser, err := models.GetUserFromCache(passId)
+	if err != nil {
+		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", err.Error())
+		c.Ctx.WriteString(output)
+		return
+	}
+	uid := cahchedUser.UserProfile.Id
+
+	limit, err := c.GetInt("limit")
+	if err != nil{
+		limit = 1
+	}
+
+	isDesc := true
+	order := c.GetString("order", "desc")
+	if order != "desc"{
+		isDesc = false
+	}
+
+	startDate := c.GetString("start", "0")
+	dateFormatStart := strings.Replace(startDate, "/", "", -1)
+	startDateInt ,_ := strconv.Atoi(dateFormatStart)
+
+	endDate := c.GetString("end", "20201231")
+	dateFormatEnd := strings.Replace(endDate, "/", "", -1)
+	endDateInt ,_ := strconv.Atoi(dateFormatEnd)
+
+	var newPostDb = models.NewPost()
+	//var getUser = newUser.GetUserProfile()
+	//logs.Warning(getUser)
+	postList, err := newPostDb.QueryUserPostByDateRange(uid, startDateInt, endDateInt, isDesc, limit)
+
+	var output string
+
+	if err != nil{
+		output, _ = library.ReturnJsonWithError(library.CodeErrCommen, err.Error(), nil)
+	}else {
+		output, _ = library.ReturnJsonWithError(library.CodeSucc, "ref", postList)
+	}
+
+	c.Ctx.WriteString(output)
+}
+
+
+func (c *GetUserPostDateController) Get() {
+	c.EnableXSRF = false
+
+	cookiekey := beego.AppConfig.String("passid")
+
+	//get from cache
+	passId, _ := c.GetSecureCookie(cookiekey, "passid")
+
+	if len(passId) <= 0 {
+		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
+		c.Ctx.WriteString(output)
+		return
+	}
+	cahchedUser, err := models.GetUserFromCache(passId)
+	if err != nil {
+		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", err.Error())
+		c.Ctx.WriteString(output)
+		return
+	}
+	uid := cahchedUser.UserProfile.Id
+
+	limit, err := c.GetInt("limit")
+	if err != nil{
+		limit = 1
+	}
+
+	isDesc := true
+	order := c.GetString("order", "desc")
+	if order != "desc"{
+		isDesc = false
+	}
+
+	dateStr := c.GetString("date", "0")
+	dateMap := strings.Split(dateStr, ",")
+
+	var queryDateList []int
+	for _, eachDateStr := range dateMap{
+		dateFormatStart := strings.Replace(eachDateStr, "/", "", -1)
+		dateInt ,_ := strconv.Atoi(dateFormatStart)
+		queryDateList = append(queryDateList, dateInt)
+	}
+	
+	var newPostDb = models.NewPost()
+	postList, err := newPostDb.QueryUserPostByDate(uid, queryDateList, isDesc, limit)
+
+	var output string
+
+	if err != nil{
+		output, _ = library.ReturnJsonWithError(library.CodeErrCommen, err.Error(), nil)
 	}else {
 		output, _ = library.ReturnJsonWithError(library.CodeSucc, "ref", postList)
 	}

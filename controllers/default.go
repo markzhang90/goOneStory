@@ -116,6 +116,8 @@ func (c *TestController) Get() {
 	if !ok {
 		fmt.Print("get wether fail")
 	}
+
+
 	stringRes, _ := library.ReturnJsonWithError(1,"", realtimeVal)
 	c.Ctx.WriteString(stringRes)
 }

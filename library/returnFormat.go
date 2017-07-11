@@ -3,6 +3,7 @@ package library
 import (
 	"encoding/json"
 	"github.com/astaxie/beego/logs"
+	"reflect"
 )
 
 type (
@@ -17,9 +18,10 @@ return format
  */
 func ReturnJsonWithError(errNo int, errMsg string, data interface{}) (res string, err error) {
 
-	if data == nil{
+	if data == nil || reflect.ValueOf(data).IsNil(){
 		data = ""
 	}
+
 	if errMsg == "ref" {
 		errMsg = CodeString(errNo)
 	}

@@ -159,6 +159,8 @@ func (c *LoginUserController) Get() {
 //获取用户信息
 func (c *GetUserProfileController) Get() {
 
+	c.EnableXSRF = false
+
 	cookiekey := beego.AppConfig.String("passid")
 
 	var finalErr error
@@ -178,7 +180,6 @@ func (c *GetUserProfileController) Get() {
 	email := c.GetString("email")
 	logs.Warning(email)
 	var newUserDb = models.NewUser()
-	c.EnableXSRF = false
 
 	if errPhone != nil {
 		finalErr = errPhone

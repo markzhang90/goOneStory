@@ -16,5 +16,7 @@ func init() {
 	beego.Router("/uploader", &controllers.UploadController{})
 	beego.Router("/post/adduserpost", &controllers.AddUserPostController{})
 	beego.Router("/post/getuserpost", &controllers.GetUserPostController{})
+	beego.Router("/post/getuserpostdaterange", &controllers.GetUserPostDateRangeController{})
+	beego.Router("/post/getuserpostdate", &controllers.GetUserPostDateController{})
 	beego.Router("/post/getuserclosestpost", &controllers.GetUserPostClosestController{})
 }
