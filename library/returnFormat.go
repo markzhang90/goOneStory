@@ -18,7 +18,7 @@ return format
  */
 func ReturnJsonWithError(errNo int, errMsg string, data interface{}) (res string, err error) {
 
-	if data == nil || reflect.ValueOf(data).IsNil(){
+	if data == nil || !reflect.ValueOf(data).IsValid(){
 		data = ""
 	}
 

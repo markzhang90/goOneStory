@@ -92,6 +92,20 @@ func (postDb *PostDb) QueryUserPostByDate(uid int, queryDateArr []int, orderByDe
 }
 
 /**
+query count
+ */
+func (postDb *PostDb) QueryCountUserPostByDateRange(uid int, startDate int, endDate int) (num int64, err error) {
+	o := postDb.DbConnect.Orm
+	o.Using(postDb.DbConnect.DbName)
+	qsNum, err := o.QueryTable(postDb.tableName).Filter("uid", uid).Filter("create_date__gte", startDate).Filter("create_date__lte", endDate).Count()
+	if err == nil {
+		return qsNum, nil
+	}
+	logs.Warning(err)
+	return -1, err
+}
+
+/**
 post date list
  */
 func (postDb *PostDb) QueryUserPostByDateRange(uid int, startDate int, endDate int, orderByDesc bool, limit int) (postList []Posts, err error) {

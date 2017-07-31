@@ -132,7 +132,13 @@ func (c *GetUserPostController) Get() {
 	c.Ctx.WriteString(output)
 }
 
+/**
+get most recent post
 
+@vars limit
+@vars option : (next , previous)
+@vars date : 20170101,2017/01/01
+ */
 func (c *GetUserPostClosestController) Post() {
 	c.EnableXSRF = false
 
@@ -179,6 +185,14 @@ func (c *GetUserPostClosestController) Post() {
 	c.Ctx.WriteString(output)
 }
 
+/**
+get user post by date range
+
+@vars limit
+@vars order : (desc , asc)
+@vars start : start date (20170101,2017/01/01)
+@vars end : end date (20170101,2017/01/01)
+ */
 func (c *GetUserPostDateRangeController) Get() {
 	c.EnableXSRF = false
 
@@ -200,9 +214,14 @@ func (c *GetUserPostDateRangeController) Get() {
 	}
 	uid := cahchedUser.UserProfile.Id
 
-	limit, err := c.GetInt("limit")
-	if err != nil{
-		limit = 1
+	total, errTotal := c.GetInt("total")
+	if errTotal != nil{
+		total = 0
+	}
+
+	limit, errLimit := c.GetInt("limit")
+	if errLimit != nil{
+		limit = 10
 	}
 
 	isDesc := true
@@ -220,22 +239,40 @@ func (c *GetUserPostDateRangeController) Get() {
 	endDateInt ,_ := strconv.Atoi(dateFormatEnd)
 
 	var newPostDb = models.NewPost()
-	//var getUser = newUser.GetUserProfile()
-	//logs.Warning(getUser)
-	postList, err := newPostDb.QueryUserPostByDateRange(uid, startDateInt, endDateInt, isDesc, limit)
+
+	var allResult = make(map[string]interface{})
+	//allResult["total"] = -1
 
 	var output string
 
-	if err != nil{
-		output, _ = library.ReturnJsonWithError(library.CodeErrCommen, err.Error(), nil)
-	}else {
-		output, _ = library.ReturnJsonWithError(library.CodeSucc, "ref", postList)
+	postList, errList := newPostDb.QueryUserPostByDateRange(uid, startDateInt, endDateInt, isDesc, limit)
+	if total == 1{
+		allNum, errNum := newPostDb.QueryCountUserPostByDateRange(uid, startDateInt, endDateInt)
+		if errNum != nil {
+			allNum = -1
+			logs.Warning("get count all query fail" , errNum)
+			//output, _ = library.ReturnJsonWithError(library.CodeErrCommen, errNum.Error(), nil)
+		}
+		allResult["total"] = allNum
+	}
+	allResult["list"] = postList
+
+	if errList != nil{
+		output, _ = library.ReturnJsonWithError(library.CodeErrCommen, errList.Error(), nil)
+	} else {
+		output, _ = library.ReturnJsonWithError(library.CodeSucc, "ref", allResult)
 	}
 
 	c.Ctx.WriteString(output)
 }
 
+/**
+get user post by dates
 
+@vars limit auto
+@vars order : (desc , asc)
+@vars date : split by comma 20170101,2017/01/01
+ */
 func (c *GetUserPostDateController) Get() {
 	c.EnableXSRF = false
 
@@ -257,11 +294,6 @@ func (c *GetUserPostDateController) Get() {
 	}
 	uid := cahchedUser.UserProfile.Id
 
-	limit, err := c.GetInt("limit")
-	if err != nil{
-		limit = 1
-	}
-
 	isDesc := true
 	order := c.GetString("order", "desc")
 	if order != "desc"{
@@ -276,6 +308,14 @@ func (c *GetUserPostDateController) Get() {
 		dateFormatStart := strings.Replace(eachDateStr, "/", "", -1)
 		dateInt ,_ := strconv.Atoi(dateFormatStart)
 		queryDateList = append(queryDateList, dateInt)
+	}
+
+	limit, err := c.GetInt("limit")
+	if err != nil{
+		limit = len(queryDateList)
+		if limit < 1 {
+			limit = 1
+		}
 	}
 
 	var newPostDb = models.NewPost()
