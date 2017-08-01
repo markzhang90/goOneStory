@@ -25,12 +25,14 @@ func ReturnJsonWithError(errNo int, errMsg string, data interface{}) (res string
 	if errMsg == "ref" {
 		errMsg = CodeString(errNo)
 	}
+
 	formatter := new(returnFormat)
 	formatter.ErrNo = errNo
 	formatter.ErrMsg = errMsg
 	formatter.Data = data
 
 	result, err := json.Marshal(formatter)
+
 	if err != nil {
 		logs.Warn(err)
 		return "", err

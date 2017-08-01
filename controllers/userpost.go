@@ -62,6 +62,7 @@ func (c *AddUserPostController) Post() {
 	if err != nil{
 		logs.Warn("failed convert", err)
 	}
+
 	postData := models.Posts{
 		Uid: uid,
 		Header: header,
@@ -256,7 +257,6 @@ func (c *GetUserPostDateRangeController) Get() {
 		allResult["total"] = allNum
 	}
 	allResult["list"] = postList
-
 	if errList != nil{
 		output, _ = library.ReturnJsonWithError(library.CodeErrCommen, errList.Error(), nil)
 	} else {
@@ -281,12 +281,14 @@ func (c *GetUserPostDateController) Get() {
 	//get from cache
 	passId, _ := c.GetSecureCookie(cookiekey, "passid")
 
+
 	if len(passId) <= 0 {
 		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
 		c.Ctx.WriteString(output)
 		return
 	}
 	cahchedUser, err := models.GetUserFromCache(passId)
+
 	if err != nil {
 		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", err.Error())
 		c.Ctx.WriteString(output)
@@ -319,14 +321,19 @@ func (c *GetUserPostDateController) Get() {
 	}
 
 	var newPostDb = models.NewPost()
-	postList, err := newPostDb.QueryUserPostByDate(uid, queryDateList, isDesc, limit)
 
+	postList, err := newPostDb.QueryUserPostByDate(uid, queryDateList, isDesc, limit)
+	//for _, eachPost := range postList{
+	//	eachPost
+	//}
 	var output string
 
 	if err != nil{
+
 		output, _ = library.ReturnJsonWithError(library.CodeErrCommen, err.Error(), nil)
 	}else {
-		output, _ = library.ReturnJsonWithError(library.CodeSucc, "ref", postList)
+		psotMap := newPostDb.ClearPostOut(postList)
+		output, _ = library.ReturnJsonWithError(library.CodeSucc, "ref", psotMap)
 	}
 
 	c.Ctx.WriteString(output)

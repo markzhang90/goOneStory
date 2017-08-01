@@ -6,6 +6,7 @@ import (
 	"onestory/services"
 	"github.com/mitchellh/mapstructure"
 	"encoding/json"
+	"onestory/library"
 )
 
 type (
@@ -14,6 +15,14 @@ type (
 		DbConnect *services.DbService
 	}
 
+	PubPost struct {
+		Id          int `orm:"auto"`
+		Header      string
+		Rel         string
+		Update_time int64
+		Content     string
+		Ext         string
+	}
 	Posts struct {
 		Id          int `orm:"auto"`
 		Uid         int
@@ -211,3 +220,18 @@ func (postDb *PostDb) AddNewUserPost(NewPost Posts) (postId int64, err error) {
 
 	return postId, err
 }
+
+
+/**
+
+ */
+func (postDb *PostDb)ClearPostOut(postList []Posts) (allPubPost []map[string]interface{}) {
+
+	for _, eachPost := range postList {
+		mapVal := library.Struct2Map(eachPost)
+		delete(mapVal, "Uid")
+		allPubPost = append(allPubPost, mapVal)
+	}
+	return allPubPost
+}
+
