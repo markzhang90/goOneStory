@@ -68,7 +68,6 @@ func (wechat *WehcatSmallApp)GetLoginOpenIdFronCode(code string) (interface{}, e
 	if err != nil{
 		return nil, err
 	}
-	mapRes["openid"] = "3213123131312"
 	if _, ok := mapRes["openid"]; ok{
 		return mapRes, nil
 	}
