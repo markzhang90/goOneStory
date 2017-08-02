@@ -11,7 +11,6 @@ import (
 	"encoding/json"
 	"time"
 	"errors"
-	"onestory/library"
 )
 
 type (
@@ -210,11 +209,9 @@ func (userDb *UserProfileDb) GetUserProfile() (err error) {
 }
 
 func (userDb *UserProfileDb)ClearProfileOut(userProfile UserProfile) (userPubProfile map[string]interface{}) {
-
-	mapVal := library.Struct2Map(userProfile)
-	var pubUserInfo map[string]interface{}
-	pubUserInfo["Passid"] = mapVal["Passid"]
-	pubUserInfo["Nick_name"] = mapVal["Nick_name"]
+	var pubUserInfo = make(map[string]interface{})
+	pubUserInfo["Passid"] = userProfile.Passid
+	pubUserInfo["Nick_name"] = userProfile.Nick_name
 	return pubUserInfo
 }
 
