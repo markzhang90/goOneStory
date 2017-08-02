@@ -9,6 +9,7 @@ import (
 	"onestory/library"
 	"fmt"
 	"time"
+	"onestory/services/request/third"
 )
 
 type (
@@ -43,7 +44,7 @@ func (c *UploadController) Post() {
 	path := "./temp/" + nowTimging + h.Filename;
 	defer f.Close()
 	c.SaveToFile("myfile", path)
-	qiuniuApi := library.NewQiNiu(false)
+	qiuniuApi := third.NewQiNiu(false)
 	imgKey, errUp := qiuniuApi.Upoloader(path)
 	var output string
 	if errUp == nil{

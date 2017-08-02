@@ -38,6 +38,7 @@ func (c *AddUserProfileController) Get() {
 		Passid:      models.GetPid(phone, email),
 		Email:       email,
 		Phone:       phone,
+		Openid:       "0",
 		Password:    "123",
 		Update_time: time.Now().Unix(),
 		Nick_name:   "1234",
@@ -94,7 +95,7 @@ func (c *UpdateUserProfileController) Get() {
 	if errUpdate == nil {
 
 		cookiekey := beego.AppConfig.String("passid")
-		cacheUserObj, cacheUserRes := models.SyncSetUserCache(resUser)
+		cacheUserObj, cacheUserRes := models.SyncSetUserCache(resUser, false)
 
 		if cacheUserRes {
 			c.SetSecureCookie(cookiekey, "passid", resUser.Passid)
@@ -130,7 +131,7 @@ func (c *LoginUserController) Post() {
 	var output string
 	if err == nil {
 		output, _ = library.ReturnJsonWithError(0, "ref", res)
-		_, cacheUser := models.SyncSetUserCache(res)
+		_, cacheUser := models.SyncSetUserCache(res, false)
 		if cacheUser {
 			//set redis fail
 		}
@@ -190,7 +191,7 @@ func (c *GetUserProfileController) Get() {
 		if errGetUser != nil {
 			finalErr = errGetUser
 		} else {
-			cacheUserObj, cacheUserRes := models.SyncSetUserCache(userProfile)
+			cacheUserObj, cacheUserRes := models.SyncSetUserCache(userProfile, false)
 			if cacheUserRes {
 				c.SetSecureCookie(cookiekey, "passid", userProfile.Passid)
 			}
@@ -209,7 +210,7 @@ func (c *GetUserProfileController) Get() {
 		if errGetUser != nil {
 			finalErr = errGetUser
 		} else {
-			cacheUserObj, cacheUserRes := models.SyncSetUserCache(userProfile)
+			cacheUserObj, cacheUserRes := models.SyncSetUserCache(userProfile, false)
 			if cacheUserRes {
 				c.SetSecureCookie(cookiekey, "passid", userProfile.Passid)
 			}

@@ -1,4 +1,4 @@
-package library
+package third
 
 import (
 	"qiniupkg.com/api.v7/conf"

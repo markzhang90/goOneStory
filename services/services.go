@@ -33,7 +33,6 @@ func findServicesFromPull(dbname string)(dbInstance *DbService, res bool){
 //get connect from here
 func NewService(dbname string) (*DbService, error) {
 
-
 	getInstance, ok := findServicesFromPull(dbname)
 
 	if ok && getInstance != nil {

@@ -21,7 +21,6 @@ func ReturnJsonWithError(errNo int, errMsg string, data interface{}) (res string
 	if data == nil || !reflect.ValueOf(data).IsValid(){
 		data = ""
 	}
-
 	if errMsg == "ref" {
 		errMsg = CodeString(errNo)
 	}

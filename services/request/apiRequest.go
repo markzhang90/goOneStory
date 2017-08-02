@@ -27,3 +27,5 @@ func GetWeatherInfo(location string) (interface{}, error) {
 	}
 	return mapRes["result"], nil
 }
+
+

@@ -19,4 +19,7 @@ func init() {
 	beego.Router("/post/getuserpostdaterange", &controllers.GetUserPostDateRangeController{})
 	beego.Router("/post/getuserpostdate", &controllers.GetUserPostDateController{})
 	beego.Router("/post/getuserclosestpost", &controllers.GetUserPostClosestController{})
+
+
+	beego.Router("api/wechat/logintosys", &controllers.LoginWehchatController{})
 }

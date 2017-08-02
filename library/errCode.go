@@ -1,6 +1,7 @@
 package library
 
 const CodeErrCommen = 1
+const CodeErrApi = 40000
 const GetUserFail = 10001
 const AddPostFail = 20001
 const InternalError = 500

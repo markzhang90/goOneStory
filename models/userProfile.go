@@ -22,6 +22,7 @@ type (
 	UserProfile struct {
 		Id          int `orm:"auto"`
 		Passid      string
+		Openid      string
 		Email       string
 		Phone       int64
 		Password    string
@@ -34,6 +35,7 @@ type (
 		UserProfile
 		LastLogin int64
 	}
+
 )
 
 
@@ -102,12 +104,25 @@ func (userDb *UserProfileDb) GetUserProfileByPassId(passId string) (targetUser U
 	return targetUser, nil
 }
 
+func (userDb *UserProfileDb) GetUserProfileById(uid int) (targetUser UserProfile, err error) {
+	o := userDb.DbConnect.Orm
+	o.Using(userDb.DbConnect.DbName)
+	targetUser = UserProfile{Id: uid}
+	err = o.Read(&targetUser)
+	if err != nil {
+		logs.Warning("get user fail " + err.Error())
+		return targetUser, err
+	}
+	return targetUser, nil
+}
+
 func (userDb *UserProfileDb) AddNewUserProfile(userprofileData UserProfile)(int64, error){
 	o := userDb.DbConnect.Orm
 	o.Using(userDb.DbConnect.DbName)
 
 	profile := new(UserProfile)
 	profile.Passid = userprofileData.Passid
+	profile.Openid = userprofileData.Openid
 	profile.Email = userprofileData.Email
 	profile.Phone = userprofileData.Phone
 	profile.Update_time = time.Now().Unix()
@@ -207,7 +222,33 @@ func encriptPass(password string)  string{
 	return passWord
 }
 
-func SyncSetUserCache(userObj UserProfile) (UserCache, bool) {
+/**
+stringType passid openid
+ */
+func getUserCacheKey(prefix string, stringType string) string{
+	switch stringType {
+	case "passid":
+		return "passid:"+prefix
+	case "openid":
+		return "openid"+prefix
+	default:
+		return "default"+prefix
+	}
+}
+
+func SyncSetUserCache(userObj UserProfile, usingOpenId bool) (UserCache, bool) {
+
+	var redisCacheKey string
+	var cacheType string
+
+	if usingOpenId {
+		cacheType = "openid"
+		redisCacheKey = getUserCacheKey(userObj.Openid, cacheType)
+	}else{
+		cacheType = "passid"
+		redisCacheKey = getUserCacheKey(userObj.Passid, cacheType)
+	}
+
 	redsiConn := rediscli.RedisClient.Get()
 	userObj.Password = ""
 
@@ -221,8 +262,7 @@ func SyncSetUserCache(userObj UserProfile) (UserCache, bool) {
 		logs.Warn("SyncSetUserCache Fail" + userObj.Passid)
 		return userCache, false
 	}
-
-	res, errCache := redsiConn.Do("SET", userObj.Passid, jsonUser)
+	res, errCache := redsiConn.Do("SET", redisCacheKey, jsonUser)
 	//expire user
 	expireTime, confErr := beego.AppConfig.Int("redisuserexpire")
 	if confErr != nil {
@@ -241,21 +281,26 @@ func SyncSetUserCache(userObj UserProfile) (UserCache, bool) {
 }
 
 func CleanUserCache(passId string) (bool, error) {
-	redsiConn := rediscli.RedisClient.Get()
-	_, errCache := redsiConn.Do("DEL", passId)
-	if errCache != nil{
-		return false, errCache
-	}
-	return true, nil
 
+	redsiConn := rediscli.RedisClient.Get()
+	cacheTypes := []string{"passid", "openid"}
+	for _, cacheType := range cacheTypes  {
+		redisCacheKey := getUserCacheKey(passId, cacheType)
+		_, errCache := redsiConn.Do("DEL", redisCacheKey)
+		if errCache != nil{
+			return false, errCache
+		}
+	}
+
+	return true, nil
 }
 
 func GetUserFromCache(passId string) (UserCache, error) {
 
 	var userCache UserCache
-
+	redisCacheKey := getUserCacheKey(passId, "passid")
 	redsiConn := rediscli.RedisClient.Get()
-	res, errCache := redsiConn.Do("Get", passId)
+	res, errCache := redsiConn.Do("Get", redisCacheKey)
 	defer redsiConn.Close()
 
 	if errCache != nil{
