@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"time"
 	"errors"
+	"onestory/library"
 )
 
 type (
@@ -208,6 +209,15 @@ func (userDb *UserProfileDb) GetUserProfile() (err error) {
 	return err
 }
 
+func (userDb *UserProfileDb)ClearProfileOut(userProfile UserProfile) (userPubProfile map[string]interface{}) {
+
+	mapVal := library.Struct2Map(userProfile)
+	var pubUserInfo map[string]interface{}
+	pubUserInfo["Passid"] = mapVal["Passid"]
+	pubUserInfo["Nick_name"] = mapVal["Nick_name"]
+	return pubUserInfo
+}
+
 func GetPid(phone int64, email string) string {
 	passIdEncode := md5.New()
 	passIdEncode.Write([]byte(string(phone) + "_" + email))
@@ -322,3 +332,4 @@ func GetUserFromCache(passId string) (UserCache, error) {
 		return userCache, nil
 	}
 }
+

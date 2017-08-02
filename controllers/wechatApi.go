@@ -56,8 +56,8 @@ func (c *LoginWehchatController) Get()  {
 		c.Ctx.WriteString(output)
 		return
 	}
-
-	output, _ := library.ReturnJsonWithError(0, "", userprofile)
+	clearRes := userDb.ClearProfileOut(userprofile)
+	output, _ := library.ReturnJsonWithError(0, "", clearRes)
 	c.Ctx.WriteString(output)
 	return
 }
