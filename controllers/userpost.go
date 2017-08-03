@@ -38,11 +38,14 @@ func (c *AddUserPostController) Post() {
 
 	//get from cache
 	passId, _ := c.GetSecureCookie(cookiekey, "passid")
-	logs.Warning(passId)
+
 	if len(passId) <= 0 {
-		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
-		c.Ctx.WriteString(output)
-		return
+		passId = c.GetString("passid", "")
+		if len(passId) < 0{
+			output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
+			c.Ctx.WriteString(output)
+			return
+		}
 	}
 	cahchedUser, err := models.GetUserFromCache(passId)
 	if err != nil {
@@ -96,11 +99,14 @@ func (c *GetUserPostController) Get() {
 
 	//get from cache
 	passId, _ := c.GetSecureCookie(cookiekey, "passid")
-	logs.Warning(passId)
+
 	if len(passId) <= 0 {
-		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
-		c.Ctx.WriteString(output)
-		return
+		passId = c.GetString("passid", "")
+		if len(passId) < 0{
+			output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
+			c.Ctx.WriteString(output)
+			return
+		}
 	}
 	cahchedUser, err := models.GetUserFromCache(passId)
 	if err != nil {
@@ -149,9 +155,12 @@ func (c *GetUserPostClosestController) Post() {
 	passId, _ := c.GetSecureCookie(cookiekey, "passid")
 	logs.Warning(passId)
 	if len(passId) <= 0 {
-		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
-		c.Ctx.WriteString(output)
-		return
+		passId = c.GetString("passid", "")
+		if len(passId) < 0{
+			output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
+			c.Ctx.WriteString(output)
+			return
+		}
 	}
 	cahchedUser, err := models.GetUserFromCache(passId)
 	if err != nil {
@@ -198,14 +207,16 @@ func (c *GetUserPostDateRangeController) Get() {
 	c.EnableXSRF = false
 
 	cookiekey := beego.AppConfig.String("passid")
-
 	//get from cache
 	passId, _ := c.GetSecureCookie(cookiekey, "passid")
 
 	if len(passId) <= 0 {
-		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
-		c.Ctx.WriteString(output)
-		return
+		passId = c.GetString("passid", "")
+		if len(passId) < 0{
+			output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
+			c.Ctx.WriteString(output)
+			return
+		}
 	}
 	cahchedUser, err := models.GetUserFromCache(passId)
 	if err != nil {
@@ -256,10 +267,13 @@ func (c *GetUserPostDateRangeController) Get() {
 		}
 		allResult["total"] = allNum
 	}
-	allResult["list"] = postList
+
 	if errList != nil{
+		allResult["list"] = make(map[string]interface{})
 		output, _ = library.ReturnJsonWithError(library.CodeErrCommen, errList.Error(), nil)
 	} else {
+		psotMap := newPostDb.ClearPostOut(postList)
+		allResult["list"] = psotMap
 		output, _ = library.ReturnJsonWithError(library.CodeSucc, "ref", allResult)
 	}
 
@@ -281,11 +295,13 @@ func (c *GetUserPostDateController) Get() {
 	//get from cache
 	passId, _ := c.GetSecureCookie(cookiekey, "passid")
 
-
 	if len(passId) <= 0 {
-		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
-		c.Ctx.WriteString(output)
-		return
+		passId = c.GetString("passid", "")
+		if len(passId) < 0{
+			output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
+			c.Ctx.WriteString(output)
+			return
+		}
 	}
 	cahchedUser, err := models.GetUserFromCache(passId)
 
