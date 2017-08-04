@@ -348,8 +348,13 @@ func (c *GetUserPostDateController) Get() {
 
 		output, _ = library.ReturnJsonWithError(library.CodeErrCommen, err.Error(), nil)
 	}else {
+		var resultMap = make(map[string]interface{})
 		psotMap := newPostDb.ClearPostOut(postList)
-		output, _ = library.ReturnJsonWithError(library.CodeSucc, "ref", psotMap)
+		for _, eachPost := range psotMap {
+			date := strconv.FormatInt(eachPost["Create_date"].(int64),10)
+			resultMap[date] = eachPost
+		}
+		output, _ = library.ReturnJsonWithError(library.CodeSucc, "ref", resultMap)
 	}
 
 	c.Ctx.WriteString(output)
