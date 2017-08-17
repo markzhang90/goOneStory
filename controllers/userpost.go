@@ -267,7 +267,8 @@ func (c *GetUserPostDateRangeController) Get() {
 		}
 		allResult["total"] = allNum
 	}
-
+	allResult["limit"] = limit
+	allResult["order"] = order
 	if errList != nil{
 		allResult["list"] = make(map[string]interface{})
 		output, _ = library.ReturnJsonWithError(library.CodeErrCommen, errList.Error(), nil)
