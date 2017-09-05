@@ -38,7 +38,7 @@ func (c *MainController) Get() {
 }
 
 func (c *UploadController) Post() {
-	//c.EnableXSRF = false
+	c.EnableXSRF = false
 	f, h, _ := c.GetFile("myfile")
 	nowTimging := time.Now().Format("2006-01-02-03-04-05")
 	path := "./temp/" + nowTimging + h.Filename;

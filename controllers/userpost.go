@@ -249,7 +249,7 @@ func (c *GetUserPostDateRangeController) Get() {
 	endDate := c.GetString("end", "20201231")
 	dateFormatEnd := strings.Replace(endDate, "/", "", -1)
 	endDateInt ,_ := strconv.Atoi(dateFormatEnd)
-
+	
 	var newPostDb = models.NewPost()
 
 	var allResult = make(map[string]interface{})
