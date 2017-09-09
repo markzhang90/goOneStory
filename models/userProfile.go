@@ -315,7 +315,7 @@ func GetUserFromCache(passId string) (UserCache, error) {
 		var newUserDb = NewUser()
 		targetUser, err := newUserDb.GetUserProfileByPassId(passId)
 		if err !=nil {
-			logs.Warn("GetUser Fail" + err.Error())
+			logs.Warn("GetUser Fail " + passId + "  " + err.Error())
 			return userCache, errCache
 		}
 		userCache.UserProfile = targetUser

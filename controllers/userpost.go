@@ -49,7 +49,7 @@ func (c *AddUserPostController) Post() {
 	}
 	cahchedUser, err := models.GetUserFromCache(passId)
 	if err != nil {
-		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", err.Error())
+		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
 		c.Ctx.WriteString(output)
 		return
 	}
