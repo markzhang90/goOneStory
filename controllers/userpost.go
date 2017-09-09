@@ -41,7 +41,7 @@ func (c *AddUserPostController) Post() {
 
 	if len(passId) <= 0 {
 		passId = c.GetString("passid", "")
-		if len(passId) < 0{
+		if len(passId) < 1{
 			output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
 			c.Ctx.WriteString(output)
 			return
@@ -102,7 +102,7 @@ func (c *GetUserPostController) Get() {
 
 	if len(passId) <= 0 {
 		passId = c.GetString("passid", "")
-		if len(passId) < 0{
+		if len(passId) < 1{
 			output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
 			c.Ctx.WriteString(output)
 			return
@@ -156,7 +156,7 @@ func (c *GetUserPostClosestController) Post() {
 	logs.Warning(passId)
 	if len(passId) <= 0 {
 		passId = c.GetString("passid", "")
-		if len(passId) < 0{
+		if len(passId) < 1{
 			output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
 			c.Ctx.WriteString(output)
 			return
@@ -212,7 +212,7 @@ func (c *GetUserPostDateRangeController) Get() {
 
 	if len(passId) <= 0 {
 		passId = c.GetString("passid", "")
-		if len(passId) < 0{
+		if len(passId) < 1{
 			output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
 			c.Ctx.WriteString(output)
 			return
@@ -298,7 +298,7 @@ func (c *GetUserPostDateController) Get() {
 
 	if len(passId) <= 0 {
 		passId = c.GetString("passid", "")
-		if len(passId) < 0{
+		if len(passId) < 1{
 			output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
 			c.Ctx.WriteString(output)
 			return
