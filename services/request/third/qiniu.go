@@ -52,6 +52,7 @@ func (ins *Qiniu) DownloadUrl(key string)string {
 	policy := kodo.GetPolicy{}
 	// 生成一个client对象
 	c := kodo.New(0, nil)
+
 	// 调用MakePrivateUrl方法返回url
 	return c.MakePrivateUrl(baseUrl, &policy)
 }

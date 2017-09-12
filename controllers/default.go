@@ -44,7 +44,7 @@ func (c *UploadController) Post() {
 	path := "./temp/" + nowTimging + h.Filename;
 	defer f.Close()
 	c.SaveToFile("myfile", path)
-	qiuniuApi := third.NewQiNiu(false)
+	qiuniuApi := third.NewQiNiu(true)
 	imgKey, errUp := qiuniuApi.Upoloader(path)
 	var output string
 	if errUp == nil{
