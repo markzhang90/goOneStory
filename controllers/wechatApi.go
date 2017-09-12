@@ -7,6 +7,7 @@ import (
 	"github.com/astaxie/beego/logs"
 	"onestory/models"
 	"time"
+	"strconv"
 )
 
 type (
@@ -68,9 +69,15 @@ func (c *LoginWehchatController) Get()  {
 		countAll = -1
 	}
 	var today = time.Now().Format("20060102");
-	logs.Warning(today)
-	//userPost.QueryUserPostByDate(userprofile.Id, todayArr, true, 1);
 
+	todayInt, _ := strconv.Atoi(today)
+
+	todayArr := []int{todayInt}
+
+	result, err := userPost.QueryUserPostByDate(userprofile.Id, todayArr, true, 1);
+
+	logs.Warning(result)
+	
 	clearRes["Post_count"] = countAll
 	output, _ := library.ReturnJsonWithError(0, "", clearRes)
 	c.Ctx.WriteString(output)
