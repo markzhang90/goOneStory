@@ -6,6 +6,7 @@ import (
 	"onestory/services/request/third"
 	"github.com/astaxie/beego/logs"
 	"onestory/models"
+	"time"
 )
 
 type (
@@ -51,18 +52,25 @@ func (c *LoginWehchatController) Get()  {
 	//get userInfo by openId
 	userDb := models.NewUser()
 	userprofile, errGetDb := userDb.GetUserByOpenIdOrCreate(openid)
+
 	if err != nil{
 		output, _ := library.ReturnJsonWithError(library.CodeErrApi, "微信登录失败", errGetDb.Error())
 		c.Ctx.WriteString(output)
 		return
 	}
+
 	clearRes := userDb.ClearProfileOut(userprofile)
 	var uid = userprofile.Id
 	userPost := models.NewPost()
 	countAll, err := userPost.QueryCountUserPost(uid);
+
 	if err != nil {
 		countAll = -1
 	}
+	var today = time.Now().Format("20060102");
+	logs.Warning(today)
+	//userPost.QueryUserPostByDate(userprofile.Id, todayArr, true, 1);
+
 	clearRes["Post_count"] = countAll
 	output, _ := library.ReturnJsonWithError(0, "", clearRes)
 	c.Ctx.WriteString(output)
