@@ -74,7 +74,6 @@ func (postDb *PostDb)GetPostByPassidAndId(uid int, id int) (postList []Posts, er
 
 	qs := o.QueryTable(postDb.tableName).Filter("uid", uid).Filter("id", id)
 	_, err = qs.Values(&maps)
-	logs.Warning(maps)
 	if len(maps) < 1 {
 		err = errors.New("no record")
 	}

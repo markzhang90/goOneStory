@@ -154,7 +154,6 @@ func (c *GetUserPostClosestController) Post() {
 
 	//get from cache
 	passId, _ := c.GetSecureCookie(cookiekey, "passid")
-	logs.Warning(passId)
 	if len(passId) <= 0 {
 		passId = c.GetString("passid", "")
 		if len(passId) < 1{
