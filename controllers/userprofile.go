@@ -27,6 +27,9 @@ type (
 	UpdateUserProfileController struct {
 		beego.Controller
 	}
+	GetUserProfileInfoController struct {
+		beego.Controller
+	}
 )
 
 //新增用户
@@ -228,3 +231,4 @@ func (c *GetUserProfileController) Get() {
 	c.Ctx.WriteString(output)
 	return
 }
+

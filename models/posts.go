@@ -7,6 +7,7 @@ import (
 	"github.com/mitchellh/mapstructure"
 	"encoding/json"
 	"onestory/library"
+	"errors"
 )
 
 type (
@@ -64,6 +65,35 @@ func (postDb *PostDb) GetUserClosestPost(uid int, givenDate int, isNext bool) (p
 	return posts, err
 }
 
+func (postDb *PostDb)GetPostByPassidAndId(uid int, id int) (postList []Posts, err error) {
+	o := postDb.DbConnect.Orm
+	o.Using(postDb.DbConnect.DbName)
+
+	var maps []orm.Params
+	var allResPosts []Posts
+
+	qs := o.QueryTable(postDb.tableName).Filter("uid", uid).Filter("id", id)
+	_, err = qs.Values(&maps)
+	logs.Warning(maps)
+	if len(maps) < 1 {
+		err = errors.New("no record")
+	}
+	if err == nil {
+		for _, posts := range maps {
+			//logs.Warning(posts)
+			eachPost, err := _assignMapToPost(posts)
+			if err != nil {
+				logs.Warning(err)
+			} else {
+				allResPosts = append(allResPosts, eachPost)
+			}
+
+		}
+		return allResPosts, nil
+	}
+	return allResPosts, err
+}
+
 /**
 post date list
  */
@@ -111,6 +141,20 @@ func (postDb *PostDb) QueryCountUserPostByDateRange(uid int, startDate int, endD
 		return qsNum, nil
 	}
 	logs.Warning(err)
+	return -1, err
+}
+
+/**
+query count by uid
+ */
+func (postDb *PostDb) QueryCountUserPost(uid int) (num int64, err error) {
+	o := postDb.DbConnect.Orm
+	o.Using(postDb.DbConnect.DbName)
+	qsNum, err := o.QueryTable(postDb.tableName).Filter("uid", uid).Count()
+	if err == nil {
+		return qsNum, nil
+	}
+	logs.Warning("get user post count fail " + string(uid) + " error : " + err.Error())
 	return -1, err
 }
 

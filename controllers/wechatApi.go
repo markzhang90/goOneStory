@@ -57,6 +57,13 @@ func (c *LoginWehchatController) Get()  {
 		return
 	}
 	clearRes := userDb.ClearProfileOut(userprofile)
+	var uid = userprofile.Id
+	userPost := models.NewPost()
+	countAll, err := userPost.QueryCountUserPost(uid);
+	if err != nil {
+		countAll = -1
+	}
+	clearRes["post_count"] = countAll
 	output, _ := library.ReturnJsonWithError(0, "", clearRes)
 	c.Ctx.WriteString(output)
 	return

@@ -94,8 +94,9 @@ func (c *AddUserPostController) Post() {
 
 
 func (c *GetUserPostController) Get() {
-	cookiekey := beego.AppConfig.String("passid")
+	c.EnableXSRF = false
 
+	cookiekey := beego.AppConfig.String("passid")
 
 	//get from cache
 	passId, _ := c.GetSecureCookie(cookiekey, "passid")
@@ -116,17 +117,17 @@ func (c *GetUserPostController) Get() {
 	}
 	uid := cahchedUser.UserProfile.Id
 
-	limit, err := c.GetInt("num")
+	limit, err := c.GetInt("id")
 	if err != nil{
-		limit = 1
+		output, _ := library.ReturnJsonWithError(library.ParamFail, "ref", nil)
+		c.Ctx.WriteString(output)
+		return
 	}
 
-	c.EnableXSRF = false
 	var newPostDb = models.NewPost()
 	//var getUser = newUser.GetUserProfile()
 	//logs.Warning(getUser)
-	postList, err := newPostDb.GetUserAllRecentPosts(uid, limit)
-
+	postList, err := newPostDb.GetPostByPassidAndId(uid, limit)
 	var output string
 
 	if err != nil{
@@ -312,7 +313,6 @@ func (c *GetUserPostDateController) Get() {
 		return
 	}
 	uid := cahchedUser.UserProfile.Id
-
 	isDesc := true
 	order := c.GetString("order", "desc")
 	if order != "desc"{

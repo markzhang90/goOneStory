@@ -7,6 +7,8 @@ const AddPostFail = 20001
 const InternalError = 500
 const HttpError = 30001
 const CodeSucc = 0
+const ParamFail = 10002
+
 
 func CodeString(errorNo int) string {
 	switch errorNo {
@@ -24,6 +26,8 @@ func CodeString(errorNo int) string {
 	//post related
 	case AddPostFail:
 		return "发布日记失败"
+	case ParamFail:
+		return "参数错误"
 	default:
 		return "error"
 	}
