@@ -74,10 +74,15 @@ func (c *LoginWehchatController) Get()  {
 
 	todayArr := []int{todayInt}
 
-	result, err := userPost.QueryUserPostByDate(userprofile.Id, todayArr, true, 1);
+	result, errGet := userPost.QueryUserPostByDate(userprofile.Id, todayArr, true, 1);
 
-	logs.Warning(result)
-	
+	clearRes["Today"] = false;
+	if errGet != nil {
+		if len(result) > 0 {
+			clearRes["Today"] = true;
+		}
+	}
+
 	clearRes["Post_count"] = countAll
 	output, _ := library.ReturnJsonWithError(0, "", clearRes)
 	c.Ctx.WriteString(output)
