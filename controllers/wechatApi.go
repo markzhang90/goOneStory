@@ -63,7 +63,7 @@ func (c *LoginWehchatController) Get()  {
 	if err != nil {
 		countAll = -1
 	}
-	clearRes["post_count"] = countAll
+	clearRes["Post_count"] = countAll
 	output, _ := library.ReturnJsonWithError(0, "", clearRes)
 	c.Ctx.WriteString(output)
 	return
