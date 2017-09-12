@@ -68,20 +68,20 @@ func (c *LoginWehchatController) Get()  {
 	if err != nil {
 		countAll = -1
 	}
-	var today = time.Now().Format("20060102");
-
-	todayInt, _ := strconv.Atoi(today)
-
-	todayArr := []int{todayInt}
-
-	result, errGet := userPost.QueryUserPostByDate(userprofile.Id, todayArr, true, 1);
-
-	clearRes["Today"] = false;
-	if errGet != nil {
-		if len(result) > 0 {
-			clearRes["Today"] = true;
-		}
-	}
+	//var today = time.Now().Format("20060102");
+	//
+	//todayInt, _ := strconv.Atoi(today)
+	//
+	//todayArr := []int{todayInt}
+	//
+	//result, errGet := userPost.QueryUserPostByDate(userprofile.Id, todayArr, true, 1);
+	//
+	//clearRes["Today"] = false;
+	//if errGet != nil {
+	//	if len(result) > 0 {
+	//		clearRes["Today"] = true;
+	//	}
+	//}
 
 	clearRes["Post_count"] = countAll
 	output, _ := library.ReturnJsonWithError(0, "", clearRes)
