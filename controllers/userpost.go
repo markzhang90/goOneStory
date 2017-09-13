@@ -58,7 +58,6 @@ func (c *AddUserPostController) Post() {
 	header := c.GetString("header", "无题")
 	content := c.GetString("content", "")
 	ref := c.GetString("ref", "")
-
 	timeNow := time.Now().Unix()
 	timeFormat := time.Unix(timeNow, 0).Format("20060102")
 	timeFormatInt, err := strconv.ParseInt(timeFormat, 10, 64)
@@ -74,6 +73,7 @@ func (c *AddUserPostController) Post() {
 		Update_time: time.Now().Unix(),
 		Create_date: timeFormatInt,
 	}
+	logs.Warning(postData);
 
 	var newPostDb = models.NewPost()
 	//var getUser = newUser.GetUserProfile()
