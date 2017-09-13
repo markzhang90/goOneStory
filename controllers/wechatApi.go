@@ -14,6 +14,9 @@ type (
 	LoginWehchatController struct {
 		beego.Controller
 	}
+	InitWehchatController struct {
+		beego.Controller
+	}
 
 )
 
@@ -61,31 +64,61 @@ func (c *LoginWehchatController) Get()  {
 	}
 
 	clearRes := userDb.ClearProfileOut(userprofile)
-	var uid = userprofile.Id
+
+	output, _ := library.ReturnJsonWithError(0, "", clearRes)
+	c.Ctx.WriteString(output)
+	return
+}
+
+
+/**
+we chat init info
+ */
+func (c *InitWehchatController) Get() {
+
+	var passId = c.GetString("passid", "")
+	if len(passId) < 1{
+		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
+		c.Ctx.WriteString(output)
+		return
+	}
+
+	cahchedUser, err := models.GetUserFromCache(passId)
+	if err != nil {
+		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
+		c.Ctx.WriteString(output)
+		return
+	}
+
+	var clearRes = make(map[string]interface{})
+
+	var uid = cahchedUser.Id
 	userPost := models.NewPost()
 	countAll, err := userPost.QueryCountUserPost(uid);
 
 	if err != nil {
 		countAll = -1
 	}
-	//var today = time.Now().Format("20060102");
-	//
-	//todayInt, _ := strconv.Atoi(today)
-	//
-	//todayArr := []int{todayInt}
-	//
-	//result, errGet := userPost.QueryUserPostByDate(userprofile.Id, todayArr, true, 1);
-	//
-	//clearRes["Today"] = false;
-	//if errGet != nil {
-	//	if len(result) > 0 {
-	//		clearRes["Today"] = true;
-	//	}
-	//}
 
 	clearRes["Post_count"] = countAll
+
+	var today = time.Now().Format("20060102");
+
+	todayInt, _ := strconv.Atoi(today)
+
+	todayArr := []int{todayInt}
+
+	result, errGet := userPost.QueryUserPostByDate(cahchedUser.Id, todayArr, true, 1);
+
+	clearRes["Today"] = false;
+
+	if errGet == nil {
+		if len(result) > 0 {
+			clearRes["Today"] = true;
+		}
+	}
+
 	output, _ := library.ReturnJsonWithError(0, "", clearRes)
 	c.Ctx.WriteString(output)
 	return
 }
-

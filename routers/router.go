@@ -22,4 +22,5 @@ func init() {
 
 
 	beego.Router("api/wechat/logintosys", &controllers.LoginWehchatController{})
+	beego.Router("api/wechat/initinfo", &controllers.InitWehchatController{})
 }

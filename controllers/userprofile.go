@@ -231,4 +231,3 @@ func (c *GetUserProfileController) Get() {
 	c.Ctx.WriteString(output)
 	return
 }
-
