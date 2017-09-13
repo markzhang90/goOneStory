@@ -64,6 +64,7 @@ func (c *AddUserPostController) Post() {
 	if err != nil{
 		logs.Warn("failed convert", err)
 	}
+	logs.Warning(content);
 
 	postData := models.Posts{
 		Uid: uid,
