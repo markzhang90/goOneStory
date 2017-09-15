@@ -34,11 +34,11 @@ func init() {
 		logs.Warn(err)
 		panic(err)
 	}
+	var password = dbconf.String(fullName + "::password")
 
 	REDIS_HOST = host + ":" + port
-	logs.Warning(REDIS_HOST)
-
 	// 建立连接池
+
 	RedisClient = &redis.Pool{
 		// 从配置文件获取maxidle以及maxactive，取不到则用后面的默认值
 		MaxIdle:     dbconf.DefaultInt(fullName+"::maxidle", 1),
@@ -53,11 +53,17 @@ func init() {
 				redis.DialReadTimeout(1*time.Second),
 				redis.DialWriteTimeout(1*time.Second),
 			)
-
 			if err != nil {
 				logs.Warning("hahahha" + err.Error())
 				return nil, err
 			}
+
+			if _, err := c.Do("AUTH", password); err != nil {
+				c.Close()
+				logs.Warning("hahahha" + err.Error())
+				return nil, err
+			}
+
 			// 选择db
 			return c, nil
 		},
