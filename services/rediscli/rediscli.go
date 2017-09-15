@@ -59,12 +59,9 @@ func init() {
 				logs.Warning("hahahhaqqqq" + err.Error())
 				return nil, err
 			}
-			logs.Warning("hahahhaqqqq" + password)
 
 			if password != "" {
 				if _, err := c.Do("AUTH", password); err != nil {
-					logs.Warning("hahahhaqqqq" + REDIS_HOST)
-					logs.Warning("hahahha2q" + err.Error())
 					c.Close()
 					return nil, err
 				}
