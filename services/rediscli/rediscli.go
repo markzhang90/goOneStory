@@ -34,6 +34,7 @@ func init() {
 		logs.Warn(err)
 		panic(err)
 	}
+	
 	var password = dbconf.String(fullName + "::password")
 
 	REDIS_HOST = host + ":" + port
