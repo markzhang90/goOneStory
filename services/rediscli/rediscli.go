@@ -59,17 +59,15 @@ func init() {
 				logs.Warning("hahahhaqqqq" + err.Error())
 				return nil, err
 			}
+			logs.Warning("hahahhaqqqq" + password)
 
-			if res, err := c.Do("Get", password); err != nil {
-				//c.Close()
-				logs.Warning("hahahha11111" + err.Error())
-				logs.Warning(res)
-				//return nil, err
-			}
-			if _, err := c.Do("AUTH", password); err != nil {
-				c.Close()
-				logs.Warning("hahahha" + err.Error())
-				return nil, err
+			if password != "" {
+				if _, err := c.Do("AUTH", password); err != nil {
+					logs.Warning("hahahhaqqqq" + REDIS_HOST)
+					logs.Warning("hahahha2q" + err.Error())
+					c.Close()
+					return nil, err
+				}
 			}
 
 			// 选择db
