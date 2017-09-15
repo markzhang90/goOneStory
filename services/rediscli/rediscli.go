@@ -61,10 +61,10 @@ func init() {
 			}
 
 			if res, err := c.Do("Get", password); err != nil {
-				c.Close()
+				//c.Close()
 				logs.Warning("hahahha11111" + err.Error())
 				logs.Warning(res)
-				return nil, err
+				//return nil, err
 			}
 			if _, err := c.Do("AUTH", password); err != nil {
 				c.Close()
