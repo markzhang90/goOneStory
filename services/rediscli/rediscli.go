@@ -34,7 +34,7 @@ func init() {
 		logs.Warn(err)
 		panic(err)
 	}
-	
+
 	var password = dbconf.String(fullName + "::password")
 
 	REDIS_HOST = host + ":" + port
@@ -60,6 +60,12 @@ func init() {
 				return nil, err
 			}
 
+			if res, err := c.Do("Get", password); err != nil {
+				c.Close()
+				logs.Warning("hahahha11111" + err.Error())
+				logs.Warning(res)
+				return nil, err
+			}
 			if _, err := c.Do("AUTH", password); err != nil {
 				c.Close()
 				logs.Warning("hahahha" + err.Error())
