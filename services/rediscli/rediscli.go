@@ -38,6 +38,7 @@ func init() {
 
 	REDIS_HOST = host + ":" + port
 	// 建立连接池
+	logs.Warning("hahahhaqqqq" + REDIS_HOST)
 
 	RedisClient = &redis.Pool{
 		// 从配置文件获取maxidle以及maxactive，取不到则用后面的默认值
@@ -54,7 +55,7 @@ func init() {
 				redis.DialWriteTimeout(1*time.Second),
 			)
 			if err != nil {
-				logs.Warning("hahahha" + err.Error())
+				logs.Warning("hahahhaqqqq" + err.Error())
 				return nil, err
 			}
 
