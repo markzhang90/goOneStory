@@ -1,0 +1,91 @@
+<style type="text/css">
+    body > .grid {
+        height: 100%;
+    }
+
+    #showpage {
+        padding-top: 100px;
+    }
+</style>
+<div id="showpage">
+    <button class="ui primary button" @click="showTest()">111111</button>
+    <div class="ui grid">
+        {{ .xsrfdata }}
+        <div class="three wide column"></div>
+        <div class="ten wide column" style="min-height: 500px;">
+            <div class="ui divider"></div>
+
+            <div v-for="eachElement in allElements" :key="eachElement.finder">
+                <div style="margin-top: 5px; margin-bottom: 5px;" class="ui row centered segments">
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="three wide column"></div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    Vue.use(Toasted);
+
+    var today = new Date();
+    var thisMonth = today.getMonth() + 1;
+    var thispage = new Vue({
+        delimiters: ['${', '}'],
+        el: '#showpage',
+        data: {
+            show_content_loading: false,
+            cleardata: true,
+            pass_name: '',
+            pass_word: '',
+            counter: 0,
+            return_info: {},
+            passid: '',
+            nickname: '',
+            avatar_img: '/static/assets/images/avatar/tom.jpg',
+            head_title: '',
+            allElements: [], //组件池
+            pickeddate: getToday(),
+            weatherInfo: {},
+            city: "",
+            isLoading: false,
+        },
+
+        methods: {
+            showTest: function () {
+                this.$toasted.show("Toasted !!", {
+                    theme: "primary",
+                    position: "top-center",
+                    duration : 1000,
+                    icon : {
+                        name : 'check'
+                    }
+                });
+            }
+        },
+        computed: {
+
+            isSaving: function () {
+            }
+
+        },
+        created: function () {
+
+        },
+
+    });
+
+    $("#addPara").click(function () {
+        thispage.addToElements('para');
+        $('#sider-tab').sidebar('hide');
+    });
+
+    $("#addImage").click(function () {
+        thispage.addToElements('image');
+        $('#sider-tab').sidebar('hide');
+    });
+
+</script>

@@ -3,13 +3,11 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
-	//"onestory/services/rediscli"
-	"onestory/services/request"
 	"html/template"
 	"onestory/library"
-	"fmt"
 	"time"
 	"onestory/services/request/third"
+	"onestory/services/request/lbs"
 )
 
 type (
@@ -23,6 +21,9 @@ type (
 		beego.Controller
 	}
 	UploadController struct {
+		beego.Controller
+	}
+	ShowController struct {
 		beego.Controller
 	}
 )
@@ -68,6 +69,15 @@ func (c *EditController) Get() {
 	c.LayoutSections["Footer"] = "onestory/footer.html"
 }
 
+func (c *ShowController) Get() {
+	c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
+	c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
+	c.Layout = "onestory/base.html"
+	c.TplName = "onestory/show.html"
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["Fixheader"] = "onestory/fixheader.html"
+	c.LayoutSections["Footer"] = "onestory/footer.html"
+}
 
 func (c *TestController) Get() {
 
@@ -93,12 +103,15 @@ func (c *TestController) Get() {
 	//}
 	//logs.Warning("coooool")
 	city := c.GetString("city")
-	mapRes, err := request.GetWeatherInfo(city)
-
+	mapRes, err := lbs.GetWeatherByLocation(city)
 	if err != nil{
-		c.Ctx.WriteString(err.Error())
+		stringRes, _ := library.ReturnJsonWithError(1,err.Error(), "")
+		c.Ctx.WriteString(stringRes)
+	}else{
+		stringRes, _ := library.ReturnJsonWithError(0,"", mapRes)
+		c.Ctx.WriteString(stringRes)
 	}
-
+	return
 	//conn := rediscli.RedisClient.Get()
 	//_, err2 := conn.Do("SET", "hello", "world")
 	//
@@ -107,19 +120,19 @@ func (c *TestController) Get() {
 	//}
 	//
 	//defer conn.Close()
-	mapVal, ok := mapRes.(map[string]interface{})
-	if !ok {
-		fmt.Print("get wether fail")
-	}
-	fmt.Print(mapVal["realtime"])
-	fmt.Print("11111111111111")
-	realtimeVal , ok := mapVal["realtime"].(map[string]interface{})
-	if !ok {
-		fmt.Print("get wether fail")
-	}
-
-
-	stringRes, _ := library.ReturnJsonWithError(1,"", realtimeVal)
-	c.Ctx.WriteString(stringRes)
+	//mapVal, ok := mapRes.(map[string]interface{})
+	//if !ok {
+	//	fmt.Print("get wether fail")
+	//}
+	//fmt.Print(mapVal["realtime"])
+	//fmt.Print("11111111111111")
+	//realtimeVal , ok := mapVal["realtime"].(map[string]interface{})
+	//if !ok {
+	//	fmt.Print("get wether fail")
+	//}
+	//
+	//
+	//stringRes, _ := library.ReturnJsonWithError(1,"", realtimeVal)
+	//c.Ctx.WriteString(stringRes)
 }
 

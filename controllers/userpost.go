@@ -118,7 +118,7 @@ func (c *GetUserPostController) Get() {
 	}
 	uid := cahchedUser.UserProfile.Id
 
-	limit, err := c.GetInt("id")
+	pageId, err := c.GetInt("id")
 	if err != nil{
 		output, _ := library.ReturnJsonWithError(library.ParamFail, "ref", nil)
 		c.Ctx.WriteString(output)
@@ -128,7 +128,7 @@ func (c *GetUserPostController) Get() {
 	var newPostDb = models.NewPost()
 	//var getUser = newUser.GetUserProfile()
 	//logs.Warning(getUser)
-	postList, err := newPostDb.GetPostByPassidAndId(uid, limit)
+	postList, err := newPostDb.GetPostByPassidAndId(uid, pageId)
 	var output string
 
 	if err != nil{

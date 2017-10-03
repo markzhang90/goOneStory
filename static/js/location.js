@@ -5,7 +5,6 @@
 
 function getLocation() {
     if (navigator.geolocation) {
-        console.log(navigator.geolocation);
         return navigator.geolocation.getCurrentPosition(showPosition, showError);
     } else {
         console.log("浏览器不支持地理定位。");
@@ -68,7 +67,7 @@ function showPosition(position, callbackFunc) {
                 return data;
             }
         },
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
+        error: function () {
             console.log(latlon + "地址位置获取失败");
         }
     });

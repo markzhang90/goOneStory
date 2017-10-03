@@ -5,24 +5,38 @@
     }
 
     #editpage {
-        margin-top: 100px;
+        padding-top: 100px;
+    }
+
+    #saving-day {
+        padding: 50px 0px;
     }
 </style>
+<div id="sider-tab" class="ui bottom vertical inverted sidebar labeled icon menu">
+    <a id="addImage" class="item">
+        <i class="camera retro icon"></i>
+        添加图片
+    </a>
+    <a id="addPara" class="item">
+        <i class="newspaper icon"></i>
+        添加文字
+    </a>
+</div>
 
-<div id="editpage">
+<div id="editpage" class="dimmed pusher">
+
     <div class="ui grid">
         {{ .xsrfdata }}
-        <div class="one wide column"></div>
-        <div class="seven wide column">
-            <button @click="addnewpost()" class="ui secondary button">Okay</button>
+        <div class="three wide column"></div>
+        <div class="ten wide column" style="min-height: 500px;">
             <component is="header-section" :avatar_img="avatar_img" :input_title="head_title"
                        @update-title="updateTitleValue"></component>
             <h2 class="centered compact ui header">
-            <div class="ui labels">
-                <a v-if="city" class="ui label"> ${city} </a>
-                <a v-if="weatherInfo.info" class="ui teal label"> ${weatherInfo.info} </a>
-                <a v-if="weatherInfo.temperature" class="ui olive label"> ${weatherInfo.temperature}° </a>
-            </div>
+                <div class="ui labels">
+                    <a v-if="city" class="ui label"> ${city} </a>
+                    <a v-if="weatherInfo.weatherDesc" class="ui teal label"> ${weatherInfo.weatherDesc} </a>
+                    <a v-if="weatherInfo.temperature" class="ui olive label"> ${weatherInfo.temperature}° </a>
+                </div>
             </h2>
 
             <div class="ui divider"></div>
@@ -38,236 +52,258 @@
                 </div>
             </div>
 
-            <div v-if="allElements.length > 0"><button @click="showModal()"  :class="isLoading ? 'loading' : ''" class="ui primary button">保存</button></div>
-
-        </div>
-
-        <div class="one wide column"></div>
-        <div class="six wide column ">
-            <div class="ui segment row">
-                <a v-on:click="addToElements('multi')" class="ui red left ribbon label"><i
-                        class="plus icon"></i>添加图文</a>
-                <p></p>
-                <div id="img-article">
-                    <img class="ui small left floated image" src="../../static/assets/images/image.png">
-                    <p>Te eum doming eirmod, nominati pertinacia argumentum ad his. Ex eam alia facete scriptorem, est
-                        autem aliquip detraxit at. Usu ocurreret referrentur at, cu epicurei appellantur vix. Cum ea
-                        laoreet recteque electram, eos choro alterum definiebas in. Vim dolorum definiebas an. Mei ex
-                        natum rebum iisque.</p>
+            <div class="centered compact ui header" id="saving-day">
+                <div class="centered ui buttons">
+                    <button class="ui button" @click="callSideBar()">编辑添加</button>
+                    <div class="or"></div>
+                    <button :class="isSaving" @click="addnewpost()">${Saving.text}</button>
                 </div>
-            </div>
 
-            <div class="ui segment row">
-                <a v-on:click="addToElements('para')" class="ui orange left ribbon label"><i class="plus icon"></i>添加段落</a>
-                <p></p>
-                <div id="article">
-                    <img class="ui image" src="../../static/assets/images/short-paragraph.png">
-                </div>
-            </div>
-
-            <div class="ui segment row">
-                <a v-on:click="addToElements('image')" class="ui teal left ribbon label"><i
-                        class="plus icon"></i>添加图片</a>
-                <p></p>
-                <div id="img">
-                    <img class="ui image" src="../../static/assets/images/image.png">
-                </div>
+                <!--<button :class="isSaving" @click="addnewpost()">-->
+                <!--<i :class="Saving.class"></i>-->
+                <!--${Saving.text}-->
+                <!--</button>-->
             </div>
         </div>
-        <div class="one wide column"></div>
+
+        <div class="three wide column"></div>
     </div>
 </div>
 
-
-<div class="ui basic modal">
-    <i class="close icon"></i>
-    <div class="header">
-        Archive Old Messages
-    </div>
-    <div class="image content">
-        <div class="image">
-            <i class="file text outline icon"></i>
-        </div>
-    </div>
-    <div class="actions">
-        <div class="two fluid ui inverted buttons">
-            <div class="ui cancel red basic inverted button">
-                <i class="remove icon"></i>
-                No
-            </div>
-            <div class="ui ok green basic inverted button">
-                <i class="checkmark icon"></i>
-                Yes
-            </div>
-        </div>
-    </div>
-</div>
-
-
+<script type="text/javascript" src="https://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
 <script src="../../static/js/onestory/component/sections/headersection.js"></script>
 <script src="../../static/js/onestory/component/sections/imagesection.js"></script>
 <script src="../../static/js/onestory/component/sections/multisection.js"></script>
 <script src="../../static/js/onestory/component/sections/paragraphsection.js"></script>
 
 <script type="text/javascript">
+    Vue.use(Toasted);
+    //sections declear
+    Vue.component('header-section', HeaderSection);
+    Vue.component('image-section', ImageSection);
+    Vue.component('paragraph-section', ParagraphSection);
+    Vue.component('multi-section', MultiSection);
 
+    var today = new Date();
+    var thisMonth = today.getMonth() + 1;
+    var thispage = new Vue({
+        delimiters: ['${', '}'],
+        el: '#editpage',
+        data: {
+            show_content_loading: false,
+            cleardata: true,
+            pass_name: '',
+            pass_word: '',
+            counter: 0,
+            return_info: {},
+            passid: '',
+            nickname: '',
+            avatar_img: '/static/assets/images/avatar/tom.jpg',
+            head_title: '',
+            allElements: [], //组件池
+            pickeddate: getToday(),
+            weatherInfo: {},
+            city: "",
+            isLoading: false,
+            isSavingStatus: 'init',
+            Saving: {"class": "hand paper icon", "text": "保存这一天"},
+            Saving_Map: {
+                "init": {
+                    "class": "hand paper icon", "text": "保存这一天"
+                },
+                "working": {
+                    "class": "hand pointer icon", "text": "保存中"
+                },
+                "succ": {
+                    "class": "hand peace icon", "text": "保存成功"
+                },
+                "fail": {
+                    "class": "hand pointer icon", "text": "保存发生错误，再试一次"
+                },
+            }
+        },
 
-    $(function () {
-
-        //sections declear
-        Vue.component('header-section', HeaderSection);
-        Vue.component('image-section', ImageSection);
-        Vue.component('paragraph-section', ParagraphSection);
-        Vue.component('multi-section', MultiSection);
-
-        var today = new Date();
-        var thisMonth = today.getMonth() + 1;
-        var thispage = new Vue({
-            delimiters: ['${', '}'],
-            el: '#editpage',
-            data: {
-                show_content_loading: false,
-                cleardata: true,
-                pass_name: '',
-                pass_word: '',
-                counter: 0,
-                return_info: {},
-                passid: '',
-                nickname: '',
-                avatar_img: '/static/assets/images/avatar/tom.jpg',
-                head_title: '',
-                allElements: [], //组件池
-                pickeddate: getToday(),
-                weatherInfo:{},
-                city:"",
-                isLoading: false,
+        methods: {
+            getmylocation: function () {
+                var mycity = remote_ip_info['city'];
+                setCookie("city", mycity);
+                getCityNameByLocation(this.getWeather);
             },
+            getWeather: function (city) {
+                var _self = this;
+                _self.city = city;
+                var inputdata = {};
+                inputdata["city"] = _self.city;
+                $.ajax({
+                    type: "GET",
+                    url: "/test",
+                    data: inputdata,
+                    dataType: "json",
+                    beforeSend: function () {
 
-            methods: {
-                getmylocation: function () {
-                    getCityNameByLocation(this.getWeather);
-                },
-                getWeather: function (city) {
-                    var _self = this;
-                    _self.city = city;
-                    var inputdata = {};
-                    inputdata["city"] = _self.city;
-                    $.ajax({
-                        type: "GET",
-                        url:  "/test",
-                        data: inputdata,
-                        dataType: "json",
-                        beforeSend: function () {
+                    },
+                    success: function (data) {
 
-                        },
-                        success: function (data) {
-                            if(data.ErrNo == 0){
-                                _self.weatherInfo = data.Data;
-                            }
-                        },
-                    });
+                        if (data.ErrNo == 0) {
+                            _self.weatherInfo = data.Data[0];
+                        }
+                    },
+                });
 
-                },
-                addToElements: function (type) {
-                    var element = {};
-                    var _self = this;
+            },
+            addToElements: function (type) {
+                var element = {};
+                var _self = this;
 
-                    switch (type) {
-                        case 'image':
-                            element.namespace = 'image';
-                            element.component = 'image-section';
-                            element.upload_img = '/static/assets/images/image.png';
-                            element.upload_key = '';
+                switch (type) {
+                    case 'image':
+                        element.namespace = 'image';
+                        element.component = 'image-section';
+                        element.upload_img = '/static/assets/images/image.png';
+                        element.upload_key = '';
 //                            element.upload_file = '';
-                            break;
-                        case 'para':
-                            element.namespace = 'para';
-                            element.component = 'paragraph-section';
-                            element.para = '';
-                            break;
-                        case 'multi':
-                            element.namespace = 'multi';
-                            element.component = 'multi-section';
-                            element.upload_img = '/static/assets/images/image.png';
-                            element.upload_key = '';
+                        break;
+                    case 'para':
+                        element.namespace = 'para';
+                        element.component = 'paragraph-section';
+                        element.para = '';
+                        break;
+                    case 'multi':
+                        element.namespace = 'multi';
+                        element.component = 'multi-section';
+                        element.upload_img = '/static/assets/images/image.png';
+                        element.upload_key = '';
 //                            element.upload_file = '';
-                            element.para = '';
-                            break;
-                        default:
-                            return;
+                        element.para = '';
+                        break;
+                    default:
+                        return;
+                }
+                _self.counter = _self.counter + 1;
+                element.finder = _self.counter;
+                _self.allElements.push(element);
+            },
+            removeElement: function (finder) {
+                var _self = this
+                console.log(_self.allElements)
+
+                $.each(_self.allElements, function (index, obj) {
+                    if (finder == obj.finder) {
+                        _self.allElements.splice(index, 1);
+                        console.log(_self.allElements)
+                        return false;
                     }
-                    _self.counter = _self.counter + 1;
-                    element.finder = _self.counter;
-                    _self.allElements.push(element);
-                },
-                removeElement: function (finder) {
-                    var _self = this
-                    console.log(_self.allElements)
-
-                    $.each(_self.allElements, function (index, obj) {
-                        if (finder == obj.finder) {
-                            _self.allElements.splice(index, 1);
-                            console.log(_self.allElements)
-                            return false;
-                        }
-                    });
-                },
-                showModal: function () {
-                    $('.ui.modal')
-                        .modal('setting', 'closable', false)
-                        .modal('show')
-                    ;
-                },
-                updateTitleValue: function (val) {
-                    var _self = this;
-                    _self.head_title = val;
-                },
-                addnewpost: function(){
-                    var _self = this;
-                    var formdata = new FormData();
-                    var ref = {};
-                    formdata.append('_xsrf', getXsrfCookie("_xsrf"));
-                    formdata.append('content' , JSON.stringify(_self.allElements));
-                    formdata.append('header',  _self.head_title);
-                    ref['city'] = _self.city;
-                    ref['weather']=  _self.weatherInfo;
-                    formdata.append('ref', JSON.stringify(ref));
-                    console.log(formdata);
-                    _self.isLoading = true;
-                    $.ajax({
-                        type: "POST",
-                        url:  "/post/adduserpost",
-                        data: formdata,
-                        cache : false,
-                        contentType : false,
-                        processData : false,
-                        dataType: "json",
-                        beforeSend: function () {
-
-                        },
-                        success: function (data) {
-                            console.log(data);
-
-                            if(data.ErrNo == 0){
-
-                            }
-                        },
-                        complete:function () {
-                            _self.isLoading = false;
-                        }
-                    });
-                },
-                showobj: function () {
-                    var _self = this
-                    console.log(_self.head_title);
-                },
-
+                });
             },
-            created :function() {
-                this.getmylocation();
+            showModal: function () {
+                $('.ui.modal')
+                    .modal('setting', 'closable', false)
+                    .modal('show')
+                ;
             },
-        })
+            updateTitleValue: function (val) {
+                var _self = this;
+                _self.head_title = val;
+            },
+            addnewpost: function () {
+                var _self = this;
+                var formdata = new FormData();
+                var ref = {};
+                formdata.append('_xsrf', getXsrfCookie("_xsrf"));
+                formdata.append('content', JSON.stringify(_self.allElements));
+                formdata.append('header', _self.head_title);
+                ref['city'] = _self.city;
+                ref['weather'] = _self.weatherInfo;
+                formdata.append('ref', JSON.stringify(ref));
+                console.log(formdata);
+                _self.isSavingStatus = "working";
+                $.ajax({
+                    type: "POST",
+                    url: "/post/adduserpost",
+                    data: formdata,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data)
+                        if (data.ErrNo == 0) {
+                            var newId = data.Data
+                            Vue.toasted.show("保存成功！", {
+                                theme: "primary",
+                                position: "top-center",
+                                duration : 2000
+                            });
+                            _self.isSavingStatus = "succ";
+
+
+                        } else {
+                            Vue.toasted.show("保存失败！", {
+                                theme: "primary",
+                                position: "top-center",
+                                duration : 2000
+                            });
+                            _self.isSavingStatus = "fail";
+                        }
+                    },
+                    complete: function () {
+                        _self.isLoading = false;
+                    },
+                    error: function () {
+                        _self.isSavingStatus = "fail";
+                    }
+                });
+            },
+            callSideBar: function () {
+                $('#sider-tab').sidebar('toggle');
+            },
+            showobj: function () {
+                var _self = this
+                console.log(_self.head_title);
+            },
+
+        },
+        computed: {
+
+            isSaving: function () {
+                var _self = this
+                switch (_self.isSavingStatus) {
+                    case "working":
+                        _self.Saving = _self.Saving_Map["working"];
+                        return "loading ui primary button disabled";
+                        break;
+                    case "init":
+                        _self.Saving = _self.Saving_Map["init"];
+                        return "ui primary button";
+                        break;
+                    case "succ":
+                        _self.Saving = _self.Saving_Map["succ"];
+                        return "ui positive button";
+                        break;
+                    default:
+                        _self.Saving = _self.Saving_Map["fail"];
+                        return "ui red button";
+                        break;
+                }
+            }
+
+        },
+        created: function () {
+            this.getmylocation();
+            this.addToElements('para');
+        },
 
     });
+
+    $("#addPara").click(function () {
+        thispage.addToElements('para');
+        $('#sider-tab').sidebar('hide');
+    });
+
+    $("#addImage").click(function () {
+        thispage.addToElements('image');
+        $('#sider-tab').sidebar('hide');
+    });
+
 
 </script>

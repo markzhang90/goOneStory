@@ -9,6 +9,7 @@ func init() {
 	beego.Router("/test", &controllers.TestController{})
 	beego.Router("/main", &controllers.MainController{})
 	beego.Router("/edit", &controllers.EditController{})
+	beego.Router("/show", &controllers.ShowController{})
 	beego.Router("/user/adduserprofile", &controllers.AddUserProfileController{})
 	beego.Router("/user/updateuserprofile", &controllers.UpdateUserProfileController{})
 	beego.Router("/user/getuserprofile", &controllers.GetUserProfileController{})
@@ -19,7 +20,6 @@ func init() {
 	beego.Router("/post/getuserpostdaterange", &controllers.GetUserPostDateRangeController{})
 	beego.Router("/post/getuserpostdate", &controllers.GetUserPostDateController{})
 	beego.Router("/post/getuserclosestpost", &controllers.GetUserPostClosestController{})
-
 
 	beego.Router("api/wechat/logintosys", &controllers.LoginWehchatController{})
 	beego.Router("api/wechat/initinfo", &controllers.InitWehchatController{})

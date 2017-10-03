@@ -68,6 +68,7 @@ var ImageSection = Vue.extend({
                         // _self.img_file = data.Data.url
                         loadImage(data.Data.url, _self.updateImage)
                         _self.tar_obj.upload_key = data.Data.key
+                        _self.tar_obj.upload_img = data.Data.url
                     } else {
                         alert("上传失败")
                     }

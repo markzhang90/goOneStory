@@ -309,7 +309,6 @@ func GetUserFromCache(passId string) (UserCache, error) {
 	redsiConn := rediscli.RedisClient.Get()
 	res, errCache := redsiConn.Do("Get", redisCacheKey)
 	defer redsiConn.Close()
-	logs.Warning(res);
 	if errCache != nil || res == nil{
 		//try to get user from db
 		var newUserDb = NewUser()
