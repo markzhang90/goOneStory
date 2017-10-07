@@ -27,8 +27,7 @@ func Struct2Map(obj interface{}) map[string]interface{} {
 }
 
 func GetClientIp(r *http.Request) string {
-	ip := r.Header.Get("remote_addr")
-	logs.Warn(r.Header)
+	ip := r.Header.Get("X-Real-Ip")
 	if ip == "" {
 		ip = r.RemoteAddr
 	}
