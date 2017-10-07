@@ -7,7 +7,7 @@ import (
 	"onestory/library"
 	"time"
 	"onestory/services/request/third"
-	"onestory/services/request/lbs"
+	//"onestory/services/request/lbs"
 )
 
 type (
@@ -104,15 +104,21 @@ func (c *TestController) Get() {
 	//	c.Data["num"] = v.(int)
 	//}
 	//logs.Warning("coooool")
-	city := c.GetString("city")
-	mapRes, err := lbs.GetWeatherByLocation(city)
-	if err != nil{
-		stringRes, _ := library.ReturnJsonWithError(1,err.Error(), "")
-		c.Ctx.WriteString(stringRes)
-	}else{
-		stringRes, _ := library.ReturnJsonWithError(0,"", mapRes)
-		c.Ctx.WriteString(stringRes)
-	}
+
+
+	//city := c.GetString("city")
+	//mapRes, err := lbs.GetWeatherByLocation(city)
+	//if err != nil{
+	//	stringRes, _ := library.ReturnJsonWithError(1,err.Error(), "")
+	//	c.Ctx.WriteString(stringRes)
+	//}else{
+	//	stringRes, _ := library.ReturnJsonWithError(0,"", mapRes)
+	//	c.Ctx.WriteString(stringRes)
+	//}
+
+	res := library.GetClientIp(c.Ctx.Request)
+	c.Ctx.WriteString(res)
+
 	return
 	//conn := rediscli.RedisClient.Get()
 	//_, err2 := conn.Do("SET", "hello", "world")
@@ -134,6 +140,7 @@ func (c *TestController) Get() {
 	//}
 	//
 	//
+
 	//stringRes, _ := library.ReturnJsonWithError(1,"", realtimeVal)
 	//c.Ctx.WriteString(stringRes)
 }

@@ -56,7 +56,7 @@ func (c *AddUserPostController) Post() {
 	uid := cahchedUser.UserProfile.Id
 
 	header := c.GetString("header", "无题")
-	content := c.GetString("content", "")
+	content := c.GetString("content", "今日无事。。。")
 	ref := c.GetString("ref", "")
 	timeNow := time.Now().Unix()
 	timeFormat := time.Unix(timeNow, 0).Format("20060102")
@@ -64,7 +64,6 @@ func (c *AddUserPostController) Post() {
 	if err != nil{
 		logs.Warn("failed convert", err)
 	}
-	logs.Warning(content);
 
 	postData := models.Posts{
 		Uid: uid,
