@@ -8,6 +8,7 @@ import (
 	"time"
 	"onestory/services/request/third"
 	//"onestory/services/request/lbs"
+	"onestory/services/request/lbs"
 )
 
 type (
@@ -104,20 +105,26 @@ func (c *TestController) Get() {
 	//	c.Data["num"] = v.(int)
 	//}
 	//logs.Warning("coooool")
+	var city string
+	city = c.GetString("city")
+	if len(city) < 1 {
+		res := library.GetClientIp(c.Ctx.Request)
+		city, _ = lbs.GetLocationByIp(res)
+	}
+	if len(city) < 1 {
+		stringRes, _ := library.ReturnJsonWithError(1,"获取信息失败", "")
+		c.Ctx.WriteString(stringRes)
+		return
+	}
 
-
-	//city := c.GetString("city")
-	//mapRes, err := lbs.GetWeatherByLocation(city)
-	//if err != nil{
-	//	stringRes, _ := library.ReturnJsonWithError(1,err.Error(), "")
-	//	c.Ctx.WriteString(stringRes)
-	//}else{
-	//	stringRes, _ := library.ReturnJsonWithError(0,"", mapRes)
-	//	c.Ctx.WriteString(stringRes)
-	//}
-
-	res := library.GetClientIp(c.Ctx.Request)
-	c.Ctx.WriteString(res)
+	mapRes, err := lbs.GetWeatherByLocation(city)
+	if err != nil{
+		stringRes, _ := library.ReturnJsonWithError(1,err.Error(), "")
+		c.Ctx.WriteString(stringRes)
+	}else{
+		stringRes, _ := library.ReturnJsonWithError(0,"", mapRes)
+		c.Ctx.WriteString(stringRes)
+	}
 
 	return
 	//conn := rediscli.RedisClient.Get()

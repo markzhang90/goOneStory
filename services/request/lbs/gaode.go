@@ -9,6 +9,7 @@ import (
 )
 
 const weatherApi = "http://restapi.amap.com/v3/weather/weatherInfo"
+const locationApi = "http://restapi.amap.com/v3/ip"
 
 /**
 获取天气信息
@@ -53,6 +54,28 @@ func GetWeatherByLocation(location string) (interface{}, error) {
 	return mapLives, nil
 }
 
+
+func GetLocationByIp(ip string) (string, error) {
+	secreteKey, err := getSecreteKey()
+
+	if err != nil {
+		return "", err
+	}
+	var requestVars = make(map[string]string)
+
+	requestVars["key"] = secreteKey;
+	requestVars["ip"] = ip;
+	stringRes, err := request.HttpGet(locationApi, requestVars)
+	if err != nil {
+		return "", err
+	}
+	mapRes, err := library.Json2Map(stringRes)
+	if err != nil {
+		return "", err
+	}
+	cityRes := mapRes["city"].(string)
+	return cityRes, err
+}
 func getSecreteKey() (string, error) {
 
 	thirdConf, err := config.NewConfig("ini", "conf/third.conf")
@@ -71,3 +94,4 @@ func getSecreteKey() (string, error) {
 	}
 	return screctKey, nil
 }
+
