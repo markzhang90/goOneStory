@@ -97,7 +97,6 @@ function getCityNameByLocation(callbackFunc) {
         return allRes;
     }
     var location = getLocation();
-    console.log(location);
     return location;
 }
 

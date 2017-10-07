@@ -167,7 +167,6 @@
 <div id="progress-runner" class="ui red bottom attached progress">
     <div class="bar"></div>
 </div>
-<script type="text/javascript" src="https://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
 
 <script type="text/javascript">
 
@@ -206,8 +205,6 @@
 
         methods: {
             getmylocation: function () {
-                var mycity = remote_ip_info['city'];
-                setCookie("city", mycity);
                 getCityNameByLocation(this.getWeather);
             },
             getWeather: function (city) {
@@ -226,6 +223,8 @@
                     success: function (data) {
                         if (data.ErrNo == 0) {
                             _self.weatherInfo = data.Data[0];
+                            _self.city = data.Data[0].city
+                            setCookie("city", _self.city, 100000);
                         }
                     },
                 });
