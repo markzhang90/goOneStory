@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"reflect"
 	"net/http"
+	"github.com/astaxie/beego/logs"
 )
 
 func Json2Map(input string) (map[string]interface{}, error) {
@@ -27,6 +28,7 @@ func Struct2Map(obj interface{}) map[string]interface{} {
 
 func GetClientIp(r *http.Request) string {
 	ip := r.Header.Get("remote_addr")
+	logs.Warn(r.Header)
 	if ip == "" {
 		ip = r.RemoteAddr
 	}
