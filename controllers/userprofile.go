@@ -45,6 +45,7 @@ func (c *AddUserProfileController) Get() {
 		Password:    "123",
 		Update_time: time.Now().Unix(),
 		Nick_name:   "1234",
+		Avatar:   	 "http://orrxp85k4.bkt.clouddn.com/FhzfohvkrOuiY02gKJnEBiegInZs",
 		Ext:         "",
 	}
 	c.EnableXSRF = false
@@ -76,6 +77,7 @@ func (c *UpdateUserProfileController) Get() {
 
 	nickname := c.GetString("nickname")
 	password := c.GetString("password")
+	avatar := c.GetString("avatar")
 
 	userData := models.UserProfile{
 		Id:          id,
@@ -84,6 +86,7 @@ func (c *UpdateUserProfileController) Get() {
 		//Phone:       phone,
 		Password:    password,
 		Nick_name:   nickname,
+		Avatar:   	 avatar,
 		Ext:         "",
 	}
 
@@ -182,7 +185,6 @@ func (c *GetUserProfileController) Get() {
 
 	phone, errPhone := c.GetInt64("phone")
 	email := c.GetString("email")
-	logs.Warning(email)
 	var newUserDb = models.NewUser()
 
 	if errPhone != nil {

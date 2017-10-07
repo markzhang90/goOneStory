@@ -12,6 +12,7 @@
         padding: 50px 0px;
     }
 </style>
+
 <div id="sider-tab" class="ui bottom vertical inverted sidebar labeled icon menu">
     <a id="addImage" class="item">
         <i class="camera retro icon"></i>
@@ -70,7 +71,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="https://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
+<script type="text/javascript" src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
 <script src="../../static/js/onestory/component/sections/headersection.js"></script>
 <script src="../../static/js/onestory/component/sections/imagesection.js"></script>
 <script src="../../static/js/onestory/component/sections/multisection.js"></script>
@@ -143,7 +144,6 @@
 
                     },
                     success: function (data) {
-
                         if (data.ErrNo == 0) {
                             _self.weatherInfo = data.Data[0];
                         }
@@ -215,7 +215,6 @@
                 ref['city'] = _self.city;
                 ref['weather'] = _self.weatherInfo;
                 formdata.append('ref', JSON.stringify(ref));
-                console.log(formdata);
                 _self.isSavingStatus = "working";
                 $.ajax({
                     type: "POST",

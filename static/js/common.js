@@ -5,7 +5,7 @@
 function getToday() {
     var today = new Date();
     var thisMonth = today.getMonth()+1;
-    return today.getFullYear() + "/" + zeroize(thisMonth) + "/" + today.getDate()
+    return today.getFullYear() + "/" + zeroize(thisMonth) + "/" + zeroize(today.getDate())
 }
 
 function changeDate(dateToGo, pidkcedData, type){
@@ -38,6 +38,15 @@ function zeroize(value, length) {
 
     return zeros + value;
 
+}
+
+function dateIntToData(date) {
+    var this_date = date / 10000;
+    var year = parseInt(this_date)
+    var rest = date % 10000;
+    var month = parseInt(rest / 100)
+    var day = parseInt(rest % 100)
+    return year + "/" + zeroize(month) + "/" + day
 }
 
 function stringToDate(DateStr){
@@ -88,4 +97,110 @@ function loadImage(url, callback) {
     img.onload = function () { //图片下载完毕时异步调用callback函数。
         callback(img.src);//将回调函数的this替换为Image对象
     };
+}
+
+/**
+ *
+ * @param id
+ * @param callbackFunc
+ */
+function loadPostData(id, callbackFunc) {
+
+    if(isNaN(id)){
+        callbackFunc()
+        return;
+    }
+    var inputdata = {};
+    inputdata['id'] = id;
+    $.ajax({
+        type: "GET",
+        url: "/post/getuserpostbyid",
+        data: inputdata,
+        dataType: "json",
+
+        success: function (data) {
+            console.log(data);
+            callbackFunc(data)
+        },
+        error: function () {
+            callbackFunc()
+        }
+    });
+
+}
+
+/**
+ *
+ * @param splitDate
+ * @param left
+ * @param callbackFunc
+ */
+function loadRecordByDateRange(splitDate, left, callbackFunc){
+    var requestData = {};
+    if (left){
+        requestData.start = splitDate;
+        requestData.order = "asc";
+    }else{
+        requestData.end = splitDate;
+        requestData.order = "desc";
+    }
+    requestData.limit = 6;
+    requestData.total = 1;
+    $.ajax({
+        type: "GET",
+        url: "post/getuserpostdaterange",
+        data: requestData,
+        dataType: "json",
+        success: function (data) {
+            console.log(data)
+            callbackFunc(data)
+        },
+        error: function () {
+            callbackFunc()
+        }
+    });
+}
+
+/**
+ * @param element
+ */
+function autoProgressRun(element) {
+    clearInterval(window.fakeProgress)
+    element.progress('reset');
+    element.progress('remove success');
+    // updates every 10ms until complete
+    window.fakeProgress = setInterval(function() {
+        // stop incrementing when complete
+        if(element.progress('is complete') || element.progress('get percent') == 90) {
+            clearInterval(window.fakeProgress)
+        }else{
+            element.progress({
+                percent: element.progress('get percent') + 10
+            });
+        }
+    }, 300);
+}
+
+/**
+ * @param element
+ */
+function closeProgressRun(element) {
+    element.progress({
+        percent: 100
+    });
+}
+
+function Init(callback, callbackfail) {
+    $.ajax({
+        type: "GET",
+        url: "api/wechat/initinfo",
+        data: {},
+        dataType: "json",
+        success: function (data) {
+            callback(data)
+        },
+        error: function () {
+            callbackfail()
+        }
+    });
 }

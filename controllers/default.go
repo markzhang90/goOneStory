@@ -70,8 +70,10 @@ func (c *EditController) Get() {
 }
 
 func (c *ShowController) Get() {
+	getId := c.GetString("id", "")
 	c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
-	c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
+	c.Data["curId"]= getId
+	c.Data["detail"]= false
 	c.Layout = "onestory/base.html"
 	c.TplName = "onestory/show.html"
 	c.LayoutSections = make(map[string]string)

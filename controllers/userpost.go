@@ -257,7 +257,6 @@ func (c *GetUserPostDateRangeController) Get() {
 	//allResult["total"] = -1
 
 	var output string
-
 	postList, errList := newPostDb.QueryUserPostByDateRange(uid, startDateInt, endDateInt, isDesc, limit)
 	if total == 1{
 		allNum, errNum := newPostDb.QueryCountUserPostByDateRange(uid, startDateInt, endDateInt)

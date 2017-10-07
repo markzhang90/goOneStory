@@ -76,11 +76,17 @@ we chat init info
  */
 func (c *InitWehchatController) Get() {
 
-	var passId = c.GetString("passid", "")
-	if len(passId) < 1{
-		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
-		c.Ctx.WriteString(output)
-		return
+	cookiekey := beego.AppConfig.String("passid")
+	//get from cache
+	passId, _ := c.GetSecureCookie(cookiekey, "passid")
+
+	if len(passId) <= 0 {
+		passId = c.GetString("passid", "")
+		if len(passId) < 1{
+			output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
+			c.Ctx.WriteString(output)
+			return
+		}
 	}
 
 	cahchedUser, err := models.GetUserFromCache(passId)
@@ -91,7 +97,10 @@ func (c *InitWehchatController) Get() {
 	}
 
 	var clearRes = make(map[string]interface{})
-
+	var userInfo = make(map[string]string)
+	userInfo["Nick_name"] = cahchedUser.Nick_name
+	userInfo["Avatar"] = cahchedUser.Avatar
+	clearRes["User_info"] = userInfo
 	var uid = cahchedUser.Id
 	userPost := models.NewPost()
 	countAll, err := userPost.QueryCountUserPost(uid);
@@ -111,10 +120,12 @@ func (c *InitWehchatController) Get() {
 	result, errGet := userPost.QueryUserPostByDate(cahchedUser.Id, todayArr, true, 1);
 
 	clearRes["Today"] = false;
+	clearRes["Id"] = -1;
 
 	if errGet == nil {
 		if len(result) > 0 {
 			clearRes["Today"] = true;
+			clearRes["Id"] = result[0].Id;
 		}
 	}
 

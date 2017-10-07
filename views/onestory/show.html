@@ -3,32 +3,176 @@
         height: 100%;
     }
 
-    #showpage {
+    #place-holder {
         padding-top: 100px;
     }
+
+    #showpage {
+        font-size: 20px;
+    }
+
+    .ui.text.container {
+        font-size: 1.3rem;
+        text-align: center;
+    }
 </style>
+<div id="place-holder"></div>
+
 <div id="showpage">
-    <button class="ui primary button" @click="showTest()">111111</button>
-    <div class="ui grid">
-        {{ .xsrfdata }}
-        <div class="three wide column"></div>
-        <div class="ten wide column" style="min-height: 500px;">
-            <div class="ui divider"></div>
+    <div v-if="detail" class="ui grid" style="min-height: 400px; padding-bottom: 50px;">
+            <div class="three wide column"></div>
+            <div id="detail-section" class="ten wide column">
+                <div v-show="loaded">
+                    <div class="ui centered grid">
+                        <div class="left floated five wide column">
+                            <div><img class="ui avatar image" :src="avatar_img"> ${pickDate}</div>
+                        </div>
+                        <div class="right floated five wide column">
+                            <div class="ui labels">
+                                <a v-if="city" class="ui label"> ${city} </a>
+                                <a v-if="weatherInfo.weatherDesc" class="ui teal label"> ${weatherInfo.weatherDesc} </a>
+                                <a v-if="weatherInfo.temperature" class="ui olive label"> ${weatherInfo.temperature}° </a>
+                            </div>
+                        </div>
+                    </div>
 
-            <div v-for="eachElement in allElements" :key="eachElement.finder">
-                <div style="margin-top: 5px; margin-bottom: 5px;" class="ui row centered segments">
+                    <h2 class="centered compact ui header">
+                        <h2 class="ui centered header">${headTitle}</h2>
+                    </h2>
+                    <div class="ui divider"></div>
 
+                    <div v-for="eachElement in allElements" :key="eachElement.finder">
+                        <div style="margin-top: 30px; margin-bottom: 30px;" class="ui vertical stripe segment">
+                            <div v-if="eachElement.component == 'paragraph-section'" class="ui text container">
+                                <p>${eachElement.para}</p>
+                            </div>
+                            <div v-else-if="eachElement.component == 'image-section'" class="ui container">
+                                <img class="ui centered rounded image" :src="eachElement.upload_img">
+                            </div>
+                            <div v-else>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-        </div>
+            <div class="three wide column"></div>
+    </div>
 
+
+    <div v-else class="ui grid" style="min-height: 400px; padding-bottom: 50px;">
+        <div class="three wide column" ></div>
+        <div id="main-section" class="ten wide column" style="height: 100%">
+            <div class="ui grid">
+                <div class="ten wide column" style=" min-height: 400px;">
+                    <div class="ui grid"  style=" padding-top: 25px; height: 100%">
+                        <div class="ui relaxed divided list">
+                            <div v-for="eachPost in allList" class="item">
+                                <i class="large red remove bookmark middle aligned icon"></i>
+                                <div class="content">
+                                    <a class="header" @click="openCachedDetail(eachPost)">${eachPost.Header}</a>
+                                    <div class="description">${eachPost.year}/${eachPost.month}/${eachPost.day}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui buttons">
+
+                        <button v-if="showLeft" class="ui labeled icon button" @click="loadLeftDate">
+                            <i class="left chevron icon"></i>
+                            向前翻
+                        </button>
+
+                        <button v-if="showRight" class="ui right labeled icon button" @click="loadRightDate">
+                            向后翻
+                            <i class="right chevron icon"></i>
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="six wide column">
+                    <div v-if="userInfo" class="row">
+                        <div v-if="!isToday" class="ui card">
+                            <div class="content">
+                                <div class="header">${today}</div>
+                                <div class="description">
+                                    记录今天
+                                </div>
+                            </div>
+                            <div class="ui blue bottom attached button">
+                                <i class="add icon"></i>
+                                立即编辑
+                            </div>
+                        </div>
+                        <div v-else class="ui card">
+                            <div class="content">
+                                <div class="header">${today}</div>
+                                <div class="description">
+                                    已经记录过了
+                                </div>
+                            </div>
+                            <div class="ui blue bottom attached button" @click="openDetailById(lastId)">
+                                <i class="checkmark icon"></i>
+                                立即查看
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="userInfo" class="row" style="margin-top: 20px;">
+                        <div class="ui card">
+                            <div class="content">
+                                <img class="ui avatar image" :src="userInfo.Avatar">${userInfo.Nick_name}
+                            </div>
+                            <div class="content">
+                                <div class="ui small horizontal statistic">
+                                    <div class="value">
+                                        ${postCount}
+                                    </div>
+                                    <div class="label">
+                                        天
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div v-if="city" class="row" style="margin-top: 20px;">
+                        <div class="ui card">
+
+                        <div class="content ui middle aligned animated list">
+                            <div v-if="city" class="item">
+                                <img class="ui avatar image" src="../../static/img/city.png">
+                                <div class="content">
+                                    <div class="header">${city}</div>
+                                </div>
+                            </div>
+                            <div v-if="weatherInfo" class="item">
+                                <img class="ui avatar image" src="../../static/img/weather.png">
+                                <div class="content">
+                                    <div class="header">${weatherInfo.weatherDesc}</div>
+                                </div>
+                            </div>
+
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="three wide column"></div>
     </div>
 </div>
-
+<div id="progress-runner" class="ui red bottom attached progress">
+    <div class="bar"></div>
+</div>
+<script type="text/javascript" src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
 
 <script type="text/javascript">
+
+    var curId = {{.curId}};
+    var detail = {{.detail}};
     Vue.use(Toasted);
 
     var today = new Date();
@@ -37,43 +181,205 @@
         delimiters: ['${', '}'],
         el: '#showpage',
         data: {
-            show_content_loading: false,
-            cleardata: true,
-            pass_name: '',
-            pass_word: '',
-            counter: 0,
-            return_info: {},
+            loaded: false,
             passid: '',
             nickname: '',
             avatar_img: '/static/assets/images/avatar/tom.jpg',
-            head_title: '',
+            headTitle: '',
             allElements: [], //组件池
-            pickeddate: getToday(),
+            pickDate: '',
             weatherInfo: {},
             city: "",
-            isLoading: false,
+            allList : [],
+            curId: curId,
+            detail: detail,
+            leftDate: '30000000',
+            rightDate: '0',
+            showLeft: false,
+            showRight: false,
+            today: getToday(),
+            postCount: 0,
+            isToday: false,
+            userInfo: false,
+            lastId: -1,
         },
 
         methods: {
-            showTest: function () {
-                this.$toasted.show("Toasted !!", {
+            getmylocation: function () {
+                var mycity = remote_ip_info['city'];
+                setCookie("city", mycity);
+                getCityNameByLocation(this.getWeather);
+            },
+            getWeather: function (city) {
+                var _self = this;
+                _self.city = city;
+                var inputdata = {};
+                inputdata["city"] = _self.city;
+                $.ajax({
+                    type: "GET",
+                    url: "/test",
+                    data: inputdata,
+                    dataType: "json",
+                    beforeSend: function () {
+
+                    },
+                    success: function (data) {
+                        if (data.ErrNo == 0) {
+                            _self.weatherInfo = data.Data[0];
+                        }
+                    },
+                });
+
+            },
+            assignData: function (data) {
+                var _self = this;
+                if (data && data.ErrNo == 0 && data.Data[0]) {
+                    _self.detail = true;
+                    var getData = data.Data[0];
+                    _self.curId = getData.Id;
+                    var Rel = getData.Rel;
+                    var relObj = JSON.parse(Rel);
+                    var allContent = JSON.parse(getData.Content);
+                    _self.city = relObj.city;
+                    _self.weatherInfo = relObj.weather;
+                    _self.allElements = allContent;
+                    _self.headTitle = getData.Header;
+                    _self.pickDate = dateIntToData(getData.Create_date)
+                    _self.loaded = true;
+                    $('#detail-section').transition('fade up');
+
+                } else {
+                    this.$toasted.show("加载数据失败！", {
+                        theme: "primary",
+                        position: "top-center",
+                        duration: 1000,
+                    });
+                }
+                closeProgressRun($('#progress-runner'));
+
+            },
+            loadLeftDate: function () {
+                autoProgressRun($('#progress-runner'));
+                var _self = this;
+                loadRecordByDateRange(_self.leftDate, true, this.assignMainData)
+            },
+            loadRightDate: function () {
+                autoProgressRun($('#progress-runner'));
+                var _self = this;
+                loadRecordByDateRange(_self.rightDate, false, this.assignMainData)
+            },
+            initData: function (data) {
+                var _self = this;
+                console.log(data);
+                if (data && data.ErrNo == 0 && data.Data){
+                    _self.userInfo = data.Data.User_info;
+                    _self.isToday = data.Data.Today;
+                    _self.postCount = data.Data.Post_count;
+                    _self.lastId = data.Data.Id;
+                }else{
+                    _self.userInfo = {'Avatar':"http://orrxp85k4.bkt.clouddn.com/FndyZWARjYthhVxGg8rZtcUfVbZe", "Nick_name":""};
+                    this.failData()
+                }
+            },
+            failData: function (data) {
+                var msg = "加载数据失败";
+                if(!data){
+                    msg = data;
+                }
+
+                this.$toasted.show(msg, {
                     theme: "primary",
                     position: "top-center",
-                    duration : 1000,
-                    icon : {
-                        name : 'check'
-                    }
+                    duration: 1000,
                 });
-            }
-        },
-        computed: {
+                return;
+            },
+            assignMainData: function (data) {
+                var _self = this;
+                closeProgressRun($('#progress-runner'));
 
-            isSaving: function () {
-            }
+                if (data && data.ErrNo == 0 && data.Data) {
+                    var postData = data.Data
+                    var postDataList = postData.list
+                    if (!postDataList || postDataList.length <= 0 || postData.total == 0){
+                        this.$toasted.show("没有更多记录了", {
+                            theme: "primary",
+                            position: "top-center",
+                            duration: 1000,
+                        });
+                        return;
+                    }
+                    //asc 是向前 获取日期大的，需要倒叙排列
+                    if (postData.order == "asc") {
+                        postDataList.reverse();
+                    }
 
+                    postDataList.forEach(function (t) {
+                        var this_date = t.Create_date / 10000;
+                        t.year = parseInt(this_date)
+                        var rest = t.Create_date % 10000;
+                        t.month = parseInt(rest / 100)
+                        t.day = parseInt(rest%100)
+                    });
+
+                    var right_Date = postDataList[postDataList.length - 1].Create_date - 1
+                    var left_Date = postDataList[0].Create_date + 1
+                    //要是向前的 总是有向后按钮
+                    if (postData.order == "asc"){
+                        _self.showRight = true;
+                        if (postDataList.length >= 5){
+                        _self.showLeft = true;
+                        }else {
+                            _self.showLeft = false;
+                        }
+                    }else{
+                        //向后翻 总是有向前按妞
+                        _self.showLeft = true;
+                        if (postDataList.length >= 5) {
+                            _self.showRight = true;
+                        }else{
+                            _self.showRight = false;
+                        }
+                    }
+                    _self.allList = postDataList;
+                    _self.leftDate = left_Date;
+                    _self.rightDate = right_Date;
+                }
+            },
+            openCachedDetail: function (element) {
+                var _self = this;
+                var data = {};
+                data["ErrNo"] = 0;
+                var list = [];
+                list.push(element);
+                data["Data"] = list;
+
+                _self.assignData(data);
+            },
+
+            openDetailById:function (id) {
+                var _self = this;
+                autoProgressRun($('#progress-runner'));
+                loadPostData(id, _self.assignData);
+            },
         },
+        computed: {},
         created: function () {
-
+            autoProgressRun($('#progress-runner'));
+            if(!this.$data.userInfo){
+                Init(this.initData, this.failData);
+            }
+            if(this.$data.detail){
+                loadPostData(this.$data.curId, this.assignData);
+            }else{
+                this.getmylocation();
+                loadRecordByDateRange(getToday(), false, this.assignMainData)
+            }
+        },
+        mounted: function () {
+            if(this.$data.detail) {
+                $('#detail-section').transition('fade up');
+            }
         },
 
     });

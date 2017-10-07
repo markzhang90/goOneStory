@@ -24,6 +24,7 @@ type (
 		Passid      string
 		Openid      string
 		Email       string
+		Avatar      string
 		Phone       int64
 		Password    string
 		Update_time int64
@@ -125,6 +126,7 @@ func (userDb *UserProfileDb) AddNewUserProfile(userprofileData UserProfile)(int6
 	profile.Openid = userprofileData.Openid
 	profile.Email = userprofileData.Email
 	profile.Phone = userprofileData.Phone
+	profile.Avatar = userprofileData.Avatar
 	profile.Update_time = time.Now().Unix()
 	profile.Nick_name = userprofileData.Nick_name
 	profile.Password = encriptPass(userprofileData.Password)
@@ -170,6 +172,10 @@ func (userDb *UserProfileDb) UpdateNewUserProfile(userprofileData UserProfile) (
 		if len(userprofileData.Ext) > 0 {
 			requireUpdate = true
 			profile.Ext = userprofileData.Ext
+		}
+		if len(userprofileData.Avatar) > 0 {
+			requireUpdate = true
+			profile.Avatar = userprofileData.Avatar
 		}
 		if !requireUpdate {
 			return profile, nil
