@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"reflect"
 	"net/http"
-	"github.com/astaxie/beego/logs"
 )
 
 func Json2Map(input string) (map[string]interface{}, error) {
