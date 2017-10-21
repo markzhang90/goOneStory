@@ -5,7 +5,6 @@ import (
 	"onestory/library"
 	"onestory/models"
 	"strings"
-	"github.com/astaxie/beego/logs"
 )
 
 type (
