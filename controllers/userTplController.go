@@ -3,6 +3,8 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"html/template"
+	"onestory/library"
+	"onestory/models"
 )
 
 type (
@@ -24,7 +26,44 @@ type (
 	MainController struct {
 		beego.Controller
 	}
+	ActiveUserProfileController struct {
+		beego.Controller
+	}
 )
+
+func (c *ActiveUserProfileController) Get() {
+	key := c.GetString("key")
+	c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
+	c.Layout = "onestory/base.html"
+	c.TplName = "onestory/msgalert.html"
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["Fixheader"] = "onestory/fixheader.html"
+	c.LayoutSections["Footer"] = "onestory/footer.html"
+
+	if len(key) < 42 {
+		c.Data["msg"] = "激活码无效";
+	}
+
+	realPassId := library.Substr(key, 10, 42)
+	var newUserDb = models.NewUser()
+	userProFile, err := newUserDb.GetUserProfileByPassId(realPassId)
+	if err != nil {
+		c.Data["msg"] = "激活码无效";
+	}
+	_, errUp := newUserDb.ActiveUserProfile(userProFile)
+
+	if errUp != nil {
+		c.Data["msg"] = "激活码失败";
+	}
+	if _, ok := c.Data["msg"]; ok {
+		//存在
+		c.Data["header"] = "oops！";
+		c.StopRun();
+		return;
+	}
+	c.Data["msg"] = "激活成功!!";
+	c.Data["header"] = "";
+}
 
 func (c *RegisterController) Get() {
 	c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())

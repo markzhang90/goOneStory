@@ -130,7 +130,7 @@
                         success: function (data) {
                             console.log(data);
                             if (data.ErrNo != 0) {
-                                $('.ui.form').form('add errors', [data.msg]);
+                                $('.ui.form').form('add errors', [data.ErrMsg]);
                             } else {
                                 window.location.href="/show"
                             }

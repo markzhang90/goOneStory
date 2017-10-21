@@ -47,7 +47,7 @@ func (c *AddUserPostController) Post() {
 			return
 		}
 	}
-	cahchedUser, err := models.GetUserFromCache(passId)
+	cahchedUser, err := models.GetUserFromCache(passId, true)
 	if err != nil {
 		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
 		c.Ctx.WriteString(output)
@@ -109,7 +109,7 @@ func (c *GetUserPostController) Get() {
 			return
 		}
 	}
-	cahchedUser, err := models.GetUserFromCache(passId)
+	cahchedUser, err := models.GetUserFromCache(passId, true)
 	if err != nil {
 		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", err.Error())
 		c.Ctx.WriteString(output)
@@ -162,7 +162,7 @@ func (c *GetUserPostClosestController) Post() {
 			return
 		}
 	}
-	cahchedUser, err := models.GetUserFromCache(passId)
+	cahchedUser, err := models.GetUserFromCache(passId, true)
 	if err != nil {
 		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", err.Error())
 		c.Ctx.WriteString(output)
@@ -218,7 +218,7 @@ func (c *GetUserPostDateRangeController) Get() {
 			return
 		}
 	}
-	cahchedUser, err := models.GetUserFromCache(passId)
+	cahchedUser, err := models.GetUserFromCache(passId, true)
 	if err != nil {
 		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", err.Error())
 		c.Ctx.WriteString(output)
@@ -303,7 +303,7 @@ func (c *GetUserPostDateController) Get() {
 			return
 		}
 	}
-	cahchedUser, err := models.GetUserFromCache(passId)
+	cahchedUser, err := models.GetUserFromCache(passId, true)
 
 	if err != nil {
 		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", err.Error())

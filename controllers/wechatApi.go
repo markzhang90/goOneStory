@@ -89,7 +89,7 @@ func (c *InitWehchatController) Get() {
 		}
 	}
 
-	cahchedUser, err := models.GetUserFromCache(passId)
+	cahchedUser, err := models.GetUserFromCache(passId, false)
 	if err != nil {
 		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
 		c.Ctx.WriteString(output)

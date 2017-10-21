@@ -8,6 +8,7 @@ import (
 	"time"
 	"onestory/library"
 	"errors"
+	"onestory/services/common"
 )
 
 type (
@@ -26,40 +27,8 @@ type (
 	GetUserProfileInfoController struct {
 		beego.Controller
 	}
-	ActiveUserProfileController struct {
-		beego.Controller
-	}
 )
 
-func (c *ActiveUserProfileController) Get() {
-	key := c.GetString("key")
-
-	var output string
-	if len(key) < 42 {
-		output, _ = library.ReturnJsonWithError(1, "参数错误", "")
-		c.Ctx.WriteString(output)
-		return
-	}
-
-	realPassId := library.Substr(key, 10, 42)
-	var newUserDb = models.NewUser()
-	userProFile, err := newUserDb.GetUserProfileByPassId(realPassId)
-	if err != nil {
-		output, _ = library.ReturnJsonWithError(library.GetUserFail, "ref", "")
-		c.Ctx.WriteString(output)
-		return
-	}
-	_, errUp := newUserDb.ActiveUserProfile(userProFile)
-
-	if errUp != nil {
-		output, _ = library.ReturnJsonWithError(1, "激活失败", "")
-		c.Ctx.WriteString(output)
-		return
-	}
-	output, _ = library.ReturnJsonWithError(0, "succ", "")
-	c.Ctx.WriteString(output)
-	return
-}
 
 //新增用户
 func (c *AddUserProfileController) Post() {
@@ -107,18 +76,26 @@ func (c *AddUserProfileController) Post() {
 
 	if err == nil {
 		targetUser, errGet := newUserDb.GetUserProfileById(int(res))
-		if errGet == nil{
-			cookiekey := beego.AppConfig.String("passid")
-			models.SyncSetUserCache(targetUser, false)
-			logs.Warning(targetUser.Passid)
-			c.SetSecureCookie(cookiekey, "passid", "")
-			c.SetSecureCookie(cookiekey, "passid", targetUser.Passid)
-			logs.Warning(c.GetSecureCookie(cookiekey, "passid"))
+		if errGet != nil{
+			output, _ = library.ReturnJsonWithError(1, "ref", err.Error())
 		}
-
-		output, _ = library.ReturnJsonWithError(0, "ref", true)
+		cookiekey := beego.AppConfig.String("passid")
+		models.SyncSetUserCache(targetUser, false)
+		logs.Warning(targetUser.Passid)
+		c.SetSecureCookie(cookiekey, "passid", "")
+		c.SetSecureCookie(cookiekey, "passid", targetUser.Passid)
+		errEmail := common.SendRegisterEmail(targetUser)
+		if errEmail != nil{
+			output, _ = library.ReturnJsonWithError(1, "发送激活邮件失败，请检查邮箱是否填写正确", "")
+		}else{
+			output, _ = library.ReturnJsonWithError(0, "ref", true)
+		}
 	} else {
-		output, _ = library.ReturnJsonWithError(1, "ref", err.Error())
+		if err.Error() == "user exist" {
+			output, _ = library.ReturnJsonWithError(1, "用户信息已被注册", err.Error())
+		}else{
+			output, _ = library.ReturnJsonWithError(1, "ref", err.Error())
+		}
 	}
 	c.Ctx.WriteString(output)
 	return
@@ -170,6 +147,7 @@ func (c *UpdateUserProfileController) Get() {
 				logs.Warn(" update user cache fail " + delError.Error())
 			}
 		}
+
 		output, _ := library.ReturnJsonWithError(0, "ref", cacheUserObj)
 		c.Ctx.WriteString(output)
 		return
@@ -221,7 +199,7 @@ func (c *GetUserProfileController) Get() {
 	//get from cache
 	passId, resBool := c.GetSecureCookie(cookiekey, "passid")
 	if resBool {
-		cahchedUser, err := models.GetUserFromCache(passId)
+		cahchedUser, err := models.GetUserFromCache(passId, true)
 		if err == nil {
 			output, _ := library.ReturnJsonWithError(0, "ref", cahchedUser)
 			c.Ctx.WriteString(output)

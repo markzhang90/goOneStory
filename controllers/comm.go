@@ -5,6 +5,7 @@ import (
 	"onestory/library"
 	"onestory/models"
 	"strings"
+	"github.com/astaxie/beego/logs"
 )
 
 type (
@@ -30,7 +31,7 @@ func (c *EmailConfirmController) Get() {
 		}
 	}
 
-	cachedUser, err := models.GetUserFromCache(passId)
+	cachedUser, err := models.GetUserFromCache(passId, false)
 	if err != nil {
 		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", err.Error())
 		c.Ctx.WriteString(output)

@@ -133,9 +133,13 @@ func (userDb *UserProfileDb) GetUserProfileById(uid int) (targetUser UserProfile
 }
 
 func (userDb *UserProfileDb) AddNewUserProfile(userprofileData UserProfile)(int64, error){
+	//check email
+	_, errCheck := userDb.GetUserProfileByEmail(userprofileData.Email)
+	if !(errCheck != nil && errCheck == orm.ErrNoRows) {
+		return 0, errors.New("user exist")
+	}
 	o := userDb.DbConnect.Orm
 	o.Using(userDb.DbConnect.DbName)
-
 	profile := new(UserProfile)
 	profile.Passid = userprofileData.Passid
 	profile.Openid = userprofileData.Openid
@@ -354,7 +358,7 @@ func CleanUserCache(passId string) (bool, error) {
 	return true, nil
 }
 
-func GetUserFromCache(passId string) (UserCache, error) {
+func GetUserFromCache(passId string, actived bool) (UserCache, error) {
 
 	var userCache UserCache
 	redisCacheKey := getUserCacheKey(passId, "passid")
@@ -369,12 +373,15 @@ func GetUserFromCache(passId string) (UserCache, error) {
 			logs.Warn("GetUser Fail " + passId + "  " + err.Error())
 			return userCache, errCache
 		}
-		if targetUser.Active != 1{
+
+		if actived && targetUser.Active != 1{
 			logs.Warn("User is not active ")
-			return userCache, errors.New("用户未激活")
+			return userCache, errors.New("user unactivate")
+		}
+		if actived {
+			SyncSetUserCache(targetUser, false)
 		}
 		userCache.UserProfile = targetUser
-		SyncSetUserCache(targetUser, false)
 		return userCache, nil
 	}
 
