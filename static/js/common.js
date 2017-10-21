@@ -83,6 +83,10 @@ function redirectLogin() {
         return true;
     }
     setCookie("passid", "", -1);
+    setCookie("city", "", -1);
+    setCookie("loclat", "", -1);
+    setCookie("loclng", "", -1);
+
     if (!passId){
         window.location.href="/user/logintosys"
     }
