@@ -71,7 +71,6 @@
     </div>
 </div>
 
-<script type="text/javascript" src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
 <script src="../../static/js/onestory/component/sections/headersection.js"></script>
 <script src="../../static/js/onestory/component/sections/imagesection.js"></script>
 <script src="../../static/js/onestory/component/sections/multisection.js"></script>
@@ -126,8 +125,6 @@
 
         methods: {
             getmylocation: function () {
-                var mycity = remote_ip_info['city'];
-                setCookie("city", mycity);
                 getCityNameByLocation(this.getWeather);
             },
             getWeather: function (city) {
@@ -146,6 +143,8 @@
                     success: function (data) {
                         if (data.ErrNo == 0) {
                             _self.weatherInfo = data.Data[0];
+                            _self.city = data.Data[0].city
+                            setCookie("city", _self.city, 2);
                         }
                     },
                 });
@@ -234,13 +233,14 @@
                                 duration : 2000
                             });
                             _self.isSavingStatus = "succ";
-
-
+                            setTimeout(function () {
+                                window.location.href="/show"
+                            },1000);
                         } else {
                             Vue.toasted.show("保存失败！", {
                                 theme: "primary",
                                 position: "top-center",
-                                duration : 2000
+                                duration : 3000
                             });
                             _self.isSavingStatus = "fail";
                         }
@@ -260,7 +260,6 @@
                 var _self = this
                 console.log(_self.head_title);
             },
-
         },
         computed: {
 

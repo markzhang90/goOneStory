@@ -77,6 +77,18 @@ function setCookie(name,value, expire)
     $.cookie(name, value, { expires: expire });
 }
 
+function redirectLogin() {
+    passId = getCookie('passid')
+    if(passId){
+        return true;
+    }
+    setCookie("passid", "", -1);
+    if (!passId){
+        window.location.href="/user/logintosys"
+    }
+    return false;
+}
+
 function getCookie(name)
 {
     var result = $.cookie(name);
@@ -119,14 +131,12 @@ function loadPostData(id, callbackFunc) {
         dataType: "json",
 
         success: function (data) {
-            console.log(data);
             callbackFunc(data)
         },
         error: function () {
             callbackFunc()
         }
     });
-
 }
 
 /**
@@ -148,11 +158,10 @@ function loadRecordByDateRange(splitDate, left, callbackFunc){
     requestData.total = 1;
     $.ajax({
         type: "GET",
-        url: "post/getuserpostdaterange",
+        url: "/post/getuserpostdaterange",
         data: requestData,
         dataType: "json",
         success: function (data) {
-            console.log(data)
             callbackFunc(data)
         },
         error: function () {
@@ -193,7 +202,7 @@ function closeProgressRun(element) {
 function Init(callback, callbackfail) {
     $.ajax({
         type: "GET",
-        url: "api/wechat/initinfo",
+        url: "/api/wechat/initinfo",
         data: {},
         dataType: "json",
         success: function (data) {
@@ -203,4 +212,12 @@ function Init(callback, callbackfail) {
             callbackfail()
         }
     });
+}
+
+function checkImgFile(fileType) {
+    if(!/image\/\w+/.test(fileType)){
+        alert("文件必须为图片！");
+        return false;
+    }
+    return true;
 }

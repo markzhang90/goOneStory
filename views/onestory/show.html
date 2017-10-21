@@ -44,7 +44,7 @@
                     <div v-for="eachElement in allElements" :key="eachElement.finder">
                         <div style="margin-top: 30px; margin-bottom: 30px;" class="ui vertical stripe segment">
                             <div v-if="eachElement.component == 'paragraph-section'" class="ui text container">
-                                <p>${eachElement.para}</p>
+                                <p v-html="replaceBr(eachElement.para)"></p>
                             </div>
                             <div v-else-if="eachElement.component == 'image-section'" class="ui container">
                                 <img class="ui centered rounded image" :src="eachElement.upload_img">
@@ -70,7 +70,7 @@
                             <div v-for="eachPost in allList" class="item">
                                 <i class="large red remove bookmark middle aligned icon"></i>
                                 <div class="content">
-                                    <a class="header" @click="openCachedDetail(eachPost)">${eachPost.Header}</a>
+                                    <a class="header" @click="openDetailInNewPage(eachPost.Id)">${eachPost.Header}</a>
                                     <div class="description">${eachPost.year}/${eachPost.month}/${eachPost.day}</div>
                                 </div>
                             </div>
@@ -100,7 +100,7 @@
                                     记录今天
                                 </div>
                             </div>
-                            <div class="ui blue bottom attached button">
+                            <div class="ui blue bottom attached button" @click="redirectEdit">
                                 <i class="add icon"></i>
                                 立即编辑
                             </div>
@@ -204,6 +204,9 @@
         },
 
         methods: {
+            redirectEdit: function () {
+                window.location.href = "/edit";
+            },
             getmylocation: function () {
                 getCityNameByLocation(this.getWeather);
             },
@@ -214,7 +217,7 @@
                 inputdata["city"] = _self.city;
                 $.ajax({
                     type: "GET",
-                    url: "/test",
+                    url: "/wea",
                     data: inputdata,
                     dataType: "json",
                     beforeSend: function () {
@@ -223,8 +226,8 @@
                     success: function (data) {
                         if (data.ErrNo == 0) {
                             _self.weatherInfo = data.Data[0];
-                            _self.city = data.Data[0].city
-                            setCookie("city", _self.city, 100000);
+                            _self.city = data.Data[0].city;
+                            setCookie("city", _self.city, 2);
                         }
                     },
                 });
@@ -269,7 +272,6 @@
             },
             initData: function (data) {
                 var _self = this;
-                console.log(data);
                 if (data && data.ErrNo == 0 && data.Data){
                     _self.userInfo = data.Data.User_info;
                     _self.isToday = data.Data.Today;
@@ -291,7 +293,8 @@
                     position: "top-center",
                     duration: 1000,
                 });
-                window.location.href="/main";
+                redirectLogin();
+                // window.location.href="/user/logintosys";
                 return;
             },
             assignMainData: function (data) {
@@ -353,21 +356,36 @@
                 var list = [];
                 list.push(element);
                 data["Data"] = list;
-
                 _self.assignData(data);
             },
 
+            openDetailInNewPage: function (id) {
+                window.open("/showdetail/"+id);
+            },
             openDetailById:function (id) {
                 var _self = this;
                 autoProgressRun($('#progress-runner'));
                 loadPostData(id, _self.assignData);
             },
+            replaceBr: function (input) {
+                return input.replace(/\n/g, '<br>')
+            }
         },
-        computed: {},
+        computed: {
+
+        },
         created: function () {
+            redirectLogin();
             autoProgressRun($('#progress-runner'));
             if(!this.$data.userInfo){
                 Init(this.initData, this.failData);
+            }
+            if(this.$data.detail && this.$data.detail == "true"){
+                this.$data.detail = true;
+            }
+
+            if(this.$data.detail && this.$data.detail == "false"){
+                this.$data.detail = false;
             }
             if(this.$data.detail){
                 loadPostData(this.$data.curId, this.assignData);

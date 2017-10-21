@@ -3,52 +3,53 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs"
-	"html/template"
 	"onestory/library"
 	"time"
+	"encoding/base64"
 	"onestory/services/request/third"
-	//"onestory/services/request/lbs"
 	"onestory/services/request/lbs"
+	"io/ioutil"
 )
 
 type (
-	MainController struct {
-		beego.Controller
-	}
-	EditController struct {
-		beego.Controller
-	}
 	TestController struct {
 		beego.Controller
 	}
 	UploadController struct {
 		beego.Controller
 	}
-	ShowController struct {
+	WeatherController struct {
 		beego.Controller
 	}
 )
 
 
-func (c *MainController) Get() {
-	c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
-	c.Layout = "onestory/base.html"
-	c.TplName = "onestory/feed.html"
-	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["Fixheader"] = "onestory/fixheader.html"
-	c.LayoutSections["Footer"] = "onestory/footer.html"
-}
-
 func (c *UploadController) Post() {
 	c.EnableXSRF = false
-	f, h, _ := c.GetFile("myfile")
+	fileType := c.GetString("type", "file")
+	var path string
 	nowTimging := time.Now().Format("2006-01-02-03-04-05")
-	path := "./temp/" + nowTimging + h.Filename;
-	defer f.Close()
-	c.SaveToFile("myfile", path)
+	var output string
+
+	if fileType == "base64" {
+		dataSource := c.GetString("myfile")
+		fileData, _ := base64.StdEncoding.DecodeString(dataSource)
+		path = "./temp/" + nowTimging + library.RandSeq(3) + "_.png";
+		errWriteFile := ioutil.WriteFile(path, fileData, 0777)
+		if errWriteFile != nil {
+			output, _ = library.ReturnJsonWithError(library.CodeErrCommen, "upload pic fail", "")
+			c.Ctx.WriteString(output)
+			return
+		}
+	}else{
+		f, h, _ := c.GetFile("myfile")
+		path = "./temp/" + nowTimging + h.Filename;
+		defer f.Close()
+		c.SaveToFile("myfile", path)
+	}
+
 	qiuniuApi := third.NewQiNiu(true)
 	imgKey, errUp := qiuniuApi.Upoloader(path)
-	var output string
 	if errUp == nil{
 		var outRes = make(map[string]string)
 		outRes["key"] = imgKey
@@ -61,37 +62,26 @@ func (c *UploadController) Post() {
 	c.Ctx.WriteString(output)
 }
 
-func (c *EditController) Get() {
-	c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
-	c.Layout = "onestory/base.html"
-	c.TplName = "onestory/edit.html"
-	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["Fixheader"] = "onestory/fixheader.html"
-	c.LayoutSections["Footer"] = "onestory/footer.html"
-}
-
-func (c *ShowController) Get() {
-	getId := c.GetString("id", "")
-	c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
-	c.Data["curId"]= getId
-	c.Data["detail"]= false
-	c.Layout = "onestory/base.html"
-	c.TplName = "onestory/show.html"
-	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["Fixheader"] = "onestory/fixheader.html"
-	c.LayoutSections["Footer"] = "onestory/footer.html"
-}
-
 func (c *TestController) Get() {
+	c.EnableXSRF = false
 
 	defer func(){ // 必须要先声明defer，否则不能捕获到panic异常
 		logs.Warning("begin defer")
 
 		if err:=recover();err!=nil{
+			stringRes, _ := library.ReturnJsonWithError(1,"获取信息失败", "")
+			c.Ctx.WriteString(stringRes)
+			return
 			logs.Warning(err)
 		}
 		logs.Warning("ends defer")
 	}()
+
+	errMail := library.SendToMail("onestory90@163.com", "test", "hahahaha", "")
+	logs.Warning(errMail)
+	stringRes, _ := library.ReturnJsonWithError(1, errMail.Error(), "")
+	c.Ctx.WriteString(stringRes)
+	return
 
 	//varId := c.Ctx.Input.Param(":id")
 	//varTest := c.Ctx.Input.Param(":test")
@@ -105,26 +95,26 @@ func (c *TestController) Get() {
 	//	c.Data["num"] = v.(int)
 	//}
 	//logs.Warning("coooool")
-	var city string
-	city = c.GetString("city")
-	if len(city) < 1 {
-		res := library.GetClientIp(c.Ctx.Request)
-		city, _ = lbs.GetLocationByIp(res)
-	}
-	if len(city) < 1 {
-		stringRes, _ := library.ReturnJsonWithError(1,"获取信息失败", "")
-		c.Ctx.WriteString(stringRes)
-		return
-	}
-
-	mapRes, err := lbs.GetWeatherByLocation(city)
-	if err != nil{
-		stringRes, _ := library.ReturnJsonWithError(1,err.Error(), "")
-		c.Ctx.WriteString(stringRes)
-	}else{
-		stringRes, _ := library.ReturnJsonWithError(0,"", mapRes)
-		c.Ctx.WriteString(stringRes)
-	}
+	//var city string
+	//city = c.GetString("city")
+	//if len(city) < 1 {
+	//	res := library.GetClientIp(c.Ctx.Request)
+	//	city, _ = lbs.GetLocationByIp(res)
+	//}
+	//if len(city) < 1 {
+	//	stringRes, _ := library.ReturnJsonWithError(1,"获取信息失败", "")
+	//	c.Ctx.WriteString(stringRes)
+	//	return
+	//}
+	//
+	//mapRes, err := lbs.GetWeatherByLocation(city)
+	//if err != nil{
+	//	stringRes, _ := library.ReturnJsonWithError(1,err.Error(), "")
+	//	c.Ctx.WriteString(stringRes)
+	//}else{
+	//	stringRes, _ := library.ReturnJsonWithError(0,"", mapRes)
+	//	c.Ctx.WriteString(stringRes)
+	//}
 
 	return
 	//conn := rediscli.RedisClient.Get()
@@ -152,3 +142,30 @@ func (c *TestController) Get() {
 	//c.Ctx.WriteString(stringRes)
 }
 
+func (c *WeatherController) Get() {
+
+	var city string
+	city = c.GetString("city")
+	if len(city) < 1 {
+		res := library.GetClientIp(c.Ctx.Request)
+		city, _ = lbs.GetLocationByIp(res)
+	}
+	if len(city) < 1 {
+		stringRes, _ := library.ReturnJsonWithError(1,"获取信息失败", "")
+		c.Ctx.WriteString(stringRes)
+		c.StopRun();
+		return
+	}
+
+	mapRes, err := lbs.GetWeatherByLocation(city)
+	if err != nil{
+		stringRes, _ := library.ReturnJsonWithError(1,err.Error(), "")
+		c.Ctx.WriteString(stringRes)
+		c.StopRun();
+	}else{
+		stringRes, _ := library.ReturnJsonWithError(0,"", mapRes)
+		c.Ctx.WriteString(stringRes)
+		c.StopRun();
+	}
+	return
+}

@@ -91,8 +91,8 @@ function getCityNameByLocation(callbackFunc) {
         position["coords"] = {};
         position["coords"]["latitude"] = tryLoclat;
         position["coords"]["longitude"] = tryLoclng;
-        setCookie("loclat", tryLoclat);
-        setCookie("loclng", tryLoclng);
+        setCookie("loclat", tryLoclat, 2);
+        setCookie("loclng", tryLoclng, 2);
         var allRes = showPosition(position, callbackFunc);
         return allRes;
     }
@@ -109,7 +109,7 @@ function setLocationData(allRes) {
     console.log(addressComponent);
     var city = addressComponent.city;
     if (city != null) {
-        setCookie("city", city);
+        setCookie("city", city, 2);
     }
     return city;
 }

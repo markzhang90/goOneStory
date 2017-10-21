@@ -30,6 +30,7 @@ type (
 		Update_time int64
 		Nick_name   string
 		Ext         string
+		Active         int64
 	}
 
 	UserCache struct {
@@ -50,8 +51,22 @@ func NewUser() (*UserProfileDb) {
 	return &UserProfileDb{"user_profile", dbService}
 }
 
+func (userDb *UserProfileDb) LoginUserByEmail(email string, password string) (UserProfile, error)  {
 
-func (userDb *UserProfileDb) LoginUser(phone int64, password string) (UserProfile, error)  {
+	o := userDb.DbConnect.Orm
+	o.Using(userDb.DbConnect.DbName)
+	targetUser := UserProfile{Email: email, Password:encriptPass(password)}
+	errdb := o.Read(&targetUser, "email","password")
+
+	if errdb != nil {
+		logs.Warning("LoginUser fail " + errdb.Error())
+		return targetUser, errdb
+	}
+
+	return targetUser, nil
+}
+
+func (userDb *UserProfileDb) LoginUserByPhone(phone int64, password string) (UserProfile, error)  {
 
 	o := userDb.DbConnect.Orm
 	o.Using(userDb.DbConnect.DbName)
@@ -131,6 +146,7 @@ func (userDb *UserProfileDb) AddNewUserProfile(userprofileData UserProfile)(int6
 	profile.Nick_name = userprofileData.Nick_name
 	profile.Password = encriptPass(userprofileData.Password)
 	profile.Ext = userprofileData.Ext
+	profile.Active = userprofileData.Active
 	res, err := o.Insert(profile)
 
 	if err != nil {
@@ -194,6 +210,36 @@ func (userDb *UserProfileDb) UpdateNewUserProfile(userprofileData UserProfile) (
 	}
 	return profile, errors.New("更新用户失败")
 }
+
+func (userDb *UserProfileDb) ActiveUserProfile(userprofileData UserProfile) (UserProfile, error) {
+	o := userDb.DbConnect.Orm
+	o.Using(userDb.DbConnect.DbName)
+
+	var profile UserProfile
+	profile.Id = userprofileData.Id
+
+
+	if o.Read(&profile) == nil {
+
+		//update fields
+		profile.Update_time = time.Now().Unix()
+		profile.Active = 1
+		if num, err := o.Update(&profile); err == nil && num == 1{
+			logs.Trace(string(profile.Id) + " update userprofile succ " + string(num))
+			return profile, nil
+		}else{
+			logs.Warning(string(profile.Id) + " update userprofile fail " + err.Error())
+			return profile, err
+		}
+
+	}else{
+		logs.Warning("get user fail " + string(profile.Id))
+		return profile, errors.New("获取用户失败")
+	}
+	return profile, errors.New("更新用户失败")
+}
+
+
 
 func (userDb *UserProfileDb) GetUserProfile() (err error) {
 	o := userDb.DbConnect.Orm
@@ -322,6 +368,10 @@ func GetUserFromCache(passId string) (UserCache, error) {
 		if err !=nil {
 			logs.Warn("GetUser Fail " + passId + "  " + err.Error())
 			return userCache, errCache
+		}
+		if targetUser.Active != 1{
+			logs.Warn("User is not active ")
+			return userCache, errors.New("用户未激活")
 		}
 		userCache.UserProfile = targetUser
 		SyncSetUserCache(targetUser, false)

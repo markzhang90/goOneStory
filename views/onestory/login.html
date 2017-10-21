@@ -11,7 +11,9 @@
     .column {
         max-width: 500px;
     }
-
+    #loginpage{
+        min-height: 500px;
+    }
 </style>
 
 <div id="loginpage">
@@ -25,36 +27,25 @@
                     <h2 class="ui teal image header">
                         <img src="../../static/assets/images/logo.png" class="image">
                         <div class="content">
-                            Log-in to your account
+                            登录账户
                         </div>
                     </h2>
                     <form class="ui large form" action="" method="POST">
                         <div class="ui stacked segment">
                             <!--{{ .xsrfdata }}-->
-                            <div v-cloak v-if="show_alert == 'fail'" class="ui orange message">
-                                <div class="header"><i class="warning icon"></i> ${alert_info.title}</div>
-                                <ul class="list">
-                                    <li>${ alert_info.msg }</li>
-                                </ul>
-                            </div>
-                            <div v-cloak v-if="show_alert == 'succ'" class="ui info message">
-                                <div class="header"><i class="warning icon"></i> ${alert_info.title}</div>
-                                <ul class="list">
-                                    <li>${ alert_info.msg }</li>
-                                </ul>
-                            </div>
                             <div class="field">
                                 <div class="ui left icon input">
                                     <i class="user icon"></i>
-                                    <input type="text" name="phone" placeholder="Phone" v-model="phone">
+                                    <input type="text" name="email" placeholder="邮箱" v-model="email">
                                 </div>
                             </div>
                             <div class="field">
                                 <div class="ui left icon input">
                                     <i class="lock icon"></i>
-                                    <input type="password" name="password" placeholder="Password" v-model="pass_word">
+                                    <input type="password" name="password" placeholder="密码" v-model="pass_word">
                                 </div>
                             </div>
+                            <div class="ui error message"></div>
 
                             <div v-on:click="submitLogin" class="ui fluid large teal animated fade submit button"
                                  tabindex="0">
@@ -63,9 +54,13 @@
                             </div>
                         </div>
 
-                        <div class="ui error message"></div>
 
                     </form>
+
+                    <div class="ui horizontal divider">
+                        Or
+                    </div>
+
                     <div v-on:click="register" class="ui fluid large animated fade button" tabindex="0">
                         <div class="hidden content">快来加入吧</div>
                         <div class="visible content">还没有账号?</div>
@@ -79,11 +74,13 @@
 </div>
 <script type="text/javascript">
     $(function () {
+        Vue.use(Toasted);
+
         var thispage = new Vue({
             delimiters: ['${', '}'],
             el: '#loginpage',
             data: {
-                phone: '',
+                email: '',
                 pass_word: '',
                 counter: 0,
                 return_info: {},
@@ -96,12 +93,14 @@
 
             methods: {
                 submitLogin: function () {
+                    $('.ui.error.message').empty();
+
                     var _self = this
                     this.counter += 1
                     var inputdata = {}
 
                     inputdata['_xsrf'] = getXsrfCookie("_xsrf");
-                    inputdata['phone'] = this.phone
+                    inputdata['email'] = this.email
                     inputdata['password'] = this.pass_word
                     $.ajax({
                         type: "Post",
@@ -112,19 +111,17 @@
                             _self.login_loading = true;
                         },
                         success: function (data) {
-                            console.log(data)
                             if (data.ErrNo != 0) {
-                                _self.show_alert = 'fail';
-                                _self.alert_info.msg = data.ErrMsg;
-                            } else {
-                                _self.return_info = data.Data;
-                                _self.alert_info.msg = _self.return_info.Nick_name;
-                                _self.alert_info.title = _self.return_info.Passid;
-
-                                _self.passid = _self.return_info.Passid;
-                                _self.nickname = _self.return_info.Nick_name;
-                                _self.show_alert = 'succ';
-
+                                $('.ui.form').form('add errors', [data.ErrMsg]);
+                            }else {
+                                Vue.toasted.show("登录成功!", {
+                                    theme: "primary",
+                                    position: "top-center",
+                                    duration: 3000,
+                                });
+                                setTimeout(function () {
+                                    window.location.href="/show"
+                                },1000);
                             }
                         },
                         error: function (e) {
@@ -137,7 +134,8 @@
                     })
                 },
                 register: function () {
-                    this.counter2 += 3
+                    window.location.href="/user/register"
+
                 }
             }
         })

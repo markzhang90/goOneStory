@@ -20,7 +20,7 @@ func CodeString(errorNo int) string {
 		return "内部错误"
 	//user related
 	case GetUserFail:
-		return "登录失败，用户名或者密码错误"
+		return "登录失败，登录信息错误"
 	case HttpError:
 		return "http请求失败"
 	//post related

@@ -7,9 +7,13 @@ import (
 
 func init() {
 	beego.Router("/test", &controllers.TestController{})
+	beego.Router("/wea", &controllers.WeatherController{})
 	beego.Router("/main", &controllers.MainController{})
 	beego.Router("/edit", &controllers.EditController{})
 	beego.Router("/show", &controllers.ShowController{})
+	beego.Router("/showdetail/?:id", &controllers.ShowDetailController{})
+	beego.Router("/user/activeuser", &controllers.ActiveUserProfileController{})
+	beego.Router("/user/register", &controllers.RegisterController{})
 	beego.Router("/user/adduserprofile", &controllers.AddUserProfileController{})
 	beego.Router("/user/updateuserprofile", &controllers.UpdateUserProfileController{})
 	beego.Router("/user/getuserprofile", &controllers.GetUserProfileController{})
@@ -23,4 +27,7 @@ func init() {
 
 	beego.Router("api/wechat/logintosys", &controllers.LoginWehchatController{})
 	beego.Router("api/wechat/initinfo", &controllers.InitWehchatController{})
+
+	beego.Router("api/activeuser", &controllers.EmailConfirmController{})
+
 }

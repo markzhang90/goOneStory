@@ -8,7 +8,6 @@ import (
 	"time"
 	"onestory/library"
 	"errors"
-	"html/template"
 )
 
 type (
@@ -16,9 +15,6 @@ type (
 		beego.Controller
 	}
 	GetUserProfileController struct {
-		beego.Controller
-	}
-	LoginUserController struct {
 		beego.Controller
 	}
 	LogoutUserController struct {
@@ -30,34 +26,97 @@ type (
 	GetUserProfileInfoController struct {
 		beego.Controller
 	}
+	ActiveUserProfileController struct {
+		beego.Controller
+	}
 )
 
-//新增用户
-func (c *AddUserProfileController) Get() {
+func (c *ActiveUserProfileController) Get() {
+	key := c.GetString("key")
 
+	var output string
+	if len(key) < 42 {
+		output, _ = library.ReturnJsonWithError(1, "参数错误", "")
+		c.Ctx.WriteString(output)
+		return
+	}
+
+	realPassId := library.Substr(key, 10, 42)
+	var newUserDb = models.NewUser()
+	userProFile, err := newUserDb.GetUserProfileByPassId(realPassId)
+	if err != nil {
+		output, _ = library.ReturnJsonWithError(library.GetUserFail, "ref", "")
+		c.Ctx.WriteString(output)
+		return
+	}
+	_, errUp := newUserDb.ActiveUserProfile(userProFile)
+
+	if errUp != nil {
+		output, _ = library.ReturnJsonWithError(1, "激活失败", "")
+		c.Ctx.WriteString(output)
+		return
+	}
+	output, _ = library.ReturnJsonWithError(0, "succ", "")
+	c.Ctx.WriteString(output)
+	return
+}
+
+//新增用户
+func (c *AddUserProfileController) Post() {
+	c.EnableXSRF = false
 	email := c.GetString("email")
-	phone, _ := c.GetInt64("phone")
+	phone, _ := c.GetInt64("phone", 0)
+	avatar := c.GetString("avatar", "")
+	nickname := c.GetString("nickname", "")
+	password := c.GetString("password", "")
+
+	var output string
+
+	if len(password) < 6 {
+		output, _ = library.ReturnJsonWithError(1, "密码不可少于6位", "")
+		c.Ctx.WriteString(output)
+		return
+	}
+	if len(nickname) <= 0 {
+		output, _ = library.ReturnJsonWithError(1, "昵称不能为空", "")
+		c.Ctx.WriteString(output)
+		return
+	}
+	if len(email) <= 0 {
+		output, _ = library.ReturnJsonWithError(1, "邮箱不能为空", "")
+		c.Ctx.WriteString(output)
+		return
+	}
+
 	userData := models.UserProfile{
 		Passid:      models.GetPid(phone, email),
 		Email:       email,
 		Phone:       phone,
 		Openid:       "0",
-		Password:    "123",
+		Password:    password,
 		Update_time: time.Now().Unix(),
-		Nick_name:   "1234",
-		Avatar:   	 "http://orrxp85k4.bkt.clouddn.com/FhzfohvkrOuiY02gKJnEBiegInZs",
+		Nick_name:   nickname,
+		Avatar:   	 avatar,
 		Ext:         "",
+		Active:      0,
 	}
-	c.EnableXSRF = false
 	var newUserDb = models.NewUser()
 	//var getUser = newUser.GetUserProfile()
 	//logs.Warning(getUser)
 	res, err := newUserDb.AddNewUserProfile(userData)
 
-	var output string
-
 	if err == nil {
-		output, _ = library.ReturnJsonWithError(0, "ref", res)
+		targetUser, errGet := newUserDb.GetUserProfileById(int(res))
+		if errGet == nil{
+			cookiekey := beego.AppConfig.String("passid")
+			models.SyncSetUserCache(targetUser, false)
+			logs.Warning(targetUser.Passid)
+			c.SetSecureCookie(cookiekey, "passid", "")
+			c.SetSecureCookie(cookiekey, "passid", targetUser.Passid)
+			logs.Warning(c.GetSecureCookie(cookiekey, "passid"))
+		}
+
+		output, _ = library.ReturnJsonWithError(0, "ref", true)
 	} else {
 		output, _ = library.ReturnJsonWithError(1, "ref", err.Error())
 	}
@@ -124,16 +183,15 @@ func (c *UpdateUserProfileController) Get() {
 
 //登录
 func (c *LoginUserController) Post() {
-	cookiekey := beego.AppConfig.String("passid")
 
-	password := c.GetString("password")
-	phone, _ := c.GetInt64("phone")
+	password := c.GetString("password", "")
+	email := c.GetString("email", "")
 
 	c.EnableXSRF = false
 	var newUserDb = models.NewUser()
 
-	res, err := newUserDb.LoginUser(phone, password)
-
+	res, err := newUserDb.LoginUserByEmail(email, password)
+	logs.Warn(res)
 	var output string
 	if err == nil {
 		output, _ = library.ReturnJsonWithError(0, "ref", res)
@@ -141,25 +199,13 @@ func (c *LoginUserController) Post() {
 		if cacheUser {
 			//set redis fail
 		}
+		cookiekey := beego.AppConfig.String("passid")
 		c.SetSecureCookie(cookiekey, "passid", res.Passid)
-
-
 	} else {
 		errCode := library.GetUserFail
 		output, _ = library.ReturnJsonWithError(errCode, "ref", err.Error())
 	}
 	c.Ctx.WriteString(output)
-	return
-}
-
-//登录渲染页
-func (c *LoginUserController) Get() {
-	c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
-	c.Layout = "onestory/base.html"
-	c.TplName = "onestory/login.html"
-	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["Fixheader"] = "onestory/fixheader.html"
-	c.LayoutSections["Footer"] = "onestory/footer.html"
 	return
 }
 
