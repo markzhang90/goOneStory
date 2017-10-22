@@ -8,7 +8,6 @@ import (
 	"time"
 	"onestory/library"
 	"errors"
-	"onestory/services/common"
 )
 
 type (
@@ -84,12 +83,14 @@ func (c *AddUserProfileController) Post() {
 		logs.Warning(targetUser.Passid)
 		c.SetSecureCookie(cookiekey, "passid", "")
 		c.SetSecureCookie(cookiekey, "passid", targetUser.Passid)
-		errEmail := common.SendRegisterEmail(targetUser)
-		if errEmail != nil{
-			output, _ = library.ReturnJsonWithError(1, "发送激活邮件失败，请检查邮箱是否填写正确", "")
-		}else{
-			output, _ = library.ReturnJsonWithError(0, "ref", true)
-		}
+		output, _ = library.ReturnJsonWithError(0, "ref", true)
+
+		//errEmail := common.SendRegisterEmail(targetUser)
+		//if errEmail != nil{
+		//	output, _ = library.ReturnJsonWithError(1, "发送激活邮件失败，请检查邮箱是否填写正确", "")
+		//}else{
+		//	output, _ = library.ReturnJsonWithError(0, "ref", true)
+		//}
 	} else {
 		if err.Error() == "user exist" {
 			output, _ = library.ReturnJsonWithError(1, "用户信息已被注册", err.Error())
