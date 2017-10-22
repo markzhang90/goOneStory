@@ -393,3 +393,13 @@ func GetUserFromCache(passId string, actived bool) (UserCache, error) {
 	}
 }
 
+func ClearOutputUserprofile(profile UserProfile) map[string]interface{} {
+	var userInfo = make(map[string]interface{})
+	userInfo["Nick_name"] = profile.Nick_name
+	userInfo["Avatar"] = profile.Avatar
+	userInfo["Email"] = profile.Email
+	userInfo["Active"] = profile.Active
+	userInfo["Update_time"] = profile.Update_time
+	return userInfo
+}
+

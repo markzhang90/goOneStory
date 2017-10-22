@@ -17,7 +17,7 @@
     }
 
 </style>
-<div id="registerpage">
+<div id="profilepage">
     <div id="center" class="ui middle aligned center aligned grid">
 
         <div class="two wide column">
@@ -27,17 +27,22 @@
                 <div class="column">
 
                     <h2 class="ui teal image header">
-                        <img src="../../static/img/logo.png" class="image">
+                        <!--<img src="../../static/img/logo.png" class="image">-->
                         <div class="content">
-                            创建账户
+                            我的账户
                         </div>
                     </h2>
                     <div class="ui horizontal divider">
                         onestory
                     </div>
                     <form class="ui large form" action="" style="text-align: left">
+                        <div :class="loaded ? '': 'active'" class="ui inverted dimmer">
+                            <div class="ui text loader">Loading</div>
+                        </div>
+
                         <div class="ui stacked segment">
-                            <div class="field">
+
+                            <div v-if="loaded" class="field">
                                 <component is="image-picker" :tar_obj="avatarInfo"></component>
                             </div>
 
@@ -45,7 +50,7 @@
                                 <label>邮箱</label>
                                 <div class="ui left icon input">
                                     <i class="mail icon"></i>
-                                    <input type="text" name="email" placeholder="邮箱" v-model="email">
+                                    <input type="text" disabled name="email" placeholder="邮箱" v-model="email">
                                 </div>
                             </div>
                             <div class="required field">
@@ -56,34 +61,27 @@
                                 </div>
                             </div>
                             <div class="required field">
-                                <label>密码</label>
+                                <label>修改密码</label>
                                 <div class="ui left icon input">
                                     <i class="lock icon"></i>
                                     <input type="password" name="password" placeholder="密码" v-model="pass_word">
                                 </div>
                             </div>
                             <div class="required field">
-                                <label>确认密码</label>
+                                <label>确认修改密码</label>
                                 <div class="ui left icon input">
                                     <i class="lock icon"></i>
                                     <input type="password" name="password_re" placeholder="重新输入密码" v-model="re_pass_word">
                                 </div>
                             </div>
                             <div class="ui error message"></div>
-                            <div v-on:click="submitRegister" class="ui fluid large teal animated fade submit button"
+                            <div class="ui fluid large teal animated fade submit button"
                                  tabindex="0">
-                                <div class="hidden content">立即注册<i v-cloak v-show="request_loading" class="notched circle loading icon"></i></div>
-                                <div class="visible content">填写完成</div>
+                                <div class="hidden content">确认修改<i v-cloak v-show="request_loading" class="notched circle loading icon"></i></div>
+                                <div class="visible content">提交</div>
                             </div>
                         </div>
                     </form>
-                    <div class="ui horizontal divider">
-                        Or
-                    </div>
-                    <div @click="gotoLogin" class="ui fluid large animated fade button" tabindex="0">
-                        <div class="hidden content">立即登录</div>
-                        <div class="visible content">已经有账号?</div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -91,15 +89,20 @@
         </div>
     </div>
 </div>
+<div id="progress-runner" class="ui red bottom attached progress">
+    <div class="bar"></div>
+</div>
+
 
 <script src="../../static/js/onestory/component/sections/imagepicker.js"></script>
 <script type="text/javascript">
     Vue.component('image-picker', ImagePicker);
+    Vue.use(Toasted);
 
     $(function () {
         var thispage = new Vue({
             delimiters: ['${', '}'],
-            el: '#registerpage',
+            el: '#profilepage',
             data: {
                 phone: '',
                 email: '',
@@ -107,14 +110,15 @@
                 re_pass_word: '',
                 return_info: {},
                 passid: '',
+                active: 0,
                 nickname: '',
-                show_alert:null,
-                request_loading: false,
-                avatarInfo: {'img': false}
+                loaded: false,
+                avatarInfo: {'img': false},
+                request_loading: false
             },
 
             methods: {
-                submitRegister: function () {
+                submitUpdate: function () {
                     var _self = this
                     var inputdata = _self.validatForm()
                     if(!inputdata){
@@ -127,7 +131,6 @@
                         data: inputdata,
                         dataType: "json",
                         beforeSend:function (){
-                            _self.request_loading = true;
                         },
                         success: function (data) {
                             console.log(data);
@@ -140,7 +143,6 @@
                         error: function (e) {
                         },
                         complete: function () {
-                            _self.request_loading = false;
                         },
                     })
                 },
@@ -181,12 +183,36 @@
                         inputdata['avatar'] = _self.avatarInfo.img
                     }
                     return inputdata
+                },
+                setUserData :function (data) {
+                    var _self = this
+                    _self.loaded = true;
+                    if(data && data.ErrNo == 0){
+                        console.log(data);
+                        var profileData = data.Data
+                        _self.avatarInfo.img = profileData.Avatar
+                        _self.email = profileData.Email
+                        _self.nickname = profileData.Nick_name
+                    }
+                    closeProgressRun($('#progress-runner'));
+
+                },
+                alertError :function () {
+                    closeProgressRun($('#progress-runner'));
+                    _self.loaded = true;
+                    Vue.toasted.show("加载数据失败，请刷新重试", {
+                        theme: "primary",
+                        position: "top-center",
+                        duration: 3000,
+                    });
                 }
             },
             created: function () {
                 if (!this.$data.avatarInfo.img){
                     this.avatarInfo.img = '../../static/assets/images/avatar/tom.jpg';
                 }
+                autoProgressRun($('#progress-runner'));
+                loadUserInfo(this.setUserData, this.alertError);
             }
         });
 

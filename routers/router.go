@@ -14,6 +14,7 @@ func init() {
 	beego.Router("/showdetail/?:id", &controllers.ShowDetailController{})
 	beego.Router("/user/activeuser", &controllers.ActiveUserProfileController{})
 	beego.Router("/user/register", &controllers.RegisterController{})
+	beego.Router("/user/profile", &controllers.ProfileController{})
 	beego.Router("/user/adduserprofile", &controllers.AddUserProfileController{})
 	beego.Router("/user/updateuserprofile", &controllers.UpdateUserProfileController{})
 	beego.Router("/user/getuserprofile", &controllers.GetUserProfileController{})

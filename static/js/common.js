@@ -115,6 +115,22 @@ function loadImage(url, callback) {
     };
 }
 
+
+function loadUserInfo (callbackSucc, callBackFail) {
+    redirectLogin();
+    $.ajax({
+        type: "Get",
+        url: "/user/getuserprofile",
+        data: {},
+        dataType: "json",
+        success: function (data) {
+            callbackSucc(data);
+        },
+        error: function (e) {
+            callBackFail();
+        },
+    })
+}
 /**
  *
  * @param id

@@ -199,9 +199,10 @@ func (c *GetUserProfileController) Get() {
 	//get from cache
 	passId, resBool := c.GetSecureCookie(cookiekey, "passid")
 	if resBool {
-		cahchedUser, err := models.GetUserFromCache(passId, true)
+		cahchedUser, err := models.GetUserFromCache(passId, false)
 		if err == nil {
-			output, _ := library.ReturnJsonWithError(0, "ref", cahchedUser)
+			clearOut := models.ClearOutputUserprofile(cahchedUser.UserProfile)
+			output, _ := library.ReturnJsonWithError(0, "ref", clearOut)
 			c.Ctx.WriteString(output)
 			return
 		}
@@ -224,7 +225,8 @@ func (c *GetUserProfileController) Get() {
 			if cacheUserRes {
 				c.SetSecureCookie(cookiekey, "passid", userProfile.Passid)
 			}
-			output, _ := library.ReturnJsonWithError(0, "ref", cacheUserObj)
+			clearOut := models.ClearOutputUserprofile(cacheUserObj.UserProfile)
+			output, _ := library.ReturnJsonWithError(0, "ref", clearOut)
 			c.Ctx.WriteString(output)
 			return
 		}
@@ -243,7 +245,8 @@ func (c *GetUserProfileController) Get() {
 			if cacheUserRes {
 				c.SetSecureCookie(cookiekey, "passid", userProfile.Passid)
 			}
-			output, _ := library.ReturnJsonWithError(0, "ref", cacheUserObj)
+			clearOut := models.ClearOutputUserprofile(cacheUserObj.UserProfile)
+			output, _ := library.ReturnJsonWithError(0, "ref", clearOut)
 			c.Ctx.WriteString(output)
 			return
 		}

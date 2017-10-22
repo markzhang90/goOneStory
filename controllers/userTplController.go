@@ -11,6 +11,9 @@ type (
 	RegisterController struct {
 		beego.Controller
 	}
+	ProfileController struct {
+		beego.Controller
+	}
 	LoginUserController struct {
 		beego.Controller
 	}
@@ -74,6 +77,14 @@ func (c *RegisterController) Get() {
 	c.LayoutSections["Footer"] = "onestory/footer.html"
 }
 
+func (c *ProfileController) Get() {
+	c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
+	c.Layout = "onestory/base.html"
+	c.TplName = "onestory/profile.html"
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["Fixheader"] = "onestory/fixheader.html"
+	c.LayoutSections["Footer"] = "onestory/footer.html"
+}
 
 //登录渲染页
 func (c *LoginUserController) Get() {
