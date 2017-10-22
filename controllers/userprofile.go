@@ -102,11 +102,22 @@ func (c *AddUserProfileController) Post() {
 }
 
 //更新用户
-func (c *UpdateUserProfileController) Get() {
+func (c *UpdateUserProfileController) Post() {
+	c.EnableXSRF = false
 
-	id, ok := c.GetInt("id")
-	if ok != nil {
-		output, _ := library.ReturnJsonWithError(1, "获取id失败", ok.Error())
+	cookiekey := beego.AppConfig.String("passid")
+
+	//get from cache
+	passId, resBool := c.GetSecureCookie(cookiekey, "passid")
+	if !resBool {
+		output, _ := library.ReturnJsonWithError(1, "用户未登录", "")
+		c.Ctx.WriteString(output)
+		return
+	}
+
+	cahchedUser, getUserErr := models.GetUserFromCache(passId, false)
+	if getUserErr != nil {
+		output, _ := library.ReturnJsonWithError(1, "获取用户信息失败", "")
 		c.Ctx.WriteString(output)
 		return
 	}
@@ -116,7 +127,7 @@ func (c *UpdateUserProfileController) Get() {
 	avatar := c.GetString("avatar")
 
 	userData := models.UserProfile{
-		Id:          id,
+		Id:          cahchedUser.Id,
 		//Passid:      models.GetPid(phone, email),
 		//Email:       email,
 		//Phone:       phone,
@@ -135,9 +146,7 @@ func (c *UpdateUserProfileController) Get() {
 	var output string
 
 	if errUpdate == nil {
-
-		cookiekey := beego.AppConfig.String("passid")
-		cacheUserObj, cacheUserRes := models.SyncSetUserCache(resUser, false)
+		_, cacheUserRes := models.SyncSetUserCache(resUser, false)
 
 		if cacheUserRes {
 			c.SetSecureCookie(cookiekey, "passid", resUser.Passid)
@@ -148,14 +157,14 @@ func (c *UpdateUserProfileController) Get() {
 			}
 		}
 
-		output, _ := library.ReturnJsonWithError(0, "ref", cacheUserObj)
+		output, _ := library.ReturnJsonWithError(0, "ref", "")
 		c.Ctx.WriteString(output)
 		return
 
 	} else {
 		output, _ = library.ReturnJsonWithError(1, errUpdate.Error(), errUpdate.Error())
+		c.Ctx.WriteString(output)
 	}
-	c.Ctx.WriteString(output)
 	return
 }
 

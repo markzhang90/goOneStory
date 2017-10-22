@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                             <div class="ui error message"></div>
-                            <div class="ui fluid large teal animated fade submit button"
+                            <div @click="submitUpdate" class="ui fluid large teal animated fade submit button"
                                  tabindex="0">
                                 <div class="hidden content">确认修改<i v-cloak v-show="request_loading" class="notched circle loading icon"></i></div>
                                 <div class="visible content">提交</div>
@@ -96,6 +96,7 @@
 
 <script src="../../static/js/onestory/component/sections/imagepicker.js"></script>
 <script type="text/javascript">
+
     Vue.component('image-picker', ImagePicker);
     Vue.use(Toasted);
 
@@ -124,79 +125,104 @@
                     if(!inputdata){
                         return;
                     }
-                    $.cookie('passid', null);
+
                     $.ajax({
                         type: "Post",
-                        url: "/user/adduserprofile",
+                        url: "/user/updateuserprofile",
                         data: inputdata,
                         dataType: "json",
                         beforeSend:function (){
+                            _self.request_loading = true
+
                         },
                         success: function (data) {
                             console.log(data);
-                            if (data.ErrNo != 0) {
-                                $('.ui.form').form('add errors', [data.ErrMsg]);
+                            if (data && data.ErrNo == 0) {
+                                Vue.toasted.show("更新成功", {
+                                    theme: "primary",
+                                    position: "top-center",
+                                    duration: 3000,
+                                });
                             } else {
-                                window.location.href="/show"
+                                Vue.toasted.show("更新失败，" + data.ErrMsg, {
+                                    theme: "primary",
+                                    position: "top-center",
+                                    duration: 3000,
+                                });
+                                $('.ui.form').form('add errors', [data.ErrMsg]);
                             }
                         },
                         error: function (e) {
+                            Vue.toasted.show("更新失败", {
+                                theme: "primary",
+                                position: "top-center",
+                                duration: 3000,
+                            });
                         },
                         complete: function () {
+                            _self.request_loading = false
+
                         },
                     })
                 },
+
                 gotoLogin: function () {
                     window.location.href="/user/logintosys"
                 },
+
                 validatForm: function () {
                     $('.ui.error.message').empty();
                     $('.ui.form .field.error').removeClass('error');
                     var _self = this
+                    var inputdata = {}
+                    inputdata['_xsrf'] = getXsrfCookie("_xsrf");
+
                     var errorList = [];
-                    if(_self.pass_word.length < 6){
-                        $('.ui.form').form('add prompt', 'password');
-                        errorList.push("密码不能少于6位")
+                    if(_self.pass_word > 0) {
+                        if(_self.pass_word.length < 6) {
+                            $('.ui.form').form('add prompt', 'password');
+                            errorList.push("密码不能少于6位")
+                        }
+                        if(_self.pass_word != _self.re_pass_word) {
+                            $('.ui.form').form('add prompt', 'password_re');
+                            errorList.push("密码输入不一致")
+                        }
+                        inputdata['password'] = _self.pass_word
                     }
-                    if(_self.email.length < 1){
-                        $('.ui.form').form('add prompt', 'email');
-                        errorList.push("邮箱不能为空")
-                    }
-                    if(_self.nickname.length < 1){
+
+                    if(_self.nickname.length < 1) {
                         $('.ui.form').form('add prompt', 'nickname');
                         errorList.push("昵称不能为空")
                     }
-                    if(_self.pass_word != _self.re_pass_word){
-                        $('.ui.form').form('add prompt', 'password_re');
-                        errorList.push("密码输入不一致")
-                    }
-                    if(errorList.length > 0){
+                    inputdata['nickname'] = _self.nickname
+
+                    if(errorList.length > 0) {
                         $('.ui.form').form('add errors', errorList);
                         return false;
                     }
-                    var inputdata = {}
-                    inputdata['_xsrf'] = getXsrfCookie("_xsrf");
-                    inputdata['email'] = _self.email
-                    inputdata['password'] = _self.pass_word
-                    inputdata['nickname'] = _self.nickname
-                    if(_self.avatarInfo.img){
+
+                    if(_self.avatarInfo.img) {
                         inputdata['avatar'] = _self.avatarInfo.img
                     }
+
                     return inputdata
                 },
+
                 setUserData :function (data) {
                     var _self = this
                     _self.loaded = true;
                     if(data && data.ErrNo == 0){
-                        console.log(data);
                         var profileData = data.Data
                         _self.avatarInfo.img = profileData.Avatar
                         _self.email = profileData.Email
                         _self.nickname = profileData.Nick_name
-                    }
-                    closeProgressRun($('#progress-runner'));
+                        closeProgressRun($('#progress-runner'));
 
+                    } else {
+                        _self.alertError()
+                    }
                 },
+
                 alertError :function () {
                     closeProgressRun($('#progress-runner'));
                     _self.loaded = true;
@@ -207,6 +233,7 @@
                     });
                 }
             },
+
             created: function () {
                 if (!this.$data.avatarInfo.img){
                     this.avatarInfo.img = '../../static/assets/images/avatar/tom.jpg';
@@ -215,7 +242,7 @@
                 loadUserInfo(this.setUserData, this.alertError);
             }
         });
-
     });
+
 </script>
 
