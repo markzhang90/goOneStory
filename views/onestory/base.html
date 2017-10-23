@@ -51,14 +51,22 @@
         [v-cloak] {
             display: none;
         }
+        .Site{
+            display: flex;
+            min-height: 600px;
+            flex-direction: column;
+        }
 
+        .Site-content {
+            flex: 1;
+        }
         body {
             background-color: #f8f8f8;
         }
     </style>
 </head>
 
-<body>
+<body class="Site">
 <div id="header">
     {{ .Fixheader }}
 </div>
