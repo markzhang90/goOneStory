@@ -70,6 +70,7 @@ func SendToMail(to, subject, body, mailtype string) error {
 	host := "smtpdm.aliyun.com:80"
 	user := "service@mail.onestory.cn‍"
 	password := "Zyy45612301Mark"
+
 	hp := strings.Split(host, ":")
 	auth := smtp.PlainAuth("", user, password, hp[0])
 	var content_type string
