@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/logs"
 	"onestory/library"
 	"time"
 	"encoding/base64"
@@ -65,21 +64,26 @@ func (c *UploadController) Post() {
 func (c *TestController) Get() {
 	c.EnableXSRF = false
 
-	defer func(){ // 必须要先声明defer，否则不能捕获到panic异常
-		logs.Warning("begin defer")
-
-		if err:=recover();err!=nil{
-			stringRes, _ := library.ReturnJsonWithError(1,"获取信息失败", "")
-			c.Ctx.WriteString(stringRes)
-			return
-			logs.Warning(err)
-		}
-		logs.Warning("ends defer")
-	}()
-
-	errMail := library.SendToMail("onestory90@163.com", "test", "hahahaha", "")
-	logs.Warning(errMail)
-	stringRes, _ := library.ReturnJsonWithError(1, errMail.Error(), "")
+	email := "e930300047@163.com"
+	subject := "激活账户通知"
+	openUrl :=  "12345"
+	message := "<html><body><a href='"+openUrl+"'>注册成功，请点击链接激活账户<a> <br> 或复制以下链接至浏览器 " + openUrl +" </body></html>"
+	errEmail := library.SendToMail(email, subject, message, "html")
+	//defer func(){ // 必须要先声明defer，否则不能捕获到panic异常
+	//	logs.Warning("begin defer")
+	//
+	//	if err:=recover();err!=nil{
+	//		stringRes, _ := library.ReturnJsonWithError(1,"获取信息失败", "")
+	//		c.Ctx.WriteString(stringRes)
+	//		return
+	//		logs.Warning(err)
+	//	}
+	//	logs.Warning("ends defer")
+	//}()
+	//res := third.SingleSendMail()
+	//errMail := library.SendToMail("onestory90@163.com", "test", "hahahaha", "")
+	//logs.Warning(errMail)
+	stringRes, _ := library.ReturnJsonWithError(1, "", errEmail)
 	c.Ctx.WriteString(stringRes)
 	return
 

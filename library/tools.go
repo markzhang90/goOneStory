@@ -39,6 +39,8 @@ func GetClientIp(r *http.Request) string {
 
 
 var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+var mix = []rune("1234567890abcdefghijklmnopqrstuvwxyz")
+var numbers = []rune("1234567890")
 
 func RandSeq(n int) string {
 	b := make([]rune, n)
@@ -48,10 +50,26 @@ func RandSeq(n int) string {
 	return string(b)
 }
 
+func RandNum(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = numbers[rand.Intn(len(numbers))]
+	}
+	return string(b)
+}
+
+func RandMix(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = mix[rand.Intn(len(mix))]
+	}
+	return string(b)
+}
+
 func SendToMail(to, subject, body, mailtype string) error {
-	host := "smtp.163.com:25"
-	user := "onestory90@163.com"
-	password := "Zyy45612301"
+	host := "smtpdm.aliyun.com:80"
+	user := "service@mail.onestory.cn‍"
+	password := "Zyy45612301Mark"
 	hp := strings.Split(host, ":")
 	auth := smtp.PlainAuth("", user, password, hp[0])
 	var content_type string

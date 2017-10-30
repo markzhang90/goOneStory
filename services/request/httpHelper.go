@@ -63,10 +63,17 @@ func HttpGet(urlStr string, queryList map[string]string) (string, error){
 // POST请求 -- 使用http.Post()方法
 //Tips：使用这个方法的话，第二个参数要设置成”application/x-www-form-urlencoded”，否则post参数无法传递。
 
-func HttpPost(urlStr string) {
+func HttpPost(urlStr string, formList map[string]string) string{
+
+	var temp []string
+	for key, value := range formList {
+		temp = append(temp, key + "=" + value)
+	}
+	implodedStr := strings.Join(temp, "&")
+	logs.Warn(implodedStr)
 	resp, err := client.Post(urlStr,
 		"application/x-www-form-urlencoded",
-		strings.NewReader("name=cjb"))
+		strings.NewReader(implodedStr))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -76,8 +83,7 @@ func HttpPost(urlStr string) {
 	if err != nil {
 		// handle error
 	}
-
-	fmt.Println(string(body))
+	return string(body)
 }
 
 // POST请求 -- 使用http.PostForm()方法

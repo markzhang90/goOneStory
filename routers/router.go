@@ -31,5 +31,6 @@ func init() {
 	beego.Router("api/wechat/initinfo", &controllers.InitWehchatController{})
 
 	beego.Router("api/activeuser", &controllers.EmailConfirmController{})
+	beego.Router("api/authcode", &controllers.SendEmailAuthController{})
 
 }

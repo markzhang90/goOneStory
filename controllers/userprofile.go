@@ -37,6 +37,7 @@ func (c *AddUserProfileController) Post() {
 	avatar := c.GetString("avatar", "")
 	nickname := c.GetString("nickname", "")
 	password := c.GetString("password", "")
+	authcode := c.GetString("code", "")
 
 	var output string
 
@@ -53,6 +54,32 @@ func (c *AddUserProfileController) Post() {
 	if len(email) <= 0 {
 		output, _ = library.ReturnJsonWithError(1, "邮箱不能为空", "")
 		c.Ctx.WriteString(output)
+		return
+	}
+	if len(authcode) != 6 {
+		output, _ = library.ReturnJsonWithError(1, "验证码无效", "")
+		c.Ctx.WriteString(output)
+		return
+	}
+	authModel := models.NewAuthCode()
+	resGetAll, errQuery := authModel.QueryGetAuthCodeByEmail(email)
+	if errQuery != nil || len(resGetAll) < 1{
+		output, _ := library.ReturnJsonWithError(library.CodeErrApi, "验证码错误，请重新获取", "")
+		c.Ctx.WriteString(output)
+		c.StopRun()
+		return
+	}
+
+	var passFlag  = false
+	for _, CodeAuth := range resGetAll {
+		if(CodeAuth.Code == authcode){
+			passFlag = true
+		}
+	}
+	if !passFlag {
+		output, _ := library.ReturnJsonWithError(library.CodeErrApi, "验证码错误，请重新获取", "")
+		c.Ctx.WriteString(output)
+		c.StopRun()
 		return
 	}
 
@@ -80,7 +107,6 @@ func (c *AddUserProfileController) Post() {
 		}
 		cookiekey := beego.AppConfig.String("passid")
 		models.SyncSetUserCache(targetUser, false)
-		logs.Warning(targetUser.Passid)
 		c.SetSecureCookie(cookiekey, "passid", "")
 		c.SetSecureCookie(cookiekey, "passid", targetUser.Passid)
 		output, _ = library.ReturnJsonWithError(0, "ref", true)
