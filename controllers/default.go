@@ -68,7 +68,7 @@ func (c *TestController) Get() {
 	subject := "激活账户通知"
 	openUrl :=  "12345"
 	message := "<html><body><a href='"+openUrl+"'>注册成功，请点击链接激活账户<a> <br> 或复制以下链接至浏览器 " + openUrl +" </body></html>"
-	errEmail := library.SendToMail(email, subject, message, "html")
+	errEmail := third.SendToMail(email, subject, message, "html")
 	//defer func(){ // 必须要先声明defer，否则不能捕获到panic异常
 	//	logs.Warning("begin defer")
 	//

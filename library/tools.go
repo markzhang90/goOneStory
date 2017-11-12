@@ -5,9 +5,6 @@ import (
 	"reflect"
 	"net/http"
 	"math/rand"
-	"strings"
-	"net/smtp"
-	"qiniupkg.com/x/log.v7"
 )
 
 func Json2Map(input string) (map[string]interface{}, error) {
@@ -64,27 +61,6 @@ func RandMix(n int) string {
 		b[i] = mix[rand.Intn(len(mix))]
 	}
 	return string(b)
-}
-
-func SendToMail(to, subject, body, mailtype string) error {
-	host := "smtpdm.aliyun.com:80"
-	user := "service@mail.onestory.cn‍"
-	password := "Zyy45612301Mark"
-
-	hp := strings.Split(host, ":")
-	auth := smtp.PlainAuth("", user, password, hp[0])
-	var content_type string
-	if mailtype == "html" {
-		content_type = "Content-Type: text/" + mailtype + "; charset=UTF-8"
-	} else {
-		content_type = "Content-Type: text/plain" + "; charset=UTF-8"
-	}
-	to = to + ";" +user
-	msg := []byte("To: " + to + "\r\nFrom: " + user + ">\r\nSubject: " + subject + "\r\n" + content_type + "\r\n\r\n" + body)
-	send_to := strings.Split(to, ";")
-	err := smtp.SendMail(host, auth, user, send_to, msg)
-	log.Warn(err)
-	return err
 }
 
 func Substr(str string, start int, end int) string {

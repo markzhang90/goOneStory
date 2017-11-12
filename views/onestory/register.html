@@ -44,28 +44,39 @@
 
                             <div class="required field">
                                 <label>邮箱</label>
-                                <div class="ui left icon input">
+                                <div class="ui fluid left icon input">
                                     <i class="mail icon"></i>
                                     <input type="text" name="email" placeholder="邮箱" v-model="email">
                                 </div>
                             </div>
                             <div class="required field">
+                                <label>验证码</label>
+                                <div class="ui fluid left icon action input">
+                                    <i class="lock icon"></i>
+                                    <input type="text" name="authcode" placeholder="验证码" v-model="authcode">
+                                    <button type="button" v-on:click="sendCode" v-bind:disabled="isSending" class="ui teal right button">
+                                        <!--<i class="hand pointer icon"></i>-->
+                                        ${sendcodeStr}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="required field">
                                 <label>昵称</label>
-                                <div class="ui left icon input">
+                                <div class="ui fluid left icon input">
                                     <i class="user icon"></i>
                                     <input type="text" name="nickname" placeholder="昵称" v-model="nickname">
                                 </div>
                             </div>
                             <div class="required field">
                                 <label>密码</label>
-                                <div class="ui left icon input">
+                                <div class="ui fluid left icon input">
                                     <i class="lock icon"></i>
                                     <input type="password" name="password" placeholder="密码" v-model="pass_word">
                                 </div>
                             </div>
                             <div class="required field">
                                 <label>确认密码</label>
-                                <div class="ui left icon input">
+                                <div class="ui fluid left icon input">
                                     <i class="lock icon"></i>
                                     <input type="password" name="password_re" placeholder="重新输入密码" v-model="re_pass_word">
                                 </div>
@@ -73,7 +84,7 @@
                             <div class="ui error message"></div>
                             <div v-on:click="submitRegister" class="ui fluid large teal animated fade submit button"
                                  tabindex="0">
-                                <div class="hidden content">立即注册<i v-cloak v-show="request_loading" class="notched circle loading icon"></i></div>
+                                <div class="hidden content">立即注册<i v-show="request_loading" class="notched circle loading icon"></i></div>
                                 <div class="visible content">填写完成</div>
                             </div>
                         </div>
@@ -95,6 +106,7 @@
 
 <script src="../../static/js/onestory/component/sections/imagepicker.js"></script>
 <script type="text/javascript">
+    Vue.use(Toasted);
     Vue.component('image-picker', ImagePicker);
 
     $(function () {
@@ -109,9 +121,14 @@
                 return_info: {},
                 passid: '',
                 nickname: '',
+                authcode:'',
                 show_alert:null,
                 request_loading: false,
-                avatarInfo: {'img': false}
+                avatarInfo: {'img': false},
+                timer: 60,
+                isSending: false,
+                IntvalCounter : null,
+                sendcodeStr : '发送验证码'
             },
 
             methods: {
@@ -161,6 +178,10 @@
                         $('.ui.form').form('add prompt', 'email');
                         errorList.push("邮箱不能为空")
                     }
+                    if(_self.authcode.length != 6){
+                        $('.ui.form').form('add prompt', 'authcode');
+                        errorList.push("验证码错误")
+                    }
                     if(_self.nickname.length < 1){
                         $('.ui.form').form('add prompt', 'nickname');
                         errorList.push("昵称不能为空")
@@ -178,17 +199,84 @@
                     inputdata['email'] = _self.email
                     inputdata['password'] = _self.pass_word
                     inputdata['nickname'] = _self.nickname
+                    inputdata['code'] = _self.authcode
                     if(_self.avatarInfo.img){
                         inputdata['avatar'] = _self.avatarInfo.img
                     }
                     return inputdata
+                },
+                sendCode : function () {
+                    var _self = this;
+                    if(_self.isSending){
+                        console.log('sending');
+                        clearInterval(_self.IntvalCounter);
+                        return
+                    }else{
+                        $('.ui.error.message').empty();
+                        $('.ui.form .field.error').removeClass('error');
+                        var errorList = [];
+                        var inputdata = {}
+                        inputdata['_xsrf'] = getXsrfCookie("_xsrf");
+                        inputdata['email'] = _self.email
+                        if(_self.email.length < 1){
+                            $('.ui.form').form('add prompt', 'email');
+                            errorList.push("邮箱不能为空")
+                            $('.ui.form').form('add errors', errorList);
+                            return false;
+                        }
+
+                        $.ajax({
+                            type: "Get",
+                            url: "/api/authcode",
+                            data: inputdata,
+                            dataType: "json",
+                            success: function (data) {
+                                console.log(data);
+                                if(data.ErrNo != 0){
+                                    Vue.toasted.show(data.ErrMsg, {
+                                        theme: "primary",
+                                        position: "top-center",
+                                        duration : 3000
+                                    });
+                                }else{
+                                    Vue.toasted.show("发送成功，请去邮箱查看", {
+                                        theme: "primary",
+                                        position: "top-center",
+                                        duration : 3000
+                                    });
+                                }
+                            },
+                            error: function (e) {
+                                Vue.toasted.show("发送失败，请稍候再试", {
+                                    theme: "primary",
+                                    position: "top-center",
+                                    duration : 3000
+                                });
+                            },
+                        })
+                        _self.isSending = true;
+                        _self.IntvalCounter = setInterval (_self.timeRunner, 1000);
+                    }
+                },
+                timeRunner: function(){
+                    var _self = this;
+                    _self.timer --;
+                    _self.sendcodeStr = _self.timer + '秒后重试'
+                    console.log(_self.timer);
+                    if (_self.timer <= 0){
+                        clearInterval(_self.IntvalCounter)
+                        _self.isSending = false
+                        _self.sendcodeStr = '发送验证码'
+                        _self.timer = 60
+                    }
                 }
+
             },
             created: function () {
                 if (!this.$data.avatarInfo.img){
                     this.avatarInfo.img = '../../static/assets/images/avatar/tom.jpg';
                 }
-            }
+            },
         });
 
     });

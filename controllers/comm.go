@@ -6,6 +6,7 @@ import (
 	"onestory/models"
 	"strings"
 	"time"
+	"onestory/services/request/third"
 )
 
 type (
@@ -18,6 +19,9 @@ type (
 	}
 )
 
+/**
+not used
+ */
 func (c *EmailConfirmController) Get() {
 	cookiekey := beego.AppConfig.String("passid")
 
@@ -45,7 +49,7 @@ func (c *EmailConfirmController) Get() {
 	subject := "激活账户通知"
 	openUrl := "https://onestory.cn/user/activeuser?key=" + strings.ToLower(library.RandSeq(10)) + passId + strings.ToLower(library.RandSeq(10))
 	message := "<html><body><a href='" + openUrl + "'>注册成功，请点击链接激活账户<a> <br> 或复制以下链接至浏览器 " + openUrl + " </body></html>"
-	errEmail := library.SendToMail(email, subject, message, "html")
+	errEmail := third.SendToMail(email, subject, message, "html")
 	if errEmail != nil {
 		output, _ := library.ReturnJsonWithError(library.CodeErrApi, "发送激活邮件失败，请检查邮箱是否正确", "")
 		c.Ctx.WriteString(output)
@@ -58,6 +62,7 @@ func (c *EmailConfirmController) Get() {
 	c.StopRun()
 	return
 }
+
 
 func (c *SendEmailAuthController) Get() {
 	email := c.GetString("email", "")
@@ -87,12 +92,20 @@ func (c *SendEmailAuthController) Get() {
 	}
 	_, err := authModel.AddNewAuthCode(newAuthConf)
 	if err != nil {
-		output, _ := library.ReturnJsonWithError(library.CodeErrApi, "验证码发送失败", "")
+		output, _ := library.ReturnJsonWithError(library.CodeErrApi, "验证码发送失败，请稍后再试", "")
 		c.Ctx.WriteString(output)
 		c.StopRun()
 		return
 	}
-
+	subject := "一日记邮箱验证码"
+	body := "<html><body>您的验证码为 : <br> <h1>"+randNum+"</h1></body></html>"
+	mailErr := third.SendToMail(email, subject, body, "html")
+	if mailErr != nil {
+		output, _ := library.ReturnJsonWithError(library.CodeErrApi, "验证码发送失败,请确认邮箱正确", "")
+		c.Ctx.WriteString(output)
+		c.StopRun()
+		return
+	}
 	output, _ := library.ReturnJsonWithError(library.CodeSucc, "succ", randNum)
 	c.Ctx.WriteString(output)
 	c.StopRun()

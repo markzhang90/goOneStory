@@ -56,6 +56,7 @@ func (c *AddUserProfileController) Post() {
 		c.Ctx.WriteString(output)
 		return
 	}
+
 	if len(authcode) != 6 {
 		output, _ = library.ReturnJsonWithError(1, "验证码无效", "")
 		c.Ctx.WriteString(output)
@@ -93,7 +94,7 @@ func (c *AddUserProfileController) Post() {
 		Nick_name:   nickname,
 		Avatar:   	 avatar,
 		Ext:         "",
-		Active:      0,
+		Active:      1,
 	}
 	var newUserDb = models.NewUser()
 	//var getUser = newUser.GetUserProfile()

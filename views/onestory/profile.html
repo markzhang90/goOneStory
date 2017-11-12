@@ -224,6 +224,7 @@
                 },
 
                 alertError :function () {
+                    var _self = this
                     closeProgressRun($('#progress-runner'));
                     _self.loaded = true;
                     Vue.toasted.show("加载数据失败，请刷新重试", {

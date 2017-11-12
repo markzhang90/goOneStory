@@ -131,6 +131,7 @@ function loadUserInfo (callbackSucc, callBackFail) {
         },
     })
 }
+
 /**
  *
  * @param id
