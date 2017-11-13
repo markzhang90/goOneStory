@@ -200,7 +200,7 @@ function autoProgressRun(element) {
     element.progress('remove success');
     // updates every 10ms until complete
     window.fakeProgress = setInterval(function() {
-        // stop incrementing when complete
+;        // stop incrementing when complete
         if(element.progress('is complete') || element.progress('get percent') == 90) {
             clearInterval(window.fakeProgress)
         }else{

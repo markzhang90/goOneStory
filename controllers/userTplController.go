@@ -32,6 +32,9 @@ type (
 	ActiveUserProfileController struct {
 		beego.Controller
 	}
+	IndexController struct {
+		beego.Controller
+	}
 )
 
 func (c *ActiveUserProfileController) Get() {
@@ -138,4 +141,9 @@ func (c *MainController) Get() {
 	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["Fixheader"] = "onestory/fixheader.html"
 	c.LayoutSections["Footer"] = "onestory/footer.html"
+}
+
+func (c *IndexController) Get() {
+	c.Data["xsrfdata"]= template.HTML(c.XSRFFormHTML())
+	c.TplName = "onestory/index.html"
 }

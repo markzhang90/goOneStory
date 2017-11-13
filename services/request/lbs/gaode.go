@@ -69,12 +69,19 @@ func GetLocationByIp(ip string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	mapRes, err := library.Json2Map(stringRes)
 	if err != nil {
 		return "", err
 	}
-	cityRes := mapRes["city"].(string)
-	return cityRes, err
+
+	cityRes, ok := mapRes["city"].(string)
+	if ok{
+		return cityRes, err
+	}else{
+		return "", errors.New("get city fail")
+	}
+
 }
 func getSecreteKey() (string, error) {
 

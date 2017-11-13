@@ -78,10 +78,10 @@ function showPosition(position, callbackFunc) {
 
 function getCityNameByLocation(callbackFunc) {
     var tryCity = getCookie("city");
-    if (tryCity != null) {
+    // if (tryCity != null) {
         callbackFunc(tryCity);
         return tryCity;
-    }
+    // }
     var tryLoclat = getCookie("loclat");
     var tryLoclng = getCookie("loclng");
     // tryLoclat =39.978826;

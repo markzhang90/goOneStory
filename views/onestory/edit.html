@@ -9,7 +9,7 @@
     }
 
     #saving-day {
-        padding: 50px 0px;
+        padding: 20px 0px;
     }
 </style>
 
@@ -25,7 +25,7 @@
     </a>
 </div>
 
-<div id="editpage" class="Site-content dimmed pusher" style="overflow:scroll;">
+<div id="editpage" class="Site-content dimmed pusher" style="min-height: 600px; padding-bottom: 50px; overflow:scroll;">
 
     <div class="ui grid">
         {{ .xsrfdata }}
@@ -60,16 +60,12 @@
                     <div class="or"></div>
                     <button :class="isSaving" @click="addnewpost()">${Saving.text}</button>
                 </div>
-
-                <!--<button :class="isSaving" @click="addnewpost()">-->
-                <!--<i :class="Saving.class"></i>-->
-                <!--${Saving.text}-->
-                <!--</button>-->
             </div>
         </div>
 
         <div class="three wide column"></div>
     </div>
+
 </div>
 
 <script src="../../static/js/onestory/component/sections/headersection.js"></script>
