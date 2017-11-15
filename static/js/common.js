@@ -93,6 +93,11 @@ function redirectLogin() {
     return false;
 }
 
+function redirectLogout() {
+    setCookie("passid", "", -1);
+    window.location.href="/show"
+}
+
 function getCookie(name)
 {
     var result = $.cookie(name);

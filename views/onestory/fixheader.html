@@ -2,10 +2,10 @@
 <div id="header-top">
     <div class="ui large top fixed menu">
         <div class="ui container">
-            <a v-for="(item,key) in unloginheaders" :href="item.url"
+            <a v-for="(item,key) in loginheaders" :href="item.url"
                :class=" [ pagename == item.name ? 'item active' : 'item' ]"> ${ item.name }</a>
-            <div class="right item">
-                <div class="ui animated button" tabindex="0">
+            <div v-if="isLogedin" class="right item">
+                <div @click="logout" class="ui animated button" tabindex="0">
                     <div class="visible content">登出</div>
                     <div class="hidden content">
                         <i class="right arrow icon"></i>
@@ -34,8 +34,21 @@
             methods: {
                 register: function () {
                     this.counter2 += 3
+                },
+                logout: function () {
+                    redirectLogout();
+                }
+            },
+            computed:{
+                isLogedin: function () {
+                    passId = getCookie('passid')
+                    if(passId){
+                        return true;
+                    }
+                    return false;
                 }
             }
+
         })
     });
 
