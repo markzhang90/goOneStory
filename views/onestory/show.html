@@ -60,12 +60,12 @@
     </div>
 
 
-    <div v-else class="ui grid" style="min-height: 400px; padding-bottom: 50px;">
+    <div v-else class="ui grid" style="min-height: 460px; padding-bottom: 50px;">
         <div class="three wide column" ></div>
         <div id="main-section" class="ten wide column" style="height: 100%">
             <div class="ui grid">
-                <div class="ten wide column" style=" min-height: 400px;">
-                    <div class="ui grid"  style=" padding-top: 25px; height: 100%">
+                <div class="ten wide column" style="display: flex; flex-direction: column; min-height: 460px;">
+                    <div class="ui grid"  style="flex: 1; padding-top: 25px; height: 100%">
                         <div class="ui relaxed divided list">
                             <div v-for="eachPost in allList" class="item">
                                 <i class="large red remove bookmark middle aligned icon"></i>
@@ -76,17 +76,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="ui buttons">
+                    <div class="ui buttons" style="display: flex; flex-direction:row; ">
+                        <div style="flex: 1">
+                            <button v-if="showLeft" class="ui labeled icon button" @click="loadLeftDate">
+                                <i class="left chevron icon"></i>
+                                向前翻
+                            </button>
+                        </div>
 
-                        <button v-if="showLeft" class="ui labeled icon button" @click="loadLeftDate">
-                            <i class="left chevron icon"></i>
-                            向前翻
-                        </button>
+                        <div style="flex: 1">
+                            <button v-if="showRight" class="ui right labeled icon button" @click="loadRightDate">
+                                向后翻
+                                <i class="right chevron icon"></i>
+                            </button>
+                        </div>
 
-                        <button v-if="showRight" class="ui right labeled icon button" @click="loadRightDate">
-                            向后翻
-                            <i class="right chevron icon"></i>
-                        </button>
                     </div>
                 </div>
 

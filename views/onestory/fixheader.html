@@ -2,6 +2,9 @@
 <div id="header-top">
     <div class="ui large top fixed menu">
         <div class="ui container">
+            <a href="/" class="header item">
+                <img class="logo" src="../../static/img/logo.png">
+            </a>
             <a v-for="(item,key) in loginheaders" :href="item.url"
                :class=" [ pagename == item.name ? 'item active' : 'item' ]"> ${ item.name }</a>
             <div v-if="isLogedin" class="right item">

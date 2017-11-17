@@ -79,7 +79,7 @@ function setCookie(name,value, expire)
 
 function redirectLogin() {
     passId = getCookie('passid')
-    if(passId){
+    if(passId && passId!=null){
         return true;
     }
     setCookie("passid", "", -1);
@@ -95,7 +95,7 @@ function redirectLogin() {
 
 function redirectLogout() {
     setCookie("passid", "", -1);
-    window.location.href="/show"
+    window.location.href="/"
 }
 
 function getCookie(name)
