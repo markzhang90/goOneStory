@@ -32,7 +32,7 @@ type (
 	ActiveUserProfileController struct {
 		beego.Controller
 	}
-	
+
 	IndexController struct {
 		beego.Controller
 	}
