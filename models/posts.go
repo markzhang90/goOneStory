@@ -18,6 +18,7 @@ type (
 
 	PubPost struct {
 		Id          int `orm:"auto"`
+		Story_id    int64
 		Header      string
 		Rel         string
 		Update_time int64
@@ -26,6 +27,7 @@ type (
 	}
 	Posts struct {
 		Id          int `orm:"auto"`
+		Story_id    int64
 		Uid         int
 		Header      string
 		Rel         string
@@ -139,7 +141,6 @@ func (postDb *PostDb) QueryCountUserPostByDateRange(uid int, startDate int, endD
 	if err == nil {
 		return qsNum, nil
 	}
-	logs.Warning(err)
 	return -1, err
 }
 
@@ -196,6 +197,50 @@ func (postDb *PostDb) QueryUserPostByDateRange(uid int, startDate int, endDate i
 	return allResPosts, err
 }
 
+func (postDb *PostDb) QueryUserPostByStoryId(storyId int64, uid int, limit int, page int, orderByDesc bool, countChannel chan int64) (postList []Posts, err error) {
+
+	o := postDb.DbConnect.Orm
+	o.Using(postDb.DbConnect.DbName)
+	//var queryGet string
+	var orderby string
+	if orderByDesc {
+		orderby = "-create_date"
+	} else {
+		orderby = "create_date"
+	}
+	offset := page * limit
+	var maps []orm.Params
+	var allResPosts []Posts
+
+	qs := o.QueryTable(postDb.tableName).Filter("uid", uid).Filter("story_id", storyId).OrderBy(orderby).Limit(limit, offset)
+
+	if countChannel != nil{
+		go func(intChannel chan int64) {
+			defer close(intChannel)
+			counter, errCount := o.QueryTable(postDb.tableName).Filter("uid", uid).Filter("story_id", storyId).OrderBy(orderby).Count()
+			if errCount == nil {
+				countChannel <- counter
+			}
+			countChannel<-0
+		}(countChannel)
+	}
+
+	_, err = qs.Values(&maps)
+	if err == nil {
+		for _, posts := range maps {
+			//logs.Warning(posts)
+			eachPost, err := _assignMapToPost(posts)
+			if err != nil {
+				logs.Warning(err)
+			} else {
+				allResPosts = append(allResPosts, eachPost)
+			}
+		}
+		return allResPosts, nil
+	}
+	return allResPosts, err
+}
+
 /**
 get all user posts
  */
@@ -247,6 +292,7 @@ func (postDb *PostDb) AddNewUserPost(NewPost Posts) (postId int64, err error) {
 	postId = -1
 	mypost := new(Posts)
 	mypost.Uid = NewPost.Uid
+	mypost.Story_id = NewPost.Story_id
 	mypost.Header = NewPost.Header
 	mypost.Rel = NewPost.Rel
 	mypost.Content = NewPost.Content

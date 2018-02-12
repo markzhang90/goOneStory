@@ -5,6 +5,10 @@ import (
 	"reflect"
 	"net/http"
 	"math/rand"
+	"time"
+	"onesteam/library"
+	"strconv"
+	"fmt"
 )
 
 func Json2Map(input string) (map[string]interface{}, error) {
@@ -33,7 +37,6 @@ func GetClientIp(r *http.Request) string {
 	}
 	return ip
 }
-
 
 var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 var mix = []rune("1234567890abcdefghijklmnopqrstuvwxyz")
@@ -76,4 +79,30 @@ func Substr(str string, start int, end int) string {
 	}
 
 	return string(rs[start:end])
+}
+
+func CreateRandId(firstInt int) int64 {
+	nowTimer := time.Now().Unix()
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	randNum := r.Intn(1000)
+	return nowTimer*100000 + int64(randNum*10) + int64(firstInt%10)
+}
+
+func PanicFunc(recoverErr interface{}) (string, error) {
+	var output string
+	var errorFlag error
+	if recoverErr != nil {
+		switch err := recoverErr.(type) {
+		case int:
+			output, _ = library.ReturnJsonWithError(library.CodeErrApi, strconv.Itoa(err), "")
+			break
+		case string:
+			output, _ = library.ReturnJsonWithError(library.CodeErrApi, err, "")
+			break
+		default:
+			output, _ = library.ReturnJsonWithError(library.CodeErrApi, "api error", "")
+		}
+		errorFlag = fmt.Errorf("error alert")
+	}
+	return output, errorFlag
 }

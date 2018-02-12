@@ -9,4 +9,5 @@ func init() {
 	orm.RegisterModel(new(UserProfile))
 	orm.RegisterModel(new(Posts))
 	orm.RegisterModel(new(AuthCode))
+	orm.RegisterModel(new(StoryInfo))
 }

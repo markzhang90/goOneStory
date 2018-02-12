@@ -28,6 +28,10 @@ func init() {
 	beego.Router("/post/getuserpostdate", &controllers.GetUserPostDateController{})
 	beego.Router("/post/getuserclosestpost", &controllers.GetUserPostClosestController{})
 
+
+	beego.Router("/story/create", &controllers.AddUserStoryController{})
+	beego.Router("/story/getstory", &controllers.GetStoryPostController{})
+
 	beego.Router("api/wechat/logintosys", &controllers.LoginWehchatController{})
 	beego.Router("api/wechat/initinfo", &controllers.InitWehchatController{})
 

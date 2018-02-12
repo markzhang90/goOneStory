@@ -8,9 +8,46 @@ import (
 	"onestory/services/request/third"
 	"onestory/services/request/lbs"
 	"io/ioutil"
+	"onestory/models"
+	"github.com/astaxie/beego/logs"
 )
 
+type LogedInUserController struct {
+	beego.Controller
+	user models.UserCache
+}
+
+func (c *LogedInUserController)requireUserLogIn() {
+	defer func() {
+		if err := recover(); err != nil {
+			logs.Warning(err)
+			output, _ := library.ReturnJsonWithError(library.CodeErrApi, "11111", "")
+			c.Ctx.WriteString(output);
+		}
+	}()
+
+	cookiekey := beego.AppConfig.String("passid")
+
+	//get from cache
+	passId, resBool := c.GetSecureCookie(cookiekey, "passid")
+	if !resBool {
+		output, _ := library.ReturnJsonWithError(1, "用户未登录", "")
+		c.Ctx.WriteString(output)
+		c.StopRun()
+	}
+
+	cahchedUser, getUserErr := models.GetUserFromCache(passId, false)
+	if getUserErr != nil {
+		output, _ := library.ReturnJsonWithError(1, "获取用户信息失败", "")
+		c.Ctx.WriteString(output)
+		c.StopRun()
+	}
+	c.user = cahchedUser
+}
+
+
 type (
+
 	TestController struct {
 		beego.Controller
 	}
@@ -21,7 +58,6 @@ type (
 		beego.Controller
 	}
 )
-
 
 func (c *UploadController) Post() {
 	c.EnableXSRF = false
@@ -157,7 +193,7 @@ func (c *WeatherController) Get() {
 	if len(city) < 1 {
 		stringRes, _ := library.ReturnJsonWithError(1,"获取信息失败", "")
 		c.Ctx.WriteString(stringRes)
-		c.StopRun();
+		c.StopRun()
 		return
 	}
 

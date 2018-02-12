@@ -12,7 +12,7 @@ import (
 
 type (
 	AddUserPostController struct {
-		beego.Controller
+		LogedInUserController
 	}
 
 	GetUserPostController struct {
@@ -32,62 +32,43 @@ type (
 	}
 )
 
+
 func (c *AddUserPostController) Post() {
 
-	cookiekey := beego.AppConfig.String("passid")
-
-	//get from cache
-	passId, _ := c.GetSecureCookie(cookiekey, "passid")
-
-	if len(passId) <= 0 {
-		passId = c.GetString("passid", "")
-		if len(passId) < 1{
-			output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
-			c.Ctx.WriteString(output)
-			return
-		}
-	}
-	cahchedUser, err := models.GetUserFromCache(passId, true)
-	if err != nil {
-		output, _ := library.ReturnJsonWithError(library.GetUserFail, "ref", nil)
-		c.Ctx.WriteString(output)
-		return
-	}
+	cahchedUser := c.user
 	uid := cahchedUser.UserProfile.Id
 
 	header := c.GetString("header", "无题")
 	content := c.GetString("content", "今日无事。。。")
+	storyId, _ := c.GetInt64("story_id", 0)
+
 	ref := c.GetString("ref", "")
 	timeNow := time.Now().Unix()
 	timeFormat := time.Unix(timeNow, 0).Format("20060102")
-	timeFormatInt, err := strconv.ParseInt(timeFormat, 10, 64)
-	if err != nil{
-		logs.Warn("failed convert", err)
-	}
+	timeFormatInt, _ := strconv.ParseInt(timeFormat, 10, 64)
 
 	postData := models.Posts{
 		Uid: uid,
+		Story_id: storyId,
 		Header: header,
 		Content: string(content),
 		Rel: string(ref),
 		Update_time: time.Now().Unix(),
 		Create_date: timeFormatInt,
 	}
-	logs.Warning(postData);
 
 	var newPostDb = models.NewPost()
-	//var getUser = newUser.GetUserProfile()
-	//logs.Warning(getUser)
+
 	res, err := newPostDb.AddNewUserPost(postData)
 	var output string
 
 	if err != nil{
 		output, _ = library.ReturnJsonWithError(library.AddPostFail, err.Error(), nil)
-
 	}else {
 		output, _ = library.ReturnJsonWithError(library.CodeSucc, "ref", res)
 	}
 	c.Ctx.WriteString(output)
+	c.StopRun()
 }
 
 

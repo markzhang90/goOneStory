@@ -28,7 +28,6 @@ type (
 	}
 )
 
-
 //新增用户
 func (c *AddUserProfileController) Post() {
 	c.EnableXSRF = false
