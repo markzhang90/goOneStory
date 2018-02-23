@@ -339,4 +339,3 @@ func (c *GetUserPostDateController) Get() {
 
 	c.Ctx.WriteString(output)
 }
-

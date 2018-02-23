@@ -42,7 +42,6 @@ func NewService(dbname string) (*DbService, error) {
 
 	dbconf, err := config.NewConfig("ini", "conf/db.conf")
 	if err != nil {
-		logs.Warn(err)
 		panic(err)
 		return nil, err
 	}

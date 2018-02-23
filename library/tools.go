@@ -94,13 +94,13 @@ func PanicFunc(recoverErr interface{}) (string, error) {
 	if recoverErr != nil {
 		switch err := recoverErr.(type) {
 		case int:
-			output, _ = library.ReturnJsonWithError(library.CodeErrApi, strconv.Itoa(err), "")
+			output, _ = library.ReturnJsonWithError(library.CodeErrApi, "ref", "")
 			break
 		case string:
 			output, _ = library.ReturnJsonWithError(library.CodeErrApi, err, "")
 			break
 		default:
-			output, _ = library.ReturnJsonWithError(library.CodeErrApi, "api error", "")
+			output, _ = library.ReturnJsonWithError(library.CodeErrApi, "ref", "")
 		}
 		errorFlag = fmt.Errorf("error alert")
 	}

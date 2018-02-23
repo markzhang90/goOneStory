@@ -9,7 +9,6 @@ import (
 	"onestory/services/request/lbs"
 	"io/ioutil"
 	"onestory/models"
-	"github.com/astaxie/beego/logs"
 )
 
 type LogedInUserController struct {
@@ -18,29 +17,17 @@ type LogedInUserController struct {
 }
 
 func (c *LogedInUserController)requireUserLogIn() {
-	defer func() {
-		if err := recover(); err != nil {
-			logs.Warning(err)
-			output, _ := library.ReturnJsonWithError(library.CodeErrApi, "11111", "")
-			c.Ctx.WriteString(output);
-		}
-	}()
 
 	cookiekey := beego.AppConfig.String("passid")
-
 	//get from cache
 	passId, resBool := c.GetSecureCookie(cookiekey, "passid")
 	if !resBool {
-		output, _ := library.ReturnJsonWithError(1, "用户未登录", "")
-		c.Ctx.WriteString(output)
-		c.StopRun()
+		panic("用户未登录")
 	}
 
 	cahchedUser, getUserErr := models.GetUserFromCache(passId, false)
 	if getUserErr != nil {
-		output, _ := library.ReturnJsonWithError(1, "获取用户信息失败", "")
-		c.Ctx.WriteString(output)
-		c.StopRun()
+		panic("获取用户信息失败")
 	}
 	c.user = cahchedUser
 }

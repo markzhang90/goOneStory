@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/mitchellh/mapstructure"
+	"time"
 )
 
 type (
@@ -60,7 +61,7 @@ func NewStoryInfo() (*StoryDb) {
 /**
 get all user posts
  */
-func (storyDb *StoryDb) GetUserStoryInfoByUid(uid int, page int, limit int) (allStorys []StoryInfo, err error) {
+func (storyDb *StoryDb) GetUserStoryInfoByUid(uid int, page int, limit int, counter chan int64) (allStorys []StoryInfo, err error) {
 
 	o := storyDb.DbConnect.Orm
 	o.Using(storyDb.DbConnect.DbName)
@@ -72,6 +73,19 @@ func (storyDb *StoryDb) GetUserStoryInfoByUid(uid int, page int, limit int) (all
 	offset := page * limit
 	qs := o.QueryTable(storyDb.tableName).Filter("uid", uid).OrderBy("-update_time").Limit(limit, offset)
 	_, err = qs.Values(&maps)
+
+	if counter != nil{
+		go func() {
+			defer close(counter)
+			countRow, errCounter := o.QueryTable(storyDb.tableName).Filter("uid", uid).Count()
+			if errCounter != nil {
+				countRow = 0
+			}
+			counter <- countRow
+		}()
+	}
+
+
 	var allResStory []StoryInfo
 	if err == nil {
 		for _, story := range maps {
@@ -137,6 +151,70 @@ func (storyDb *StoryDb) AddNewUserStory(storyInfo StoryInfo) (storyId int64, err
 	}
 
 	return storyId, err
+}
+
+func (storyDb *StoryDb) UpdateUserStory(storyInfo StoryInfo) (*StoryInfo, error) {
+	o := storyDb.DbConnect.Orm
+	o.Using(storyDb.DbConnect.DbName)
+
+	requireUpdate := false
+	var story StoryInfo
+	story.Story_id = storyInfo.Story_id
+	story.Uid = storyInfo.Uid
+
+	errRead := o.QueryTable(storyDb.tableName).Filter("Story_id", storyInfo.Story_id). Filter("Uid", storyInfo.Uid).One(&story)
+
+	if errRead == nil {
+		//update fields
+		story.Update_time = time.Now().Unix()
+		if len(storyInfo.Title) > 0 {
+			requireUpdate = true
+			story.Title = storyInfo.Title
+		}
+		if len(storyInfo.Desc) > 0 {
+			requireUpdate = true
+			story.Desc = storyInfo.Desc
+		}
+		if len(storyInfo.Cover) > 0 {
+			requireUpdate = true
+			story.Cover = storyInfo.Cover
+		}
+		if len(storyInfo.Pen_name) > 0 {
+			requireUpdate = true
+			story.Pen_name = storyInfo.Pen_name
+		}
+		if len(storyInfo.Extend) > 0 {
+			requireUpdate = true
+			story.Extend = storyInfo.Extend
+		}
+		if storyInfo.Is_open != 0 {
+			requireUpdate = true
+			story.Is_open = storyInfo.Is_open
+		}
+		if !requireUpdate {
+			return nil, nil
+		}
+		if num, err := o.Update(&story); err == nil && num == 1{
+			logs.Trace(string(story.Id) + " update user story succ " + string(num))
+			return &story, nil
+		}else{
+			logs.Warning(string(story.Id) + " update user story fail " + err.Error())
+			return nil, err
+		}
+
+	}else{
+		if errRead == orm.ErrMultiRows {
+			// 多条的时候报错
+			return nil, fmt.Errorf("记录错误")
+		}
+		if errRead == orm.ErrNoRows {
+			// 没有找到记录
+			return nil, fmt.Errorf("没有查找到记录")
+		}
+
+		return nil, fmt.Errorf(" 更新错误")
+	}
+	return nil, fmt.Errorf("更新错误")
 }
 
 

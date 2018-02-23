@@ -14,6 +14,8 @@ func init() {
 	beego.Router("/show", &controllers.ShowController{})
 	beego.Router("/index", &controllers.IndexController{})
 	beego.Router("/showdetail/?:id", &controllers.ShowDetailController{})
+
+
 	beego.Router("/user/activeuser", &controllers.ActiveUserProfileController{})
 	beego.Router("/user/register", &controllers.RegisterController{})
 	beego.Router("/user/profile", &controllers.ProfileController{})
@@ -21,7 +23,10 @@ func init() {
 	beego.Router("/user/updateuserprofile", &controllers.UpdateUserProfileController{})
 	beego.Router("/user/getuserprofile", &controllers.GetUserProfileController{})
 	beego.Router("/user/logintosys", &controllers.LoginUserController{})
+
 	beego.Router("/uploader", &controllers.UploadController{})
+
+
 	beego.Router("/post/adduserpost", &controllers.AddUserPostController{})
 	beego.Router("/post/getuserpostbyid", &controllers.GetUserPostController{})
 	beego.Router("/post/getuserpostdaterange", &controllers.GetUserPostDateRangeController{})
@@ -30,6 +35,8 @@ func init() {
 
 
 	beego.Router("/story/create", &controllers.AddUserStoryController{})
+	beego.Router("/story/update", &controllers.UpdateUserStoryController{})
+	beego.Router("/story/getstorylist", &controllers.GetStoryListController{})
 	beego.Router("/story/getstory", &controllers.GetStoryPostController{})
 
 	beego.Router("api/wechat/logintosys", &controllers.LoginWehchatController{})
