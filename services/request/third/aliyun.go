@@ -15,11 +15,7 @@ import (
 )
 
 var (
-	accessKeyId = "LTAIGhsbZyLlSFvk"
-	accessKeySecret = "KlPlZ7NTKj9X7WSCM6QH9JrcbC6OcI"
-	user = "service@mail.onestory.cn"
-	password = "Zyy45612301Mark"
-	host = "smtpdm.aliyun.com:80"
+
 )
 
 func AliyunApiCommon() map[string]string {
